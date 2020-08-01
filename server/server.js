@@ -7,6 +7,15 @@ const path = require('path');
 
 const bodyParser = require('body-parser');
 
+// Enable CORS Origin
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method, token');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -27,7 +36,7 @@ const conexion = async() => {
 }
 
 conexion()
-    .then(res => console.log(res))
+    .then(res => console.log('MongoDB is connected...'))
     .catch(err => console.log(err));
 
 app.listen(process.env.PORT, () => {

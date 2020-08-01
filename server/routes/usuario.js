@@ -41,7 +41,7 @@ app.get('/usuario', verificarToken, function(req, res) {
 
 
 
-app.post('/usuario', [verificarToken, verificarAdmin_role], function(req, res) {
+app.post('/usuario', [verificarToken, verificarAdmin_role],function(req, res) {
 
     let body = req.body;
 

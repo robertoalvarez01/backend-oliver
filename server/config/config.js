@@ -28,6 +28,7 @@ process.env.CADUCIDAD_TOKEN = 1000 * 60 * 60 * 24 * 30;
 // ============================
 //  DataBase
 // ============================
+console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'dev') {
     urlDB = 'mongodb://localhost/cafe';
 } else {

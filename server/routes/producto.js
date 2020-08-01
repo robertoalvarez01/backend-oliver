@@ -1,5 +1,5 @@
 const express = require('express');
-const { verificarToken } = require('../middlewares/autenticacion');
+const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
 
 const app = express();
 let Producto = require('../models/producto');
@@ -10,16 +10,21 @@ const _ = require('underscore');
 // Insertar nuevo Producto
 // ======================================
 
-app.post('/producto', verificarToken, (req, res) => {
+app.post('/producto', [verificarToken, verificarAdmin_role], (req, res) => {
     let body = req.body;
     let id = req.usuario._id;
 
     let producto = new Producto({
         nombre: body.nombre,
         precioUni: body.precioUni,
-        descripcion: body.descripcion,
+        descripcionBasica: body.descripcionBasica,
         disponible: body.disponible,
         categoria: body.categoria,
+        marca: body.marca,
+        descripcion: body.descripcion,
+        stock: body.stock,
+        minimo: body.minimo,
+        codigoBarra: body.codigoBarra,
         usuario: id
     });
 
@@ -118,6 +123,7 @@ app.get('/producto', verificarToken, (req, res) => {
         .limit(limite)
         .populate('usuario', 'nombre email')
         .populate('categoria', 'descripcion')
+        .populate('marca', 'descripcion')
         .exec((err, productos) => {
             if (err) {
                 return res.status(400).json({
@@ -153,6 +159,7 @@ app.get('/producto/:id', verificarToken, (req, res) => {
     Producto.findById(id)
         .populate('usuario', 'nombre email')
         .populate('categoria', 'descripcion')
+        .populate('marca', 'descripcion')
         .exec((err, productoDB) => {
             if (err) {
                 return res.status(400).json({

@@ -11,6 +11,10 @@ var productoSchema = new Schema({
         type: Number,
         required: [true, 'El precio Ãºnitario es necesario']
     },
+    descripcionBasica: {
+        type: String,
+        required: false
+    },
     descripcion: {
         type: String,
         required: false
@@ -25,6 +29,11 @@ var productoSchema = new Schema({
         ref: 'Categoria',
         required: true
     },
+    marca: {
+        type: Schema.Types.ObjectId,
+        ref: 'Marca',
+        required: true
+    },
     img: {
         type: String,
         required: false
@@ -32,6 +41,18 @@ var productoSchema = new Schema({
     usuario: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario'
+    },
+    stock: {
+        type: Number,
+        required: [true, 'El stock es necesario']
+    },
+    minimo: {
+        type: Number,
+        required: [true, 'El stock minimo o de alerta es necesario']
+    },
+    codigoBarra:{
+        type: Number,
+        required: false
     }
 });
 
