@@ -4,13 +4,13 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
-const https = require('https');
-const fs = require('fs');
+// const https = require('https');
+// const fs = require('fs');
 
-const options = {
-    cert: fs.readFileSync(path.resolve(__dirname, '../certificates/fullchain.pem')),
-    key: fs.readFileSync(path.resolve(__dirname, '../certificates/privkey.pem'))
-};
+// const options = {
+//     cert: fs.readFileSync(path.resolve(__dirname, '../certificates/fullchain.pem')),
+//     key: fs.readFileSync(path.resolve(__dirname, '../certificates/privkey.pem'))
+// };
 
 const bodyParser = require('body-parser');
 
@@ -46,5 +46,5 @@ conexion()
     .then(res => console.log('MongoDB is connected...'))
     .catch(err => console.log(err));
 
-app.listen(3001, console.log("Server running"));
-https.createServer(options, app).listen(3000, console.log("Secure server running on port 3000"));
+app.listen(3000, console.log("Server running"));
+// https.createServer(options, app).listen(3000, console.log("Secure server running on port 3000"));
