@@ -8,8 +8,8 @@ const https = require('https');
 const fs = require('fs');
 
 const options = {
-    cert: fs.readFileSync('../certificates/fullchain.pem'),
-    key: fs.readFileSync('../certificates/privkey.pem')
+    cert: fs.readFileSync(path.resolve(__dirname, '../certificates/fullchain.pem')),
+    key: fs.readFileSync(path.resolve(__dirname, '../certificates/privkey.pem'))
 };
 
 const bodyParser = require('body-parser');
