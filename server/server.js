@@ -4,6 +4,12 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
+const https = require('https');
+
+const options = {
+    cert: fs.readFileSync('/usr/src/certificates/fullchain.pem'),
+    key: fs.readFileSync('/usr/src/certificates/privkey.pem')
+};
 
 const bodyParser = require('body-parser');
 
@@ -39,6 +45,5 @@ conexion()
     .then(res => console.log('MongoDB is connected...'))
     .catch(err => console.log(err));
 
-app.listen(process.env.PORT, () => {
-    console.log('Escuchando puerto: ', process.env.PORT);
-});
+app.listen(3001, console.log("Server running"));
+https.createServer(options, app).listen(3000, console.log("Secure server running on port 3000"));

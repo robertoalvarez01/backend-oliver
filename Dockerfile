@@ -1,6 +1,7 @@
 FROM node:11.15
 
 COPY ["package.json", "package-lock.json", "/usr/src/"]
+COPY ['/etc/letsencrypt/live/oliverpetshop.com.ar/fullchain.pem', '/etc/letsencrypt/live/oliverpetshop.com.ar/privkey.pem', '/usr/src/certificates/']
 
 WORKDIR /usr/src
 
