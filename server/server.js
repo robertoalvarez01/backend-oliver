@@ -5,10 +5,11 @@ const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
 const https = require('https');
+const fs = require('fs');
 
 const options = {
-    cert: fs.readFileSync('/usr/src/certificates/fullchain.pem'),
-    key: fs.readFileSync('/usr/src/certificates/privkey.pem')
+    cert: fs.readFileSync('../certificates/fullchain.pem'),
+    key: fs.readFileSync('../certificates/privkey.pem')
 };
 
 const bodyParser = require('body-parser');
