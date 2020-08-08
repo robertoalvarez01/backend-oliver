@@ -38,7 +38,8 @@ const conexion = async() => {
 
     return await mongoose.connect(process.env.URLDB, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: false
     });
 }
 
