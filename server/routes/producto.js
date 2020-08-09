@@ -49,7 +49,7 @@ app.post('/producto', [verificarToken, verificarAdmin_role], (req, res) => {
 
 app.put('/producto/:id', verificarToken, (req, res) => {
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'precioUni', 'descripcion', 'disponible', 'categoria', 'usuario']);
+    let body = _.pick(req.body, ['nombre', 'precioUni', 'descripcion', 'descripcionBasica', 'disponible', 'categoria', 'marca', 'usuario', 'stock', 'minimo','codigoBarra']);
 
     Producto.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, productoDB) => {
         if (err) {
