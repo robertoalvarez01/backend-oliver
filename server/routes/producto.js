@@ -112,15 +112,8 @@ app.delete('/producto/:id', verificarToken, (req, res) => {
 // ======================================
 
 app.get('/producto', verificarToken, (req, res) => {
-    let desde = req.query.desde || 0;
-    desde = Number(desde);
-
-    let limite = req.query.limite || 5;
-    limite = Number(limite);
 
     Producto.find({ disponible: true })
-        .skip(desde)
-        .limit(limite)
         .populate('usuario', 'nombre email')
         .populate('categoria', 'descripcion')
         .populate('marca', 'descripcion')
