@@ -82,7 +82,7 @@ app.put('/producto/:id', verificarToken, (req, res) => {
 app.delete('/producto/:id', verificarToken, (req, res) => {
     let id = req.params.id;
 
-    Producto.findOneAndRemove(id, (err, productoBorrado) => {
+    Producto.findOneAndUpdate(id, { disponible: false }, (err, productoBorrado) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
