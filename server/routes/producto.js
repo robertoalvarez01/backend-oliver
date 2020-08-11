@@ -83,7 +83,7 @@ app.delete('/producto/:id', verificarToken, (req, res) => {
     let id = req.params.id;
     console.log(id);
 
-    Producto.findOneAndUpdate(id, { disponible: false }, (err, productoBorrado) => {
+    Producto.findByIdAndRemove(id, (err, productoBorrado) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -91,7 +91,7 @@ app.delete('/producto/:id', verificarToken, (req, res) => {
             });
         }
 
-        if (!productoBorrado) {
+        if (productoBorrado === null) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -104,7 +104,7 @@ app.delete('/producto/:id', verificarToken, (req, res) => {
             ok: true,
             message: `El producto ${productoBorrado.nombre}, ha sido borrado con exito`
         });
-    })
+    });
 });
 
 
