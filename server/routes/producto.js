@@ -81,6 +81,7 @@ app.put('/producto/:id', verificarToken, (req, res) => {
 
 app.delete('/producto/:id', verificarToken, (req, res) => {
     let id = req.params.id;
+    console.log(id);
 
     Producto.findOneAndUpdate(id, { disponible: false }, (err, productoBorrado) => {
         if (err) {
