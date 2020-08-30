@@ -3,8 +3,7 @@ const Schema = mongoose.Schema;
 
 let subCategoriaSchema = new Schema({
     descripcion: {
-        type: String,
-        required: [true, 'La descripción es obligatoria']
+        type: String
     },
     usuario: {
         type: Schema.Types.ObjectId,
