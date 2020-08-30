@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 let subCategoriaSchema = new Schema({
     descripcion: {
         type: String,
-        unique: true,
         required: [true, 'La descripción es obligatoria']
     },
     usuario: {
