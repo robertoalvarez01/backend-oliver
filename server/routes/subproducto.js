@@ -187,7 +187,7 @@ app.get('/subproducto/buscar/:busqueda', verificarToken, (req, res) => {
 });
 
 //-- Integracion con el admin del local --
-
+/*
 const axios = require('axios');
 async function getUser() {
     try {
@@ -215,6 +215,6 @@ async function getUser() {
 }
 
 getUser();
-
+*/
 
 module.exports = app;
