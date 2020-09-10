@@ -3,7 +3,9 @@ const Schema = mongoose.Schema;
 
 let subCategoriaSchema = new Schema({
     descripcion: {
-        type: String
+        type: String,
+        unique: false,
+        required: [true, 'La descripción es obligatoria']
     },
     usuario: {
         type: Schema.Types.ObjectId,
@@ -15,7 +17,5 @@ let subCategoriaSchema = new Schema({
         required: true
     }
 });
-
-
 
 module.exports = mongoose.model('subCategoria', subCategoriaSchema);

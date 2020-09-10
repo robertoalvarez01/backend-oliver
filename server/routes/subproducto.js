@@ -2,7 +2,7 @@ const express = require('express');
 const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
 
 const app = express();
-let Producto = require('../models/producto');
+let Producto = require('../models/subProducto');
 
 const _ = require('underscore');
 
@@ -10,18 +10,14 @@ const _ = require('underscore');
 // Insertar nuevo Producto
 // ======================================
 
-app.post('/producto', [verificarToken, verificarAdmin_role], (req, res) => {
+app.post('/subproducto', [verificarToken, verificarAdmin_role], (req, res) => {
     let body = req.body;
     let id = req.usuario._id;
 
     let producto = new Producto({
         nombre: body.nombre,
         precioUni: body.precioUni,
-        descripcionBasica: body.descripcionBasica,
-        disponible: body.disponible,
-        categoria: body.categoria,
-        marca: body.marca,
-        descripcion: body.descripcion,
+        peso: body.peso,
         stock: body.stock,
         minimo: body.minimo,
         codigoBarra: body.codigoBarra,
@@ -47,10 +43,9 @@ app.post('/producto', [verificarToken, verificarAdmin_role], (req, res) => {
 // Modificar Producto
 // ======================================
 
-app.put('/producto/:id', verificarToken, (req, res) => {
-
+app.put('/subproducto/:id', verificarToken, (req, res) => {
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'precioUni', 'descripcion', 'descripcionBasica', 'disponible', 'categoria', 'marca', 'usuario', 'stock', 'minimo','codigoBarra']);
+    let body = _.pick(req.body, ['nombre', 'codigoBarra', 'stock', 'minimo', 'peso', 'precioUni', 'usuario']);
 
     Producto.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, productoDB) => {
         if (err) {
@@ -80,7 +75,7 @@ app.put('/producto/:id', verificarToken, (req, res) => {
 // Borrar Producto -- (Desactivarlo)
 // ======================================
 
-app.delete('/producto/:id', verificarToken, (req, res) => {
+app.delete('/subproducto/:id', verificarToken, (req, res) => {
     let id = req.params.id;
     console.log(id);
 
@@ -113,16 +108,9 @@ app.delete('/producto/:id', verificarToken, (req, res) => {
 // Listar productos (Paginados)
 // ======================================
 
-app.get('/producto', verificarToken, (req, res) => {
-    let desde = req.query.desde || 0;
-    desde = Number(desde);
+app.get('/subproducto', verificarToken, (req, res) => {
 
-    let limite = req.query.limite || 5;
-    limite = Number(limite);
-
-    Producto.find({ disponible: true })
-        .skip(desde)
-        .limit(limite)
+    Producto.find()
         .exec((err, productos) => {
             if (err) {
                 return res.status(400).json({
@@ -131,7 +119,7 @@ app.get('/producto', verificarToken, (req, res) => {
                 });
             }
 
-            Producto.count({ disponible: true }, (err, conteo) => {
+            Producto.countDocuments((err, conteo) => {
                 if (err) {
                     return res.status(400).json({
                         ok: false,
@@ -152,13 +140,10 @@ app.get('/producto', verificarToken, (req, res) => {
 // Seleccionar Producto X ID
 // ======================================
 
-app.get('/producto/:id', verificarToken, (req, res) => {
+app.get('/subproducto/:id', verificarToken, (req, res) => {
     let id = req.params.id;
 
     Producto.findById(id)
-        .populate('usuario', 'nombre email')
-        .populate('categoria', 'descripcion')
-        .populate('marca', 'descripcion')
         .exec((err, productoDB) => {
             if (err) {
                 return res.status(400).json({
@@ -178,7 +163,7 @@ app.get('/producto/:id', verificarToken, (req, res) => {
 // Busquedas con Expresión Regular
 // ======================================
 
-app.get('/producto/buscar/:busqueda', verificarToken, (req, res) => {
+app.get('/subproducto/buscar/:busqueda', verificarToken, (req, res) => {
     let busqueda = req.params.busqueda;
 
     let regex = new RegExp(busqueda, 'i');
@@ -201,6 +186,35 @@ app.get('/producto/buscar/:busqueda', verificarToken, (req, res) => {
         });
 });
 
+//-- Integracion con el admin del local --
+
+const axios = require('axios');
+async function getUser() {
+    try {
+        const response = await axios.get('https://local.oliverpetshop.com.ar/backend/relacion-pagina/producto/listarProducto.php');
+        //console.log(response.data);
+        console.log('La cantidad de productos es --> ', response.data.length);
+        response.data.map((product, index) => {
+            let producto = new Producto({
+                nombre: product.producto,
+                stock: product.stock,
+                codigoBarra: product.codigo_producto
+            });
+        
+            producto.save((err, productoDB) => {
+                if (err) {
+                    return console.log('Error en el producto --> ', index, err);
+                }
+        
+                console.log('Se guardo el producto --> ', index);
+            });
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+getUser();
 
 
 module.exports = app;

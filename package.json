@@ -19,6 +19,7 @@
         "mongoose": "^5.9.7",
         "mongoose-unique-validator": "^2.0.3",
         "node-gyp": "^7.0.0",
-        "underscore": "^1.10.1"
+        "underscore": "^1.10.1",
+        "axios": "^0.20.0"
     }
 }

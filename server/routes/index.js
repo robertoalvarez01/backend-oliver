@@ -8,6 +8,7 @@ app.use(require('./categoria'));
 app.use(require('./subCategoria'));
 app.use(require('./marca'));
 app.use(require('./producto'));
+app.use(require('./subproducto'));
 app.use(require('./upload'));
 app.use(require('./imagenes'));
 

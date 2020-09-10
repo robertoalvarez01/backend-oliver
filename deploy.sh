@@ -10,5 +10,5 @@ docker image rm backend-oliver
 
 docker build -t backend-oliver .
 
-docker run -d --restart unless-stopped --name petshop-oliver-mongo --mount src=oliverpetshop,dst=/data/db mongo
+docker run -d --restart unless-stopped --name petshop-oliver-mongo -p 27017:27017 --mount src=oliverpetshop,dst=/data/db mongo
 docker run -d --restart unless-stopped --name backend-oliver -p 3000:3000 --link petshop-oliver-mongo backend-oliver
