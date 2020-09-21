@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-
+const {config} = require('../config/config.js');
 // ==========================
 // Verificar Token
 // ==========================
@@ -8,7 +8,7 @@ let verificarToken = (req, res, next) => {
 
     let token = req.get('token');
 
-    jwt.verify(token, process.env.SEED, (err, decoded) => {
+    jwt.verify(token, config.seed, (err, decoded) => {
         if (err) {
             return res.status(401).json({
                 ok: false,
@@ -51,7 +51,7 @@ let verificarTokenURL = (req, res, next) => {
 
     let token = req.query.token;
 
-    jwt.verify(token, process.env.SEED, (err, decoded) => {
+    jwt.verify(token, config.seed, (err, decoded) => {
         if (err) {
             return res.status(401).json({
                 ok: false,

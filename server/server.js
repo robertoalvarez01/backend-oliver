@@ -1,8 +1,5 @@
-require('./config/config');
-
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
 // const https = require('https');
@@ -37,18 +34,6 @@ app.use(express.static(path.resolve(__dirname, '../public')))
 
 app.use(require('./routes/index'));
 
-const conexion = async() => {
-
-    return await mongoose.connect(process.env.URLDB, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-    });
-}
-
-conexion()
-    .then(res => console.log('MongoDB is connected...'))
-    .catch(err => console.log(err));
 
 app.listen(3000, console.log("Server running"));
 // https.createServer(options, app).listen(3000, console.log("Secure server running on port 3000"));

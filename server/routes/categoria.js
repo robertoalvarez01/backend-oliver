@@ -1,7 +1,7 @@
 const express = require('express');
 const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
 const app = express();
-const Categoria = require('../models/categoria');
+//const Categoria = require('../models/categoria');
 
 
 // ======================================
@@ -94,8 +94,11 @@ app.delete('/categoria/:id', [verificarToken, verificarAdmin_role], (req, res) =
 // Trae todas las categorias
 // ======================================
 
-app.get('/categoria', verificarToken, (req, res) => {
-    Categoria.find({})
+app.get('/categorias', verificarToken, (req, res) => {
+    res.json({
+        message:'Todo Ok'
+    })
+    /*Categoria.find({})
         .sort('descripcion')
         .populate('usuario', 'nombre email')
         .exec((err, categorias) => {
@@ -120,7 +123,7 @@ app.get('/categoria', verificarToken, (req, res) => {
                     cantidad: conteo
                 });
             })
-        })
+        })*/
 });
 
 // ======================================

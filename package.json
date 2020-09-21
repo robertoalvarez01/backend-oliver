@@ -5,21 +5,21 @@
     "main": "index.js",
     "scripts": {
         "start": "node server/server.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "dev": "nodemon server/server.js"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "bcrypt": "3.0.6",
         "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "express-fileupload": "^1.1.6",
         "google-auth-library": "^6.0.0",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.9.7",
-        "mongoose-unique-validator": "^2.0.3",
+        "mysql": "^2.18.1",
         "node-gyp": "^7.0.0",
-        "underscore": "^1.10.1",
-        "cors": "^2.8.5"
+        "underscore": "^1.10.1"
     }
 }
