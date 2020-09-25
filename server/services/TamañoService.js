@@ -6,7 +6,6 @@ class TamañoService{
     }
     async getAll(){
         const datos = await this.tamaño.getAll().then(res=>{
-            console.log(res); 
             return res;
         }).catch(err=>err); 
         return datos;

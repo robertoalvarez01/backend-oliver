@@ -23,7 +23,7 @@ class TamañoModel{
     create(body){
         return new Promise(async(resolve,reject)=>{
             //hash para password
-            let query = `CALL ${config.SP_TAMAÑO}(0,'${body.tamaño}')`;
+            let query = `CALL ${config.SP_TAM}(0,'${body.tamaño}')`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
@@ -33,7 +33,7 @@ class TamañoModel{
 
     update(body,id){
         return new Promise((resolve,reject)=>{
-            let query = `CALL ${config.SP_TAMAÑO}(${id},'${body.tamaño}')`;
+            let query = `CALL ${config.SP_TAM}(${id},'${body.tamaño}')`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);
@@ -43,7 +43,7 @@ class TamañoModel{
 
     delete(id){
         return new Promise((resolve,reject)=>{
-            connection.query(`CALL ${config.SP_TAMAÑO_DELETE}(${id})`,(err,res,fields)=>{
+            connection.query(`CALL ${config.SP_TAM_DELETE}(${id})`,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);
             })

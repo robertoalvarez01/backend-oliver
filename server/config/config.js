@@ -36,8 +36,8 @@ const config = {
     SP_SUBCATEGORIA_DELETE:process.env.SP_SUBCATEGORIA_DELETE,
     SP_SUBPRODUCTO:process.env.SP_SUBPRODUCTO,
     SP_SUBPRODUCTO_DELETE:process.env.SP_SUBPRODUCTO_DELETE,
-    SP_TAMAÑO:process.env.SP_TAMAÑO,
-    SP_TAMAÑO_DELETE:process.env.SP_TAMAÑO_DELETE,
+    SP_TAM:process.env.SP_TAM,
+    SP_TAM_DELETE:process.env.SP_TAM_DELETE,
     SP_USUARIO:process.env.SP_USUARIO,
     SP_USUARIO_DELETE:process.env.SP_USUARIO_DELETE,
     
