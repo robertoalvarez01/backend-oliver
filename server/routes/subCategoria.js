@@ -1,61 +1,46 @@
 const express = require('express');
 const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
 const app = express();
-const Categoria = require('../models/subCategoria');
+const SubCategoriaService = require('../services/SubCategoriaService');
 
 
 // ======================================
 // Crea una categoria
 // ======================================
 
-app.post('/subcategoria', verificarToken, (req, res) => {
-    let id = req.usuario._id;
-    let body = req.body;
-
-    let categoria = new Categoria({
-        descripcion: body.descripcion,
-        categoria: body.categoria,
-        usuario: id
-    });
-
-    categoria.save((err, categoriaDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        //usuarioDB.password = null;
-
-        res.json({
-            ok: true,
-            categoria: categoriaDB
-        });
-    });
+app.post('/subcategoria', [verificarToken,verificarAdmin_role], async(req, res) => {
+    try {
+        const {body} = req;
+        const subcategoria = new SubCategoriaService();
+        const response = await subcategoria.create(body);
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        })        
+    }
 });
 
 // ======================================
 // Actualiza una categoria
 // ======================================
 
-app.put('/subcategoria/:id', verificarToken, (req, res) => {
-    let id = req.params.id;
-    let body = req.body;
-
-    Categoria.findByIdAndUpdate(id, { descripcion: body.descripcion, categoria: body.categoria }, { new: true, runValidators: true }, (err, categoriaDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.json({
-            ok: true,
-            categoria: categoriaDB
-        });
-    });
+app.put('/subcategoria/:id', [verificarToken,verificarAdmin_role], async(req, res) => {
+    try {
+        const {id} = req.params;
+        const {body} = req;
+        const subcategoria = new SubCategoriaService();
+        const response = await subcategoria.update(body,id);
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        }) 
+    }
 });
 
 
@@ -63,89 +48,56 @@ app.put('/subcategoria/:id', verificarToken, (req, res) => {
 // Borra una categoria -- (Borrado definitivo)
 // ======================================
 
-app.delete('/subcategoria/:id', [verificarToken, verificarAdmin_role], (req, res) => {
-    let id = req.params.id;
-
-    Categoria.findByIdAndRemove(id, (err, categoriaBorrada) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        if (categoriaBorrada === null) {
-            return res.status(500).json({
-                ok: false,
-                err: {
-                    message: 'Categoria no encontrada'
-                }
-            });
-        }
-
-        res.json({
-            ok: true,
-            categoria: categoriaBorrada
-        });
-
-    });
+app.delete('/subcategoria/:id', [verificarToken, verificarAdmin_role], async(req, res) => {
+    try {
+        const {id} = req.params;
+        const subcategoria = new SubCategoriaService();
+        const response = await subcategoria.delete(id);
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        }) 
+    }
 });
 
 // ======================================
 // Trae todas las categorias
 // ======================================
 
-app.get('/subcategoria', verificarToken, (req, res) => {
-    Categoria.find({})
-        .sort('descripcion')
-        .populate('usuario', 'nombre email')
-        .populate('categoria', 'descripcion')
-        .exec((err, categorias) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            Categoria.count({}, (err, conteo) => {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        err
-                    });
-                }
-
-                res.json({
-                    ok: true,
-                    categorias,
-                    cantidad: conteo
-                });
-            })
+app.get('/subcategoria', verificarToken, async(req, res) => {
+    try {
+        const subcategoria = new SubCategoriaService();
+        const response = await subcategoria.getAll();
+        res.status(200).json({
+            data:response
         })
+    } catch (error) {
+        res.status(500).json({
+            error
+        }) 
+    }
 });
 
 // ======================================
 // Trae una sola categoria
 // ======================================
 
-app.get('/subcategoria/:id', verificarToken, (req, res) => {
-    let id = req.params.id;
-
-    Categoria.findOne({ _id: id }, (err, categoriaDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.json({
-            ok: true,
-            categoria: categoriaDB
-        });
-
-    });
+app.get('/subcategoria/:id', verificarToken,async(req, res) => {
+    try {
+        const {id} = req.params;
+        const subcategoria = new SubCategoriaService();
+        const response = await subcategoria.getOne(id);
+        res.status(200).json({
+            data:response
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        }) 
+    }
 });
 
 

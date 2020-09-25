@@ -28,8 +28,7 @@ let verificarToken = (req, res, next) => {
 // ==========================
 
 let verificarAdmin_role = (req, res, next) => {
-
-    if (!(req.usuario.role === 'ADMIN_ROLE')) {
+    if (!(req.usuario.admin)) {
         return res.status(401).json({
             ok: false,
             err: {

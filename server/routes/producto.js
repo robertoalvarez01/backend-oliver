@@ -2,110 +2,65 @@ const express = require('express');
 const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
 
 const app = express();
-let Producto = require('../models/producto');
+const ProductoService = require('../services/ProductoService');
 
-const _ = require('underscore');
 
 // ======================================
 // Insertar nuevo Producto
 // ======================================
 
-app.post('/producto', [verificarToken, verificarAdmin_role], (req, res) => {
-    let body = req.body;
-    let id = req.usuario._id;
-
-    let producto = new Producto({
-        nombre: body.nombre,
-        precioUni: body.precioUni,
-        descripcionBasica: body.descripcionBasica,
-        disponible: body.disponible,
-        categoria: body.categoria,
-        marca: body.marca,
-        descripcion: body.descripcion,
-        stock: body.stock,
-        minimo: body.minimo,
-        codigoBarra: body.codigoBarra,
-        usuario: id
-    });
-
-    producto.save((err, productoDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.json({
-            ok: true,
-            producto: productoDB
-        });
-    });
+app.post('/producto', [verificarToken, verificarAdmin_role], async(req, res) => {
+    try {
+        const {body} = req;
+        const productoservice = new ProductoService();
+        const response = await productoservice.create(body);
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        })
+    }
 });
 
 // ======================================
 // Modificar Producto
 // ======================================
 
-app.put('/producto/:id', verificarToken, (req, res) => {
-
-    let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'precioUni', 'descripcion', 'descripcionBasica', 'disponible', 'categoria', 'marca', 'usuario', 'stock', 'minimo','codigoBarra']);
-
-    Producto.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, productoDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        if (!productoDB) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'El id no existe'
-                }
-            });
-        }
-
-        res.json({
-            ok: true,
-            producto: productoDB
-        });
-    });
+app.put('/producto/:id', [verificarToken,verificarAdmin_role], async(req, res) => {
+    try {
+        const {body} = req;
+        const {id} = req.params;
+        const productoservice = new ProductoService();
+        const response = await productoservice.update(body,id);
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        })
+    }
 });
 
 // ======================================
 // Borrar Producto -- (Desactivarlo)
 // ======================================
 
-app.delete('/producto/:id', verificarToken, (req, res) => {
-    let id = req.params.id;
-    console.log(id);
-
-    Producto.findByIdAndRemove(id, (err, productoBorrado) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        if (productoBorrado === null) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'No se ha encontrado ningun producto con ese id'
-                }
-            });
-        }
-
-        res.json({
-            ok: true,
-            message: `El producto ${productoBorrado.nombre}, ha sido borrado con exito`
-        });
-    });
+app.delete('/producto/:id', verificarToken, async(req, res) => {
+    try {
+        const {id} = req.params;
+        const productoservice = new ProductoService();
+        const response = await productoservice.delete(id);
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        })
+    }
 });
 
 
@@ -113,92 +68,61 @@ app.delete('/producto/:id', verificarToken, (req, res) => {
 // Listar productos (Paginados)
 // ======================================
 
-app.get('/producto', verificarToken, (req, res) => {
-    let desde = req.query.desde || 0;
-    desde = Number(desde);
-
-    let limite = req.query.limite || 5;
-    limite = Number(limite);
-
-    Producto.find({ disponible: true })
-        .skip(desde)
-        .limit(limite)
-        .exec((err, productos) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            Producto.count({ disponible: true }, (err, conteo) => {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        err
-                    });
-                }
-
-                res.json({
-                    ok: true,
-                    productos,
-                    cuantos: conteo
-                });
-            });
-        });
+app.get('/producto', verificarToken, async(req, res) => {
+    try {
+        let desde = req.query.desde || 0;
+        desde = Number(desde);
+        let limite = req.query.limite || 5;
+        limite = Number(limite);
+        const productoservice = new ProductoService();
+        const data = await productoservice.getAll(desde,limite);
+        res.status(200).json({
+            data
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        })        
+    }
 });
 
 // ======================================
 // Seleccionar Producto X ID
 // ======================================
 
-app.get('/producto/:id', verificarToken, (req, res) => {
-    let id = req.params.id;
-
-    Producto.findById(id)
-        .populate('usuario', 'nombre email')
-        .populate('categoria', 'descripcion')
-        .populate('marca', 'descripcion')
-        .exec((err, productoDB) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            res.json({
-                ok: true,
-                res: productoDB
-            });
-        });
+app.get('/producto/:id', verificarToken, async(req, res) => {
+    try {
+        const {id} = req.params;
+        const productoservice = new ProductoService();
+        const data = await productoservice.getOne(id);
+        res.status(200).json({
+            data
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        })        
+    } 
 });
 
 // ======================================
 // Busquedas con Expresión Regular
 // ======================================
 
-app.get('/producto/buscar/:busqueda', verificarToken, (req, res) => {
-    let busqueda = req.params.busqueda;
-
-    let regex = new RegExp(busqueda, 'i');
-
-    Producto.find({ nombre: regex, disponible: true })
-        .populate('categoria', 'descripcion')
-        .populate('usuario', 'nombre, email')
-        .exec((err, productos) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            res.json({
-                ok: true,
-                productos
-            });
-        });
+app.get('/productos/buscar', verificarToken, async(req, res) => {
+    try {
+        let {busqueda} = req.query;
+        busqueda = busqueda.toLowerCase();
+        const productoservice = new ProductoService();
+        const data = await productoservice.search(busqueda);
+        res.status(200).json({
+            data
+        })
+    } catch (error) {
+        res.status(500).json({
+            error
+        })       
+    }
 });
 
 

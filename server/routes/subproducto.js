@@ -1,106 +1,66 @@
 const express = require('express');
 const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
-
+const upload = require('../lib/multer');
 const app = express();
-let Producto = require('../models/subProducto');
+let SubProductoService = require('../services/SubProductoService');
 
-const _ = require('underscore');
 
 // ======================================
 // Insertar nuevo Producto
 // ======================================
 
-app.post('/subproducto', [verificarToken, verificarAdmin_role], (req, res) => {
-    let body = req.body;
-    let id = req.usuario._id;
-
-    let producto = new Producto({
-        nombre: body.nombre,
-        precioUni: body.precioUni,
-        peso: body.peso,
-        stock: body.stock,
-        minimo: body.minimo,
-        codigoBarra: body.codigoBarra,
-        usuario: id
-    });
-
-    producto.save((err, productoDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.json({
-            ok: true,
-            producto: productoDB
-        });
-    });
+app.post('/subproducto', [verificarToken, verificarAdmin_role,upload.single('foto')], async(req, res) => {
+    try {
+        if(!req.file) return res.status(500).json({error:'Ninguna imagen insertada'});
+        const {body,file:foto} = req;
+        const subproducto = new SubProductoService();
+        const response = await subproducto.create(body,foto.filename);
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({error})
+    }
 });
 
 // ======================================
 // Modificar Producto
 // ======================================
 
-app.put('/subproducto/:id', verificarToken, (req, res) => {
-    let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'codigoBarra', 'stock', 'minimo', 'peso', 'precioUni', 'usuario']);
-
-    Producto.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, productoDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
+app.put('/subproducto/:id', [verificarToken,verificarAdmin_role,upload.single('foto')], async(req, res) => {
+    try {
+        const {body,params:{id}} = req;
+        const subproducto = new SubProductoService();
+        let response;
+        if(!req.file){
+            response = await subproducto.update(body,id);
+        }else{
+            const {file:foto} = req;
+            response = await subproducto.update(body,id,foto.filename);
         }
-
-        if (!productoDB) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'El id no existe'
-                }
-            });
-        }
-
-        res.json({
-            ok: true,
-            producto: productoDB
-        });
-    });
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({error})
+    }
 });
 
 // ======================================
 // Borrar Producto -- (Desactivarlo)
 // ======================================
 
-app.delete('/subproducto/:id', verificarToken, (req, res) => {
-    let id = req.params.id;
-    console.log(id);
-
-    Producto.findByIdAndRemove(id, (err, productoBorrado) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        if (productoBorrado === null) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'No se ha encontrado ningun producto con ese id'
-                }
-            });
-        }
-
-        res.json({
-            ok: true,
-            message: `El producto ${productoBorrado.nombre}, ha sido borrado con exito`
-        });
-    });
+app.delete('/subproducto/:id', [verificarToken,verificarAdmin_role], async(req, res) => {
+    try {
+        const {id} = req.params;
+        const subproducto = new SubProductoService();
+        const response = await subproducto.delete(id);
+        res.status(200).json({
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({error})
+    }
 });
 
 
@@ -108,82 +68,55 @@ app.delete('/subproducto/:id', verificarToken, (req, res) => {
 // Listar productos (Paginados)
 // ======================================
 
-app.get('/subproducto', verificarToken, (req, res) => {
-
-    Producto.find()
-        .exec((err, productos) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            Producto.countDocuments((err, conteo) => {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        err
-                    });
-                }
-
-                res.json({
-                    ok: true,
-                    productos,
-                    cuantos: conteo
-                });
-            });
-        });
+app.get('/subproducto', verificarToken, async(req, res) => {
+    try {
+        let desde = req.query.desde || 0;
+        desde = Number(desde);
+        let limite = req.query.limite || 5;
+        limite = Number(limite);
+        const subproducto = new SubProductoService();
+        const response = await subproducto.getAll(desde,limite);
+        res.status(200).json({
+            data:response
+        })
+    } catch (error) {
+        res.status(500).json({error})
+    }
 });
 
 // ======================================
 // Seleccionar Producto X ID
 // ======================================
 
-app.get('/subproducto/:id', verificarToken, (req, res) => {
-    let id = req.params.id;
-
-    Producto.findById(id)
-        .exec((err, productoDB) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            res.json({
-                ok: true,
-                res: productoDB
-            });
-        });
+app.get('/subproducto/:id', verificarToken, async(req, res) => {
+    try {
+        const {id} = req.params;
+        const subproducto = new SubProductoService();
+        const response = await subproducto.getOne(id);
+        res.status(200).json({
+            data:response
+        })
+    } catch (error) {
+        res.status(500).json({error})
+    }
 });
 
 // ======================================
 // Busquedas con Expresión Regular
 // ======================================
 
-app.get('/subproducto/buscar/:busqueda', verificarToken, (req, res) => {
-    let busqueda = req.params.busqueda;
-
-    let regex = new RegExp(busqueda, 'i');
-
-    Producto.find({ nombre: regex, disponible: true })
-        .populate('categoria', 'descripcion')
-        .populate('usuario', 'nombre, email')
-        .exec((err, productos) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            res.json({
-                ok: true,
-                productos
-            });
-        });
+app.get('/subproductos/buscar', verificarToken, async(req, res) => {
+    try {
+        let {busqueda} = req.query;
+        busqueda = busqueda.toLowerCase();
+        const subproducto = new SubProductoService();
+        const response = await subproducto.search(busqueda);
+        res.status(200).json({
+            data:response
+        })
+    } catch (error) {
+        res.status(500).json({error})
+    }
 });
 
 //-- Integracion con el admin del local --

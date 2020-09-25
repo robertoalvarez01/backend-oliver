@@ -35,7 +35,7 @@ const config = {
     SP_SUBCATEGORIA:process.env.SP_SUBCATEGORIA,
     SP_SUBCATEGORIA_DELETE:process.env.SP_SUBCATEGORIA_DELETE,
     SP_SUBPRODUCTO:process.env.SP_SUBPRODUCTO,
-    SP_SUBPRODUCTO_DELETE:process.env.SP_SUBCATEGORIA_DELETE,
+    SP_SUBPRODUCTO_DELETE:process.env.SP_SUBPRODUCTO_DELETE,
     SP_TAMAÑO:process.env.SP_TAMAÑO,
     SP_TAMAÑO_DELETE:process.env.SP_TAMAÑO_DELETE,
     SP_USUARIO:process.env.SP_USUARIO,
@@ -46,7 +46,7 @@ const config = {
     TABLE_PRODUCTO:process.env.TABLE_PRODUCTO,
     TABLE_SUB_PRODUCTO:process.env.TABLE_SUB_PRODUCTO,
     TABLE_SUB_CATEGORIA:process.env.TABLE_SUB_CATEGORIA,
-    TABLE_TAMAÑO:process.env.TABLE_TAMAÑO,
+    TABLE_TAM:process.env.TABLE_TAM,
     TABLE_USER:process.env.TABLE_USER
 };
 
