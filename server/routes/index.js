@@ -9,8 +9,7 @@ app.use(require('./subCategoria'));
 app.use(require('./marca'));
 app.use(require('./producto'));
 app.use(require('./subproducto'));
-/*app.use(require('./upload'));
-app.use(require('./imagenes'));*/
+app.use(require('./tamaño'));
 
 
 module.exports = app;
