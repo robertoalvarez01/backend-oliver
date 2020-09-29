@@ -2,14 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
-// const https = require('https');
-// const fs = require('fs');
-
-// const options = {
-//     cert: fs.readFileSync(path.resolve(__dirname, '../certificates/fullchain.pem')),
-//     key: fs.readFileSync(path.resolve(__dirname, '../certificates/privkey.pem'))
-// };
-
+const {config} = require('./config/config');
 const bodyParser = require('body-parser');
 
 // Enable CORS Origin
@@ -35,5 +28,5 @@ app.use(express.static(path.resolve(__dirname, '../public')))
 app.use(require('./routes/index'));
 
 
-app.listen(3000, console.log("Server running"));
+app.listen(config.port, console.log("Server running on port "+config.port));
 // https.createServer(options, app).listen(3000, console.log("Secure server running on port 3000"));

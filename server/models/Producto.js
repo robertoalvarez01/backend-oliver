@@ -54,7 +54,7 @@ class ProductoModel{
             })
         })
     };
-
+    
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_PRODUCTO}(${id},'${body.producto}','${body.precioUnidad}','${body.descripcion}',

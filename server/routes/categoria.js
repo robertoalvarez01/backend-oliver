@@ -11,6 +11,7 @@ const CategoriaService = require('../services/CategoriaService');
 app.post('/categoria', [verificarToken,verificarAdmin_role], async(req, res) => {
     try {
         const {body} = req;
+        if(Object.keys(body).length===0) return res.status(503).json({error:'Ningun dato recibido'});
         const categoriaservice = new CategoriaService();
         const response = await categoriaservice.create(body);
         res.status(200).json({
@@ -31,6 +32,7 @@ app.put('/categoria/:id', [verificarToken,verificarAdmin_role], async(req, res) 
     try {
         const {id} = req.params;
         const {body} = req;
+        if(Object.keys(body).length===0) return res.status(503).json({error:'Ningun dato recibido'});
         const categoriaservice = new CategoriaService();
         const response = await categoriaservice.update(body,id);
         res.status(200).json({

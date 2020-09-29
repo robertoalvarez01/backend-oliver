@@ -8,7 +8,7 @@ class SubProductoModel{
             peso,tamaño,subprd.precioUnidad,foto
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño
-                        ORDER BY idSubProducto DESC LIMIT ${limite}`;
+                        ORDER BY idSubProducto DESC LIMIT ${desde},${limite}`;
             connection.query(query,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);
@@ -30,8 +30,9 @@ class SubProductoModel{
 
     search(key){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idSubProducto,subProducto
-                        FROM ${config.TABLE_SUB_PRODUCTO} WHERE subProducto LIKE '%${key}%'`;
+            let query = `SELECT idSubProducto,subProducto,producto,tamaño,peso,stock
+                        FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm
+                        WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND subProducto LIKE '%${key}%'`;
             connection.query(query,(err,results,fields)=>{
                 if(err) return reject(err);
                 resolve(results);
