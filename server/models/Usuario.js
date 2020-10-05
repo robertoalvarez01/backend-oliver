@@ -1,7 +1,6 @@
 const connection = require('../lib/mysql');
 const {config} = require('../config/config');
 const bcrypt = require('bcrypt');
-const { has } = require('underscore');
 
 class UsuarioModel{
     getAll(){
@@ -21,26 +20,10 @@ class UsuarioModel{
             })
         })
     }
-
-    create(body,foto){
-        return new Promise(async(resolve,reject)=>{
-            //hash para password
-            bcrypt.hash(body.password, 10,(err,hash)=>{
-                if(err) reject(err);
-                let query = `CALL ${config.SP_USUARIO}(0,'${body.email}','${hash}','${body.nombre}','${body.telefono}',
-                ${body.admin},'${foto}')`;
-                connection.query(query,(error,results,fields)=>{
-                    if(error) return reject(error);
-                    resolve(results);
-                })
-            })
-        })
-    };
-
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_USUARIO}(${id},'${body.email}','${body.password}','${body.nombre}','${body.telefono}',
-            ${body.admin},'${foto}')`;
+            ${body.admin},'${foto}','web','${body.ubicacion}')`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);
@@ -57,12 +40,42 @@ class UsuarioModel{
         })
     }
 
+
+    //login and registers
+
+    register(body,foto){
+        return new Promise(async(resolve,reject)=>{
+            //hash para password
+            bcrypt.hash(body.password, 10,(err,hash)=>{
+                if(err) reject(err);
+                let query = `CALL ${config.SP_USUARIO}(0,'${body.email}','${hash}','${body.nombre}','${body.telefono}',
+                0,'${foto}','web','${body.ubicacion}')`;
+                connection.query(query,(error,results,fields)=>{
+                    if(error) return reject(error);
+                    resolve(results);
+                })
+            })
+        })
+    };
+
+    registerWithGoogle(data){
+        return new Promise((resolve,reject)=>{
+            let query = `CALL ${config.SP_USUARIO}(0,'${data.email}',null,'${data.nombre}',null,
+            0,'${data.foto}','Google',null)`;
+            connection.query(query,(error,results,fields)=>{
+                if(error) return reject(error);
+                resolve(results);
+            }) 
+        })
+    }
+
+
     login(body){
         return new Promise((resolve,reject)=>{
             let query = `SELECT * FROM ${config.TABLE_USER} 
                         WHERE email = '${body.email}' LIMIT 1`;
             connection.query(query,(err,res,fiels)=>{
-                if(err) return reject(err);
+                if(err) reject(err);
                 resolve(res);
             })
         })

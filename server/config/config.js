@@ -47,7 +47,10 @@ const config = {
     TABLE_SUB_PRODUCTO:process.env.TABLE_SUB_PRODUCTO,
     TABLE_SUB_CATEGORIA:process.env.TABLE_SUB_CATEGORIA,
     TABLE_TAM:process.env.TABLE_TAM,
-    TABLE_USER:process.env.TABLE_USER
+    TABLE_USER:process.env.TABLE_USER,
+
+    GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET:process.env.GOOGLE_CLIENT_SECRET
 };
 
 module.exports = {config}

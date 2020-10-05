@@ -10,6 +10,7 @@ app.use(require('./marca'));
 app.use(require('./producto'));
 app.use(require('./subproducto'));
 app.use(require('./tamaño'));
+app.use(require('./google'))
 
 
 module.exports = app;
