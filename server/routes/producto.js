@@ -68,7 +68,7 @@ app.delete('/producto/:id', verificarToken, async(req, res) => {
 // Listar productos (Paginados)
 // ======================================
 
-app.get('/producto', verificarToken, async(req, res) => {
+app.get('/producto', async(req, res) => {
     try {
         let desde = req.query.desde || 0;
         desde = Number(desde);
@@ -90,7 +90,7 @@ app.get('/producto', verificarToken, async(req, res) => {
 // Seleccionar Producto X ID
 // ======================================
 
-app.get('/producto/:id', verificarToken, async(req, res) => {
+app.get('/producto/:id', async(req, res) => {
     try {
         const {id} = req.params;
         const productoservice = new ProductoService();
@@ -109,7 +109,7 @@ app.get('/producto/:id', verificarToken, async(req, res) => {
 // Busquedas con Expresión Regular
 // ======================================
 
-app.get('/productos/buscar', verificarToken, async(req, res) => {
+app.get('/productos/buscar', async(req, res) => {
     try {
         let {busqueda} = req.query;
         busqueda = busqueda.toLowerCase();

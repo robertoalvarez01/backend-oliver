@@ -67,7 +67,7 @@ app.delete(`/${encodeURIComponent('tamaño')}/:id`, [verificarToken, verificarAd
 // Trae todos los tamaños
 // ======================================
 
-app.get(`/${encodeURIComponent('tamaños')}`, verificarToken, async(req, res) => {
+app.get(`/${encodeURIComponent('tamaños')}`, async(req, res) => {
     try {
         const tamañoservice = new TamañoService();
         const response = await tamañoservice.getAll();
@@ -85,7 +85,7 @@ app.get(`/${encodeURIComponent('tamaños')}`, verificarToken, async(req, res) =>
 // Trae un solo tamaño
 // ======================================
 
-app.get(`/${encodeURIComponent('tamaños')}/:id`, verificarToken, async(req, res) => {
+app.get(`/${encodeURIComponent('tamaños')}/:id`, async(req, res) => {
     try {
         const {id} = req.params;
         const tamañoservice = new TamañoService();

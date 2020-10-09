@@ -69,7 +69,7 @@ app.delete('/categoria/:id', [verificarToken, verificarAdmin_role], async(req, r
 // Trae todas las categorias
 // ======================================
 
-app.get('/categorias', verificarToken, async(req, res) => {
+app.get('/categorias', async(req, res) => {
     try {
         const categoriaservice = new CategoriaService();
         const response = await categoriaservice.getAll();
@@ -87,7 +87,7 @@ app.get('/categorias', verificarToken, async(req, res) => {
 // Trae una sola categoria
 // ======================================
 
-app.get('/categoria/:id', verificarToken, async(req, res) => {
+app.get('/categoria/:id', async(req, res) => {
     try {
         const {id} = req.params;
         const categoriaservice = new CategoriaService();
