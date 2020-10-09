@@ -77,7 +77,7 @@ app.delete('/marca/:id', [verificarToken, verificarAdmin_role], async(req, res) 
 // Trae todas las categorias
 // ======================================
 
-app.get('/marca', [verificarToken, verificarAdmin_role], async(req, res) => {
+app.get('/marca', async(req, res) => {
     try {
         const marcaservice = new MarcaService();
         const response = await marcaservice.getAll();
@@ -95,7 +95,7 @@ app.get('/marca', [verificarToken, verificarAdmin_role], async(req, res) => {
 // Trae una sola categoria
 // ======================================
 
-app.get('/marca/:id', verificarToken, async(req, res) => {
+app.get('/marca/:id', async(req, res) => {
     try {
         const {id} = req.params;
         const marcaservice = new MarcaService();

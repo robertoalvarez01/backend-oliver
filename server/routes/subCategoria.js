@@ -67,7 +67,7 @@ app.delete('/subcategoria/:id', [verificarToken, verificarAdmin_role], async(req
 // Trae todas las categorias
 // ======================================
 
-app.get('/subcategoria', verificarToken, async(req, res) => {
+app.get('/subcategoria', async(req, res) => {
     try {
         const subcategoria = new SubCategoriaService();
         const response = await subcategoria.getAll();
@@ -85,7 +85,7 @@ app.get('/subcategoria', verificarToken, async(req, res) => {
 // Trae una sola categoria
 // ======================================
 
-app.get('/subcategoria/:id', verificarToken,async(req, res) => {
+app.get('/subcategoria/:id',async(req, res) => {
     try {
         const {id} = req.params;
         const subcategoria = new SubCategoriaService();

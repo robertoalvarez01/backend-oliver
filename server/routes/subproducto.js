@@ -68,7 +68,7 @@ app.delete('/subproducto/:id', [verificarToken,verificarAdmin_role], async(req, 
 // Listar productos (Paginados)
 // ======================================
 
-app.get('/subproducto', verificarToken, async(req, res) => {
+app.get('/subproducto', async(req, res) => {
     try {
         let desde = req.query.desde || 0;
         desde = Number(desde);
@@ -88,7 +88,7 @@ app.get('/subproducto', verificarToken, async(req, res) => {
 // Seleccionar Producto X ID
 // ======================================
 
-app.get('/subproducto/:id', verificarToken, async(req, res) => {
+app.get('/subproducto/:id', async(req, res) => {
     try {
         const {id} = req.params;
         const subproducto = new SubProductoService();
@@ -105,7 +105,7 @@ app.get('/subproducto/:id', verificarToken, async(req, res) => {
 // Busquedas con Expresión Regular
 // ======================================
 
-app.get('/subproductos/buscar', verificarToken, async(req, res) => {
+app.get('/subproductos/buscar', async(req, res) => {
     try {
         let {busqueda} = req.query;
         busqueda = busqueda.toLowerCase();
