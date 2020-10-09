@@ -1,55 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google - signin demo</title>
-
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="209538351717-hvmr530qioltpqhqnior0lend7nb6mlp.apps.googleusercontent.com">
+<html>
+  <head>
+    <title>Simple Map</title>
+    <style>
+        #map{
+            width: 500px;
+            height: 500px;
+        }
+    </style>
 </head>
-
 <body>
-
-    <!-- <img src="http://localhost:3000/imagen/producto/5e85729fee82082b601197e3-4.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7InJvbGUiOiJBRE1JTl9ST0xFIiwiZXN0YWRvIjp0cnVlLCJnb29nbGUiOmZhbHNlLCJfaWQiOiI1ZTgyNGI2NmViYzM3ZDI5MTQ3YWVkOTIiLCJub21icmUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiX192IjowfSwiaWF0IjoxNTg1ODU1Njc0LCJleHAiOjE1ODg0NDc2NzR9.GM_xSoSAvR9HYw6rChKLBUs_c_8jpPyhNMf0QjxIg54" -->
-    <!-- alt=""> -->
-
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-    <a href="#" onclick="signOut();">Sign out</a>
-    <script>
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function() {
-                console.log('User signed out.');
-            });
-        }
+    <div id="map"></div>
+    <script src="./Localizacion.js"></script>
+    <script src="./map.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARkx6SZy9rQJmWQ4zerhzUQdjy0HMH9AI&callback=initMap">
     </script>
-
-    <script>
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-
-            var id_token = googleUser.getAuthResponse().id_token;
-            console.log(id_token);
-
-
-            /*var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/google');
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function() {
-                console.log('Signed in as: ' + xhr.responseText);
-            };
-            xhr.send('idtoken=' + id_token);*/
-
-        }
-    </script>
-</body>
-
+  </body>
 </html>
