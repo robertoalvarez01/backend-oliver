@@ -2,7 +2,7 @@ const Multer = require('multer');
 const path = require('path');
 const storage = Multer.diskStorage({
     storage: Multer.memoryStorage(),
-    destination:'../images-oliver',	
+    destination:'../images-oliver/img',	
     filename:(req,file,cb)=>{	
         cb(null,file.originalname);	
     }	
@@ -10,7 +10,7 @@ const storage = Multer.diskStorage({
     
 const upload = Multer({	
     storage:storage,
-    dest:'../images-oliver',	
+    dest:'../images-oliver/img',	
     limits:{fieldSize:1000000000},	
     fileFilter:(req,file,cb)=>{	
         //validando extensiones.	
