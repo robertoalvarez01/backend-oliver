@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 //Carpeta Public
-app.use(express.static(path.resolve(__dirname, '../public')))
+app.use(express.static(path.resolve(__dirname, '../../images-oliver')))
 
 app.use(require('./routes/index'));
 

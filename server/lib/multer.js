@@ -2,7 +2,7 @@ const Multer = require('multer');
 const path = require('path');
 const storage = Multer.diskStorage({
     storage: Multer.memoryStorage(),
-    destination:'./public/img',	
+    destination:'../images-oliver',	
     filename:(req,file,cb)=>{	
         cb(null,file.originalname);	
     }	
@@ -10,11 +10,11 @@ const storage = Multer.diskStorage({
     
 const upload = Multer({	
     storage:storage,
-    dest:'./public/img',	
+    dest:'../images-oliver',	
     limits:{fieldSize:1000000000},	
     fileFilter:(req,file,cb)=>{	
         //validando extensiones.	
-        const fileTypes = /jpeg|jpg|png|pptx|xlsx|xls|gif|doc|dot|docx|pdf|txt/;//extensiones aceptadas	
+        const fileTypes = /jpeg|jpg|png|PNG|pptx|xlsx|xls|gif|doc|dot|docx|pdf|txt/;//extensiones aceptadas	
         const mimetype = fileTypes.test(file.mimetype);
         console.log(file);
         console.log(mimetype);	

@@ -8,7 +8,7 @@ class ProductoModel{
                                 ,descripcion_basica,disponible,categoria,marca
                         FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
                         WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca
-                        LIMIT ${limite}`;
+                        LIMIT ${desde},${limite}`;
             connection.query(query,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);
