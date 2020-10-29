@@ -11,7 +11,6 @@ app.use(require('./producto'));
 app.use(require('./subproducto'));
 app.use(require('./tamaño'));
 app.use(require('./google'));
-app.use(require('./imagen.js'));
 
 
 module.exports = app;
