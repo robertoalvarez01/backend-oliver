@@ -25,6 +25,13 @@ class SubProductoService{
         return datos;
     }
 
+    async filtrar(categoria,subcategoria,marca,desde,limite){
+        const datos = await this.subproducto.filtrar(categoria,subcategoria,marca,desde,limite).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
+
     async create(body,foto=null){
         const datos = await this.subproducto.create(body,foto).then(res=>{
             return res;

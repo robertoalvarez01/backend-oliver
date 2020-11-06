@@ -119,35 +119,33 @@ app.get('/subproductos/buscar', async(req, res) => {
     }
 });
 
-//-- Integracion con el admin del local --
-/*
-const axios = require('axios');
-async function getUser() {
-    try {
-        const response = await axios.get('https://local.oliverpetshop.com.ar/backend/relacion-pagina/producto/listarProducto.php');
-        //console.log(response.data);
-        console.log('La cantidad de productos es --> ', response.data.length);
-        response.data.map((product, index) => {
-            let producto = new Producto({
-                nombre: product.producto,
-                stock: product.stock,
-                codigoBarra: product.codigo_producto
-            });
-        
-            producto.save((err, productoDB) => {
-                if (err) {
-                    return console.log('Error en el producto --> ', index, err);
-                }
-        
-                console.log('Se guardo el producto --> ', index);
-            });
-        })
-    } catch (error) {
-        console.error(error);
-    }
-}
 
-getUser();
-*/
+//filtros
+
+app.get('/subproductos/filtrar',async(req,res)=>{
+    try {
+        let categoria = req.query.categoria || null;
+        let subcategoria = req.query.subcategoria || null;
+        let marca = req.query.marca || null;
+        let desde = req.query.desde || 1;
+        let limite = req.query.limite || 50;
+        const subproducto = new SubProductoService();
+        if(categoria || subcategoria || marca){
+            const response = await subproducto.filtrar(categoria,subcategoria,marca,desde,limite);
+            res.status(200).json({
+                data:response,
+                info:'Productos filtrados'
+            })
+        }else{
+            res.status(400).json({
+                info:'Ningun dato recibido'
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            error
+        })
+    }
+})
 
 module.exports = app;
