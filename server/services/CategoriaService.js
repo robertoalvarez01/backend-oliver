@@ -19,14 +19,14 @@ class CategoriaService{
         return datos;
     }
 
-    async create(body,avatar=null){
-        const datos = await this.categoria.create(body,avatar).then(res=>{
+    async create(body,foto){
+        const datos = await this.categoria.create(body,foto).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;
     }
 
-    async update(body,id,foto=null){
+    async update(body,id,foto){
         const datos = await this.categoria.update(body,id,foto).then(res=>{
             return res;
         }).catch(err=>err);

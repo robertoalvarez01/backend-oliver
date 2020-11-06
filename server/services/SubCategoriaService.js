@@ -19,15 +19,15 @@ class SubCategoriaService{
         return datos;
     }
 
-    async create(body,avatar=null){
-        const datos = await this.subcategoria.create(body,avatar).then(res=>{
+    async create(body){
+        const datos = await this.subcategoria.create(body).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;
     }
 
-    async update(body,id,foto=null){
-        const datos = await this.subcategoria.update(body,id,foto).then(res=>{
+    async update(body,id){
+        const datos = await this.subcategoria.update(body,id).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;

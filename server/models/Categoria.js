@@ -23,7 +23,7 @@ class CategoriaModel{
     create(body,foto){
         return new Promise(async(resolve,reject)=>{
             //hash para password
-            let query = `CALL ${config.SP_CATEGORIA}(0,'${body.categoria}')`;
+            let query = `CALL ${config.SP_CATEGORIA}(0,'${body.categoria}','${foto}')`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
@@ -33,7 +33,7 @@ class CategoriaModel{
 
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
-            let query = `CALL ${config.SP_CATEGORIA}(${id},'${body.categoria}')`;
+            let query = `CALL ${config.SP_CATEGORIA}(${id},'${body.categoria}','${foto}')`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);

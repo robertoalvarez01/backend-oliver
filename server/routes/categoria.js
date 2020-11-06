@@ -1,4 +1,5 @@
 const express = require('express');
+const upload = require('../lib/multer');
 const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
 const app = express();
 const CategoriaService = require('../services/CategoriaService');
@@ -8,12 +9,16 @@ const CategoriaService = require('../services/CategoriaService');
 // Crea una categoria
 // ======================================
 
-app.post('/categoria', [verificarToken,verificarAdmin_role], async(req, res) => {
+app.post('/categoria', [verificarToken,verificarAdmin_role,upload.single('foto')], async(req, res) => {
     try {
         const {body} = req;
         if(Object.keys(body).length===0) return res.status(503).json({error:'Ningun dato recibido'});
+        if(!req.file){
+            return res.status(503).json({error:'Imagen no recibida'});
+        }
+        const {file:foto} = req;
         const categoriaservice = new CategoriaService();
-        const response = await categoriaservice.create(body);
+        const response = await categoriaservice.create(body,foto.filename);
         res.status(200).json({
             info:response
         });
@@ -28,13 +33,17 @@ app.post('/categoria', [verificarToken,verificarAdmin_role], async(req, res) => 
 // Actualiza una categoria
 // ======================================
 
-app.put('/categoria/:id', [verificarToken,verificarAdmin_role], async(req, res) => {
+app.put('/categoria/:id', [verificarToken,verificarAdmin_role,upload.single('foto')], async(req, res) => {
     try {
         const {id} = req.params;
         const {body} = req;
         if(Object.keys(body).length===0) return res.status(503).json({error:'Ningun dato recibido'});
+        let foto = null;
+        if(req.file){
+            foto = req.file.filename;
+        }
         const categoriaservice = new CategoriaService();
-        const response = await categoriaservice.update(body,id);
+        const response = await categoriaservice.update(body,id,foto);
         res.status(200).json({
             info:response
         });
