@@ -59,7 +59,7 @@ class SubProductoModel{
     filtrar(categoria,subcategoria,marca,desde,limite){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,producto,subProducto,codigoBarra,stock,minStock,
-                        peso,tamaño,subprd.precioUnidad,foto,categoria,prd.idCategoria,marca,prd.idMarca,sc.subcategoria
+                        peso,tamaño,subprd.precioUnidad,subprd.foto,categoria,prd.idCategoria,marca,prd.idMarca,sc.subcategoria
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm,
                         ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk,${config.TABLE_SUB_CATEGORIA} as sc
                             WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND cat.idCategoria = prd.idCategoria AND mk.idMarca = prd.idMarca AND sc.idSubCategoria = prd.idSubCategoria`;

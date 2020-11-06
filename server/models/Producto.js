@@ -19,9 +19,9 @@ class ProductoModel{
     get(id){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idProducto,producto,precioUnidad,descripcion
-                                ,descripcion_basica,disponible,prd.idCategoria,categoria,prd.idMarca,marca
-                        FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
-                        WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca AND idProducto = ${id}`;
+                                ,descripcion_basica,disponible,prd.idCategoria,categoria,prd.idMarca,marca,prd.idSubCategoria,sc.subcategoria
+                        FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk,${config.TABLE_SUB_CATEGORIA} as sc
+                        WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca AND sc.idSubCategoria = prd.idSubCategoria  AND idProducto = ${id}`;
             connection.query(query,(err,results,fields)=>{
                 if(err) return reject(err);
                 resolve(results);
@@ -47,7 +47,7 @@ class ProductoModel{
         return new Promise(async(resolve,reject)=>{
             //hash para password
             let query = `CALL ${config.SP_PRODUCTO}(0,'${body.producto}','${body.precioUnidad}','${body.descripcion}',
-            '${body.descripcionBasica}',${body.disponible},${body.idCategoria},${body.idMarca})`;
+            '${body.descripcionBasica}',${body.disponible},${body.idCategoria},${body.idMarca},${body.idSubCategoria})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
@@ -58,7 +58,7 @@ class ProductoModel{
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_PRODUCTO}(${id},'${body.producto}','${body.precioUnidad}','${body.descripcion}',
-            '${body.descripcionBasica}',${body.disponible},${body.idCategoria},${body.idMarca})`;
+            '${body.descripcionBasica}',${body.disponible},${body.idCategoria},${body.idMarca},${body.idSubCategoria})`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);
