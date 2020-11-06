@@ -93,8 +93,15 @@ app.get('/subproducto/:id', async(req, res) => {
         const {id} = req.params;
         const subproducto = new SubProductoService();
         const response = await subproducto.getOne(id);
-        res.status(200).json({
-            data:response
+        if(response.length>0){
+            const moreProducts = await subproducto.getByIdProducto(response[0].idProducto,response[0].idSubProducto);
+            return res.status(200).json({
+                data:response,
+                moreProducts
+            })
+        }
+        return res.status(200).json({
+            info:'ID inexistente'
         })
     } catch (error) {
         res.status(500).json({error})

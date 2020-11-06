@@ -18,6 +18,13 @@ class SubProductoService{
         return datos;
     }
 
+    async getByIdProducto(idProducto,idSubProducto){
+        const datos = await this.subproducto.getByIdProducto(idProducto,idSubProducto).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
+
     async search(key){
         const datos = await this.subproducto.search(key).then(res=>{
             return res;
