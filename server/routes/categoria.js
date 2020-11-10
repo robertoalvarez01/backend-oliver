@@ -3,7 +3,7 @@ const upload = require('../lib/multer');
 const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
 const app = express();
 const CategoriaService = require('../services/CategoriaService');
-
+const CloudStorage = require('../services/CloudStorage');
 
 // ======================================
 // Crea una categoria
@@ -17,11 +17,16 @@ app.post('/categoria', [verificarToken,verificarAdmin_role,upload.single('foto')
             return res.status(503).json({error:'Imagen no recibida'});
         }
         const {file:foto} = req;
-        const categoriaservice = new CategoriaService();
-        const response = await categoriaservice.create(body,foto.filename);
-        res.status(200).json({
-            info:response
-        });
+        const cs = new CloudStorage('categorias');
+        cs.upload(foto).then(async url=>{
+            const categoriaservice = new CategoriaService();
+            const response = await categoriaservice.create(body,url);
+            res.status(200).json({
+                info:response
+            });
+        }).catch(err=>{
+            res.status(500).json({err})
+        })
     } catch (error) {
         res.status(500).json({
             error
@@ -38,12 +43,20 @@ app.put('/categoria/:id', [verificarToken,verificarAdmin_role,upload.single('fot
         const {id} = req.params;
         const {body} = req;
         if(Object.keys(body).length===0) return res.status(503).json({error:'Ningun dato recibido'});
-        let foto = null;
         if(req.file){
-            foto = req.file.filename;
+            const cs = new CloudStorage('categorias');
+            cs.upload(req.file).then(async url=>{
+                const categoriaservice = new CategoriaService();
+                const response = await categoriaservice.update(body,id,url);
+                return res.status(200).json({
+                    info:response
+                });
+            }).catch(err=>{
+                return res.status(400).json({err})
+            })
         }
         const categoriaservice = new CategoriaService();
-        const response = await categoriaservice.update(body,id,foto);
+        const response = await categoriaservice.update(body,id,null);
         res.status(200).json({
             info:response
         });

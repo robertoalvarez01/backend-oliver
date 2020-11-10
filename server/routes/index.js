@@ -11,7 +11,7 @@ app.use(require('./producto'));
 app.use(require('./subproducto'));
 app.use(require('./tamaño'));
 app.use(require('./google'));
-app.use(require('./mercadopago'));
+//app.use(require('./mercadopago'));
 
 
 module.exports = app;
