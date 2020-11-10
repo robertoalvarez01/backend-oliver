@@ -10,10 +10,26 @@
     </style>
 </head>
 <body>
-    <div id="map"></div>
+    <!--<div id="map"></div>
     <script src="./Localizacion.js"></script>
     <script src="./map.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARkx6SZy9rQJmWQ4zerhzUQdjy0HMH9AI&callback=initMap">
+    </script>-->
+    <form id="form">
+      <input type="file" name="foto" id="">
+      <input type="submit" value="Enviar">
+    </form>
+
+    <script>
+      let form = document.getElementById('form');
+      form.addEventListener('submit',event=>{
+        event.preventDefault();
+        let data = new FormData(form);
+        fetch('http://localhost:3000/upload',{
+          method:'POST',
+          body:data
+        }).then(res=>res.json()).then(console.log);
+      })
     </script>
   </body>
 </html>
