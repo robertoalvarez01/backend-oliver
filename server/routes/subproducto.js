@@ -81,7 +81,7 @@ app.delete('/subproducto/:id', [verificarToken,verificarAdmin_role], async(req, 
 // Listar productos (Paginados)
 // ======================================
 
-app.get('/subproducto', async(req, res) => {
+app.get('/subproducto', [verificarToken,verificarAdmin_role],async(req, res) => {
     try {
         let desde = req.query.desde || 0;
         desde = Number(desde);
@@ -98,19 +98,17 @@ app.get('/subproducto', async(req, res) => {
 });
 
 // ======================================
-// Seleccionar Producto X ID
+// Seleccionar SubProducto X ID
 // ======================================
 
-app.get('/subproducto/:id', async(req, res) => {
+app.get('/subproducto/:id',[verificarToken,verificarAdmin_role] ,async(req, res) => {
     try {
         const {id} = req.params;
         const subproducto = new SubProductoService();
         const response = await subproducto.getOne(id);
         if(response.length>0){
-            const moreProducts = await subproducto.getByIdProducto(response[0].idProducto,response[0].idSubProducto);
             return res.status(200).json({
-                data:response,
-                moreProducts
+                data:response
             })
         }
         return res.status(200).json({
@@ -125,7 +123,7 @@ app.get('/subproducto/:id', async(req, res) => {
 // Busquedas con Expresión Regular
 // ======================================
 
-app.get('/subproductos/buscar', async(req, res) => {
+app.get('/subproductos/buscar',[verificarToken,verificarAdmin_role], async(req, res) => {
     try {
         let {busqueda} = req.query;
         busqueda = busqueda.toLowerCase();
@@ -142,30 +140,34 @@ app.get('/subproductos/buscar', async(req, res) => {
 
 //filtros
 
-app.get('/subproductos/filtrar',async(req,res)=>{
-    try {
-        let categoria = req.query.categoria || null;
-        let subcategoria = req.query.subcategoria || null;
-        let marca = req.query.marca || null;
-        let desde = req.query.desde || 1;
-        let limite = req.query.limite || 50;
-        const subproducto = new SubProductoService();
-        if(categoria || subcategoria || marca){
-            const response = await subproducto.filtrar(categoria,subcategoria,marca,desde,limite);
-            res.status(200).json({
-                data:response,
-                info:'Productos filtrados'
-            })
-        }else{
-            res.status(400).json({
-                info:'Ningun dato recibido'
-            })
-        }
-    } catch (error) {
-        res.status(500).json({
-            error
-        })
-    }
+//esta ruta queda caducada porque ahora se filtra desde productos
+app.get('/subproductos/filtrar',[verificarToken,verificarAdmin_role],async(req,res)=>{
+    // try {
+    //     let categoria = req.query.categoria || null;
+    //     let subcategoria = req.query.subcategoria || null;
+    //     let marca = req.query.marca || null;
+    //     let desde = req.query.desde || 1;
+    //     let limite = req.query.limite || 50;
+    //     const subproducto = new SubProductoService();
+    //     if(categoria || subcategoria || marca){
+    //         const response = await subproducto.filtrar(categoria,subcategoria,marca,desde,limite);
+    //         res.status(200).json({
+    //             data:response,
+    //             info:'Productos filtrados'
+    //         })
+    //     }else{
+    //         res.status(400).json({
+    //             info:'Ningun dato recibido'
+    //         })
+    //     }
+    // } catch (error) {
+    //     res.status(500).json({
+    //         error
+    //     })
+    // }
+    res.status(403).json({
+        info:'Ruta vencida'
+    })
 })
 
 module.exports = app;

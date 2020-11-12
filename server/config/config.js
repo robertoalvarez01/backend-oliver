@@ -57,7 +57,9 @@ const config = {
     MP_ACCESS_TOKEN:process.env.MERCADO_PAGO_ACCESS_TOKEN_DEV,
     MP_PUBLIC_KEY:process.env.MERCADO_PAGO_PUBLIC_KEY_DEV,
     MP_CLIENT_ID:process.env.MERCADO_PAGO_CLIENT_ID,
-    MP_CLIENT_SECRET:process.env.MERCADO_PAGO_CLIENT_SECRET
+    MP_CLIENT_SECRET:process.env.MERCADO_PAGO_CLIENT_SECRET,
+
+    DEFAULT_FOTO:'https://storage.googleapis.com/web-oliver/sin-imagen.png'
 };
 
 module.exports = {config}

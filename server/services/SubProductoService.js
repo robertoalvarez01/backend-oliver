@@ -18,11 +18,12 @@ class SubProductoService{
         return datos;
     }
 
-    async getByIdProducto(idProducto,idSubProducto){
-        const datos = await this.subproducto.getByIdProducto(idProducto,idSubProducto).then(res=>{
-            return res;
-        }).catch(err=>err);
-        return datos;
+    async getByIdProducto(idProducto,limit=false){
+        return new Promise((resolve,reject)=>{
+            this.subproducto.getByIdProducto(idProducto,limit).then(res=>{
+                resolve(res);
+            }).catch(err=>reject(err));
+        })
     }
 
     async search(key){
