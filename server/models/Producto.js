@@ -4,8 +4,7 @@ const {config} = require('../config/config');
 class ProductoModel{
     getAll(desde,limite){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idProducto,producto,precioUnidad,descripcion
-                                ,descripcion_basica,disponible,categoria,marca
+            let query = `SELECT idProducto,producto,disponible,categoria,marca,precioUnidad
                         FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
                         WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca
                         LIMIT ${desde},${limite}`;
@@ -31,13 +30,33 @@ class ProductoModel{
 
     search(key){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idProducto,producto,precioUnidad,descripcion
-                                ,descripcion_basica,disponible,categoria,marca
+            let query = `SELECT idProducto,producto,precioUnidad,disponible,categoria,marca
                         FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
-                        WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca AND producto LIKE '%${key}%'`;
-            console.log(query);
+                        WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca AND producto LIKE '%${key}%' OR categoria LIKE '%${key}%'`;
             connection.query(query,(err,results,fields)=>{
                 if(err) return reject(err);
+                resolve(results);
+            })
+        })
+    }
+
+    filtrar(categoria,subcategoria,marca,desde,limite){
+        return new Promise((resolve,reject)=>{
+            let query = `SELECT idProducto,producto,disponible,categoria,marca,precioUnidad
+                        FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
+                        WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca`;
+            if(categoria){
+                query += ` AND prd.idCategoria = ${categoria}`;
+            }
+            if(subcategoria){
+                query += ` AND prd.idSubCategoria = ${subcategoria}`;
+            }
+            if(marca){
+                query += ` AND prd.idMarca = ${marca}`;
+            }
+            query += ` ORDER BY idProducto DESC LIMIT ${desde},${limite};`
+            connection.query(query,(err,results,fields)=>{
+                if(err) reject(err);
                 resolve(results);
             })
         })

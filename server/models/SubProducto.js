@@ -30,13 +30,15 @@ class SubProductoModel{
         })
     }
 
-    getByIdProducto(idProducto,idSubProducto){
+    getByIdProducto(idProducto,limit){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idSubProducto,subprd.idProducto,producto,subProducto,codigoBarra,stock,
-                                minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,mk.marca
-                        FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm, ${config.TABLE_MARCA} as mk
-                        WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND mk.idMarca = prd.idMarca
-                        AND subprd.idProducto = ${idProducto} AND idSubProducto <> ${idSubProducto}`;
+            let query = `SELECT idSubProducto,subProducto,codigoBarra,stock,
+                                minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto
+                        FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_TAM} as tm
+                        WHERE subprd.idTamaño = tm.idTamaño AND subprd.idProducto = ${idProducto}`;
+            if(limit){
+                query+=` LIMIT 1`;
+            }
             connection.query(query,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);

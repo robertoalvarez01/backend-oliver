@@ -19,8 +19,14 @@ class ProductoService{
     }
 
     async search(key){
-        console.log('!!!!');
         const datos = await this.producto.search(key).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
+
+    async filtrar(categoria,subcategoria,marca,desde,limite){
+        const datos = await this.producto.filtrar(categoria,subcategoria,marca,desde,limite).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;
