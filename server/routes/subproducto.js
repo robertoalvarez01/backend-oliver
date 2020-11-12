@@ -3,7 +3,7 @@ const { verificarToken, verificarAdmin_role } = require('../middlewares/autentic
 const upload = require('../lib/multer');
 const app = express();
 let SubProductoService = require('../services/SubProductoService');
-
+const CloudStorage = require('../services/CloudStorage');
 
 // ======================================
 // Insertar nuevo Producto
@@ -13,10 +13,15 @@ app.post('/subproducto', [verificarToken, verificarAdmin_role,upload.single('fot
     try {
         if(!req.file) return res.status(500).json({error:'Ninguna imagen insertada'});
         const {body,file:foto} = req;
-        const subproducto = new SubProductoService();
-        const response = await subproducto.create(body,foto.filename);
-        res.status(200).json({
-            info:response
+        const cs = new CloudStorage();
+        cs.upload(foto).then(async url=>{
+            const subproducto = new SubProductoService();
+            const response = await subproducto.create(body,url);
+            res.status(200).json({
+                info:response
+            })
+        }).catch(err=>{
+            res.status(500).json({err})
         })
     } catch (error) {
         res.status(500).json({error})
@@ -31,16 +36,24 @@ app.put('/subproducto/:id', [verificarToken,verificarAdmin_role,upload.single('f
     try {
         const {body,params:{id}} = req;
         const subproducto = new SubProductoService();
-        let response;
         if(!req.file){
-            response = await subproducto.update(body,id);
+            const response = await subproducto.update(body,id);
+            res.status(200).json({
+                info:response
+            })
         }else{
             const {file:foto} = req;
-            response = await subproducto.update(body,id,foto.filename);
+            const cs = new CloudStorage();
+            cs.upload(foto).then(async url=>{
+                const subproducto = new SubProductoService();
+                const response = await subproducto.update(body,id,url);
+                res.status(200).json({
+                    info:response
+                })
+            }).catch(err=>{
+                res.status(500).json({err})
+            })
         }
-        res.status(200).json({
-            info:response
-        })
     } catch (error) {
         res.status(500).json({error})
     }

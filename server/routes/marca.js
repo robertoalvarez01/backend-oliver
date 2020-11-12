@@ -3,6 +3,7 @@ const { verificarToken, verificarAdmin_role } = require('../middlewares/autentic
 const app = express();
 const MarcaService = require('../services/MarcaService');
 const upload = require('../lib/multer');
+const CloudStorage = require('../services/CloudStorage');
 
 
 // ======================================
@@ -14,11 +15,15 @@ app.post('/marca', [verificarToken, verificarAdmin_role,upload.single('imagen')]
         const {body} = req;
         if(!req.file) return res.status(500).json({error:'No se recibio la imagen de la marca'});
         const {file:imagen} = req;
-        console.log(imagen);
-        const marcaservice = new MarcaService();
-        const response = await marcaservice.create(body,imagen.filename);
-        res.status(200).json({
-            info:response
+        const cs = new CloudStorage('marcas');
+        cs.upload(imagen).then(async url=>{
+            const marcaservice = new MarcaService();
+            const response = await marcaservice.create(body,url);
+            res.status(200).json({
+                info:response
+            })
+        }).catch(err=>{
+            res.status(500).json({err})
         })
     } catch (error) {
         res.status(500).json({
@@ -38,10 +43,22 @@ app.put('/marca/:id', [verificarToken, verificarAdmin_role,upload.single('imagen
         const marcaservice = new MarcaService();
         let response;
         if(!req.file){
-            response = await marcaservice.update(body,id);
+            const response = await marcaservice.update(body,id);
+            res.status(200).json({
+                info:response
+            })
         }else{
             const {file:imagen} = req;
-            response = await marcaservice.update(body,id,imagen.filename);
+            const cs = new CloudStorage('marcas');
+            cs.upload(imagen).then(async url=>{
+                const marcaservice = new MarcaService();
+                const response = await marcaservice.update(body,id,url);
+                res.status(200).json({
+                    info:response
+                })
+            }).catch(err=>{
+                res.status(500).json({err})
+            })
         }
         res.status(200).json({
             info:response
