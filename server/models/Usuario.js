@@ -49,7 +49,7 @@ class UsuarioModel{
             bcrypt.hash(body.password, 10,(err,hash)=>{
                 if(err) reject(err);
                 let query = `CALL ${config.SP_USUARIO}(0,'${body.email}','${hash}','${body.nombre}','${body.telefono}',
-                0,'${foto}','web','${body.ubicacion}')`;
+                0,'${foto}','web','${body.lng}','${body.lat}','${body.address}')`;
                 connection.query(query,(error,results,fields)=>{
                     if(error) return reject(error);
                     resolve(results);
@@ -61,7 +61,7 @@ class UsuarioModel{
     registerWithGoogle(data){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_USUARIO}(0,'${data.email}',null,'${data.nombre}',null,
-            0,'${data.foto}','Google',null)`;
+            0,'${data.foto}','Google',null,null,null)`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
