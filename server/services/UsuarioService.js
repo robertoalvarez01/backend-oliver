@@ -20,7 +20,7 @@ class UsuarioService{
     }
 
     async create(body,avatar){
-        const datos = await this.usuario.create(body,avatar).then(res=>{
+        const datos = await this.usuario.register(body,avatar).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;
