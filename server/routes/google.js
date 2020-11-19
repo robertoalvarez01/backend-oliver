@@ -4,7 +4,7 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const UsuarioModel = require('../models/Usuario');
 const {config} = require('../config/config');
-app.post('/google/tokensignin',async(req, res)=>{
+app.post('/google/tokensignin',async(req, res,next)=>{
     try{
         const gService = new GoogleService();
         const {token} = req.body;
@@ -17,6 +17,7 @@ app.post('/google/tokensignin',async(req, res)=>{
                 foto:data.picture
             };
             const usersInDb = await uModel.login(dataUser);
+            console.log(usersInDb);
             if(usersInDb.length>0){
                 //ya hay un usuario registrado con ese email, entonces lo logueo.
                 const userDB = usersInDb[0];
@@ -31,7 +32,7 @@ app.post('/google/tokensignin',async(req, res)=>{
                         telefono:userDB.telefono,
                         foto:userDB.foto,
                         provider:userDB.provider,
-                        ubicacion:userDB.address
+                        address:userDB.address
                     },
                     token
                 });
@@ -51,22 +52,20 @@ app.post('/google/tokensignin',async(req, res)=>{
                             telefono:userDB.telefono,
                             foto:userDB.foto,
                             provider:userDB.provider,
-                            ubicacion:userDB.address
+                            address:userDB.address
                         },
                         token
                     });
                 }
             }
+        }else{
+            return res.status(503).json({
+                ok:false,
+                info:'Token no valido'
+            });
         };
-        return res.status(503).json({
-            error:true,
-            info:'Token no valido'
-        });
     }catch(err){
-        res.sendStatus(503).json({
-            error:true,
-            info:'Problemas al recibir el token'
-        })
+        next(err);
     }
 });
 
