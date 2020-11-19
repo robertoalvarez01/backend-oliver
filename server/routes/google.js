@@ -40,19 +40,19 @@ app.post('/google/tokensignin',async(req, res,next)=>{
                 //si no existe, tengo que registrar el usuario en la db y loguearlo.
                 const register = await uModel.registerWithGoogle(dataUser);
                 if(register){
-                    const userDB = await uModel.login(dataUser)[0];
+                    const userDB = await uModel.login(dataUser);
                     let token = jwt.sign({
-                        usuario: userDB
+                        usuario: userDB[0]
                     }, config.seed, { expiresIn: config.caducidad_token });
                     return res.status(200).json({
                         ok: true,
                         usuario:{
-                            email:userDB.email,
-                            nombre:userDB.nombre,
-                            telefono:userDB.telefono,
-                            foto:userDB.foto,
-                            provider:userDB.provider,
-                            address:userDB.address
+                            email:userDB[0].email,
+                            nombre:userDB[0].nombre,
+                            telefono:userDB[0].telefono,
+                            foto:userDB[0].foto,
+                            provider:userDB[0].provider,
+                            address:userDB[0].address
                         },
                         token
                     });
