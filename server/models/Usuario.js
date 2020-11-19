@@ -49,7 +49,7 @@ class UsuarioModel{
             bcrypt.hash(body.password, 10,(err,hash)=>{
                 if(err) reject(err);
                 let query = `CALL ${config.SP_USUARIO}(0,'${body.email}','${hash}','${body.nombre}','${body.telefono}',
-                0,'${foto}','web','${body.lng}','${body.lat}','${body.address}')`;
+                0,'${foto}','web','${body.lon}','${body.lat}','${body.address}')`;
                 connection.query(query,(error,results,fields)=>{
                     if(error) return reject(error);
                     resolve(results);
