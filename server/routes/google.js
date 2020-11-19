@@ -31,7 +31,7 @@ app.post('/google/tokensignin',async(req, res)=>{
                         telefono:userDB.telefono,
                         foto:userDB.foto,
                         provider:userDB.provider,
-                        ubicacion:userDB.ubicacion
+                        ubicacion:userDB.address
                     },
                     token
                 });
@@ -51,7 +51,7 @@ app.post('/google/tokensignin',async(req, res)=>{
                             telefono:userDB.telefono,
                             foto:userDB.foto,
                             provider:userDB.provider,
-                            ubicacion:userDB.ubicacion
+                            ubicacion:userDB.address
                         },
                         token
                     });
