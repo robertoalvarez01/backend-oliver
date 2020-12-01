@@ -20,6 +20,8 @@ class CloudStorage{
             url+='categorias/';
         }else if(this.seccion=='marcas'){
             url+='marcas/';
+        }else if(this.seccion=='usuarios'){
+            url+='usuarios/';
         }
         url+= `${file.originalname}`;
         return new Promise((resolve,reject)=>{

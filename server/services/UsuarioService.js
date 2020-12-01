@@ -33,6 +33,13 @@ class UsuarioService{
         return datos;
     }
 
+    async updateFromWeb(body,id,foto){
+        const response = await this.usuario.updateFromWeb(body,id,foto).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return response;
+    }
+
     async delete(id){
         const datos = await this.usuario.delete(id).then(res=>{
             return res;

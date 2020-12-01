@@ -25,7 +25,7 @@ app.post('/categoria', [verificarToken,verificarAdmin_role,upload.single('foto')
                 info:response
             });
         }).catch(err=>{
-            res.status(500).json({err})
+            res.status(500).json({error:err.message})
         })
     } catch (error) {
         res.status(500).json({

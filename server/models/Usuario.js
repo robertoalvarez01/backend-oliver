@@ -14,7 +14,7 @@ class UsuarioModel{
 
     get(id){
         return new Promise((resolve,reject)=>{
-            connection.query(`SELECT * FROM ${config.TABLE_USER} WHERE idUsuario = ${id}`,(err,results,fields)=>{
+            connection.query(`SELECT email,nombre,telefono,foto,lon,lat,address,puntos FROM ${config.TABLE_USER} WHERE idUsuario = ${id}`,(err,results,fields)=>{
                 if(err) return reject(err);
                 resolve(results);
             })
@@ -30,6 +30,17 @@ class UsuarioModel{
             })
         })
     };
+
+    updateFromWeb(body,id,foto){
+        return new Promise((resolve,reject)=>{
+            let query = `CALL ${config.SP_USUARIO_UPDATE_WEB}(${id},'${body.nombre}','${body.telefono}',
+            ${body.lon},'${body.lat}','${body.address}','${foto}')`;
+            connection.query(query,(error,res,fiels)=>{
+                if(error) return reject(error);
+                resolve(res);
+            })
+        })
+    }
 
     delete(id){
         return new Promise((resolve,reject)=>{

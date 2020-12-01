@@ -40,6 +40,7 @@ const config = {
     SP_TAM_DELETE:process.env.SP_TAM_DELETE,
     SP_USUARIO:process.env.SP_USUARIO,
     SP_USUARIO_DELETE:process.env.SP_USUARIO_DELETE,
+    SP_USUARIO_UPDATE_WEB:process.env.SP_USUARIO_UPDATE_WEB,
     
     TABLE_CATEGORIA:process.env.TABLE_CATEGORIA,
     TABLE_MARCA:process.env.TABLE_MARCA,
