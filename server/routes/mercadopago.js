@@ -8,6 +8,10 @@ app.post('/mercadopago',async(req,res,next)=>{
         "title": "Dummy Item",
         "description": "Multicolor Item",
         "quantity": 1,
+<<<<<<< HEAD
+=======
+        "currency_id": "[FAKER][CURRENCY][ACRONYM]",
+>>>>>>> cebe0a0f2fef489905eb306f9b90fbda3c69e7d7
         "unit_price": 10.0
     }]);
     res.status(200).json({
