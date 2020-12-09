@@ -42,6 +42,8 @@ const config = {
     SP_USUARIO_DELETE:process.env.SP_USUARIO_DELETE,
     SP_USUARIO_UPDATE_WEB:process.env.SP_USUARIO_UPDATE_WEB,
     SP_LEGALES:process.env.SP_LEGALES,
+    SP_ZONAS:process.env.SP_ZONAS,
+    SP_ZONAS_DELETE:process.env.SP_ZONAS_DELETE,
     
     TABLE_CATEGORIA:process.env.TABLE_CATEGORIA,
     TABLE_MARCA:process.env.TABLE_MARCA,
@@ -50,6 +52,7 @@ const config = {
     TABLE_SUB_CATEGORIA:process.env.TABLE_SUB_CATEGORIA,
     TABLE_TAM:process.env.TABLE_TAM,
     TABLE_USER:process.env.TABLE_USER,
+    TABLE_ZONAS:process.env.TABLE_ZONAS,
 
     GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET:process.env.GOOGLE_CLIENT_SECRET,

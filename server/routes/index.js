@@ -13,6 +13,7 @@ app.use(require('./tamaño'));
 app.use(require('./google'));
 app.use(require('./mercadopago'));
 app.use(require('./legales'));
+app.use(require('./zonas'));
 //app.use(require('./mercadopago'));
 
 module.exports = app;

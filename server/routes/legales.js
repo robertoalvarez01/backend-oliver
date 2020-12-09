@@ -7,7 +7,6 @@ const LegalesService = require('../services/LegalesService');
 app.post('/legales', [verificarToken, verificarAdmin_role], async(req, res) => {
     try {
         const {body} = req;
-        console.log(body);
         const legalesService = new LegalesService();
         const response = await legalesService.create(body);
         res.status(200).json({
