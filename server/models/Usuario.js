@@ -31,10 +31,21 @@ class UsuarioModel{
         })
     };
 
-    updateFromWeb(body,id,foto){
+    updateFromWeb(body,id){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_USUARIO_UPDATE_WEB}(${id},'${body.nombre}','${body.telefono}',
-            ${body.lon},'${body.lat}','${body.address}','${foto}')`;
+            ${body.lon},'${body.lat}','${body.address}','null')`;
+            connection.query(query,(error,res,fiels)=>{
+                if(error) return reject(error);
+                resolve(res);
+            })
+        })
+    }
+
+    updateFotoFromWeb(foto,id){
+        return new Promise((resolve,reject)=>{
+            let query = `CALL ${config.SP_USUARIO_UPDATE_WEB}(${id},'null','null',
+            'null','null','null','${foto}')`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);

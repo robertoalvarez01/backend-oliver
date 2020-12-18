@@ -133,25 +133,12 @@ app.put('/usuario/:id', [verificarToken, verificarAdmin_role], async(req, res)=>
     }
 });
 
-app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto')],async(req,res)=>{
+app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')*/],async(req,res)=>{
     try {
         const {id} = req.params;
         const {body} = req;
         const usuario = new UsuarioService();
-        if(req.file){
-            const {file:foto} = req;
-            const cs = new CloudStorage('usuarios');
-            return cs.upload(foto).then(async url=>{
-                const response = await usuario.updateFromWeb(body,id,url);
-                return res.status(200).json({
-                    ok:true,
-                    info:response
-                })
-            }).catch(err=>{
-                res.status(500).json({error:err.message})
-            })
-        }
-        const response = await usuario.updateFromWeb(body,id,null);
+        const response = await usuario.updateFromWeb(body,id);
         res.status(200).json({
             ok:true,
             info:response
@@ -160,6 +147,27 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto')],
         res.status(503).json({
             error
         })        
+    }
+})
+
+app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto')],async(req,res)=>{
+    try {
+        const {id} = req.params;
+        const usuario = new UsuarioService();
+        if(!req.file) return res.status(503).json({ok:false,error:'No se recibido ninguna imagen'});
+        const {file:foto} = req;
+        const cs = new CloudStorage('usuarios');
+        return cs.upload(foto).then(async url=>{
+            const response = await usuario.updateFotoFromWeb(url,id);
+            return res.status(200).json({
+                ok:true,
+                info:response
+            })
+        }).catch(err=>{
+            res.status(500).json({error:err.message})
+        })
+    } catch (error) {
+        
     }
 })
 

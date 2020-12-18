@@ -33,8 +33,15 @@ class UsuarioService{
         return datos;
     }
 
-    async updateFromWeb(body,id,foto){
-        const response = await this.usuario.updateFromWeb(body,id,foto).then(res=>{
+    async updateFromWeb(body,id){
+        const response = await this.usuario.updateFromWeb(body,id).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return response;
+    }
+
+    async updateFotoFromWeb(foto,id){
+        const response = await this.usuario.updateFotoFromWeb(foto,id).then(res=>{
             return res;
         }).catch(err=>err);
         return response;
