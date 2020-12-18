@@ -32,7 +32,8 @@ app.post('/login', async(req, res) => {
                         foto:userDB.foto,
                         provider:userDB.provider,
                         ubicacion:userDB.address,
-			            admin:userDB.admin
+                        admin:userDB.admin,
+                        idUsuario:userDB.idUsuario
                     },
                     token
                 })

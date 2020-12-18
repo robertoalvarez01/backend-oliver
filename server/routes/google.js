@@ -32,7 +32,8 @@ app.post('/google/tokensignin',async(req, res,next)=>{
                         telefono:userDB.telefono,
                         foto:userDB.foto,
                         provider:userDB.provider,
-                        address:userDB.address
+                        address:userDB.address,
+                        idUsuario:userDB.idUsuario
                     },
                     token
                 });
@@ -52,7 +53,8 @@ app.post('/google/tokensignin',async(req, res,next)=>{
                             telefono:userDB[0].telefono,
                             foto:userDB[0].foto,
                             provider:userDB[0].provider,
-                            address:userDB[0].address
+                            address:userDB[0].address,
+                            idUsuario:userDB.idUsuario
                         },
                         token
                     });
