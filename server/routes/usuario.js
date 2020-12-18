@@ -140,9 +140,11 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
         const {body} = req;
         const usuario = new UsuarioService();
         const response = await usuario.updateFromWeb(body,id);
+        const updatedUser = await usuario.getOne(id);
         res.status(200).json({
             ok:true,
-            info:response
+            info:response,
+            user:updatedUser
         })
     } catch (error) {
         res.status(503).json({
@@ -160,9 +162,11 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
         const cs = new CloudStorage('usuarios');
         return cs.upload(foto).then(async url=>{
             const response = await usuario.updateFotoFromWeb(url,id);
+            const updatedUser = await usuario.getOne(id);
             return res.status(200).json({
                 ok:true,
-                info:response
+                info:response,
+                user:updatedUser
             })
         }).catch(err=>{
             res.status(500).json({error:err.message})
