@@ -146,9 +146,7 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
             nombre:updatedUser[0].nombre,
             telefono:updatedUser[0],
             foto:updatedUser[0].foto,
-            provider:updatedUser[0].provider,
-            ubicacion:updatedUser[0].address,
-            admin:updatedUser[0].admin,
+            address:updatedUser[0].address,
             idUsuario:updatedUser[0].idUsuario
         };
         res.status(200).json({
@@ -178,9 +176,7 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
                 nombre:updatedUser[0].nombre,
                 telefono:updatedUser[0],
                 foto:updatedUser[0].foto,
-                provider:updatedUser[0].provider,
-                ubicacion:updatedUser[0].address,
-                admin:updatedUser[0].admin,
+                address:updatedUser[0].address,
                 idUsuario:updatedUser[0].idUsuario
             };
             return res.status(200).json({

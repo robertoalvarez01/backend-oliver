@@ -14,7 +14,7 @@ class UsuarioModel{
 
     get(id){
         return new Promise((resolve,reject)=>{
-            connection.query(`SELECT email,nombre,telefono,foto,lon,lat,address,puntos FROM ${config.TABLE_USER} WHERE idUsuario = ${id}`,(err,results,fields)=>{
+            connection.query(`SELECT idUsuario,email,nombre,telefono,foto,lon,lat,address,puntos FROM ${config.TABLE_USER} WHERE idUsuario = ${id}`,(err,results,fields)=>{
                 if(err) return reject(err);
                 resolve(results);
             })
