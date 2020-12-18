@@ -141,10 +141,20 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
         const usuario = new UsuarioService();
         const response = await usuario.updateFromWeb(body,id);
         const updatedUser = await usuario.getOne(id);
+        let userDB = {
+            email:updatedUser[0].email,
+            nombre:updatedUser[0].nombre,
+            telefono:updatedUser[0],
+            foto:updatedUser[0].foto,
+            provider:updatedUser[0].provider,
+            ubicacion:updatedUser[0].address,
+            admin:updatedUser[0].admin,
+            idUsuario:updatedUser[0].idUsuario
+        };
         res.status(200).json({
             ok:true,
             info:response,
-            user:updatedUser
+            user:userDB
         })
     } catch (error) {
         res.status(503).json({
@@ -163,10 +173,20 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
         return cs.upload(foto).then(async url=>{
             const response = await usuario.updateFotoFromWeb(url,id);
             const updatedUser = await usuario.getOne(id);
+            let userDB = {
+                email:updatedUser[0].email,
+                nombre:updatedUser[0].nombre,
+                telefono:updatedUser[0],
+                foto:updatedUser[0].foto,
+                provider:updatedUser[0].provider,
+                ubicacion:updatedUser[0].address,
+                admin:updatedUser[0].admin,
+                idUsuario:updatedUser[0].idUsuario
+            };
             return res.status(200).json({
                 ok:true,
                 info:response,
-                user:updatedUser
+                user:userDB
             })
         }).catch(err=>{
             res.status(500).json({error:err.message})
