@@ -68,7 +68,8 @@ app.post('/register',async(req, res)=>{
                             telefono:userDB.telefono,
                             foto:userDB.foto,
                             provider:userDB.provider,
-                            ubicacion:userDB.address
+                            ubicacion:userDB.address,
+			idUsuario:userDB.idUsuario
                         },
                         token
                     })
