@@ -33,7 +33,9 @@ app.post('/login', async(req, res) => {
                         provider:userDB.provider,
                         ubicacion:userDB.address,
                         admin:userDB.admin,
-                        idUsuario:userDB.idUsuario
+                        idUsuario:userDB.idUsuario,
+                        lat:userDB.lat,
+                        lon:userDB.lon
                     },
                     token
                 })
