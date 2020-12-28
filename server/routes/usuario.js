@@ -147,7 +147,8 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
             telefono:updatedUser[0].telefono,
             foto:updatedUser[0].foto,
             address:updatedUser[0].address,
-            idUsuario:updatedUser[0].idUsuario
+            idUsuario:updatedUser[0].idUsuario,
+            token:updatedUser[0].token
         };
         res.status(200).json({
             ok:true,
@@ -177,7 +178,8 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
                 telefono:updatedUser[0].telefono,
                 foto:updatedUser[0].foto,
                 address:updatedUser[0].address,
-                idUsuario:updatedUser[0].idUsuario
+                idUsuario:updatedUser[0].idUsuario,
+		token:updatedUser[0].token
             };
             return res.status(200).json({
                 ok:true,
@@ -188,7 +190,7 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
             res.status(500).json({error:err.message})
         })
     } catch (error) {
-        
+        res.status(500).json({error:error.message})
     }
 })
 
