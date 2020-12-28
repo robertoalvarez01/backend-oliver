@@ -69,7 +69,7 @@ app.post('/register',async(req, res)=>{
                             foto:userDB.foto,
                             provider:userDB.provider,
                             ubicacion:userDB.address,
-			idUsuario:userDB.idUsuario
+			                idUsuario:userDB.idUsuario
                         },
                         token
                     })
@@ -144,7 +144,7 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
         let userDB = {
             email:updatedUser[0].email,
             nombre:updatedUser[0].nombre,
-            telefono:updatedUser[0],
+            telefono:updatedUser[0].telefono,
             foto:updatedUser[0].foto,
             address:updatedUser[0].address,
             idUsuario:updatedUser[0].idUsuario
@@ -174,7 +174,7 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
             let userDB = {
                 email:updatedUser[0].email,
                 nombre:updatedUser[0].nombre,
-                telefono:updatedUser[0],
+                telefono:updatedUser[0].telefono,
                 foto:updatedUser[0].foto,
                 address:updatedUser[0].address,
                 idUsuario:updatedUser[0].idUsuario
