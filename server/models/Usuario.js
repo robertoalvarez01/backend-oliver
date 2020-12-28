@@ -34,7 +34,7 @@ class UsuarioModel{
     updateFromWeb(body,id){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_USUARIO_UPDATE_WEB}(${id},'${body.nombre}','${body.telefono}',
-            ${body.lon},'${body.lat}','${body.address}','null')`;
+            '${body.lon}','${body.lat}','${body.address}','null')`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);
