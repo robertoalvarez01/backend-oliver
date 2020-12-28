@@ -141,6 +141,9 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
         const usuario = new UsuarioService();
         const response = await usuario.updateFromWeb(body,id);
         const updatedUser = await usuario.getOne(id);
+        let token = jwt.sign({
+            usuario: updatedUser[0]
+        }, config.seed, { expiresIn: config.caducidad_token });
         let userDB = {
             email:updatedUser[0].email,
             nombre:updatedUser[0].nombre,
@@ -148,8 +151,8 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
             foto:updatedUser[0].foto,
             address:updatedUser[0].address,
             idUsuario:updatedUser[0].idUsuario,
-            token:updatedUser[0].token,
-	    lat:updatedUser[0].lat,
+            token:token,
+	        lat:updatedUser[0].lat,
             lon:updatedUser[0].lon
         };
         res.status(200).json({
@@ -174,6 +177,9 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
         return cs.upload(foto).then(async url=>{
             const response = await usuario.updateFotoFromWeb(url,id);
             const updatedUser = await usuario.getOne(id);
+            let token = jwt.sign({
+                usuario: updatedUser[0]
+            }, config.seed, { expiresIn: config.caducidad_token });
             let userDB = {
                 email:updatedUser[0].email,
                 nombre:updatedUser[0].nombre,
@@ -181,9 +187,9 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
                 foto:updatedUser[0].foto,
                 address:updatedUser[0].address,
                 idUsuario:updatedUser[0].idUsuario,
-		token:updatedUser[0].token,
-		lat:updatedUser[0].lat,
-		lon:updatedUser[0].lon
+                token:token,
+                lat:updatedUser[0].lat,
+                lon:updatedUser[0].lon
             };
             return res.status(200).json({
                 ok:true,
