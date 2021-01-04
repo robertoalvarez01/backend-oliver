@@ -3,10 +3,11 @@ const UsuarioService = require('../services/UsuarioService');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {config} = require('../config/config');
-const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion')
+const { verificarToken, verificarAdmin_role,verificarRefreshToken } = require('../middlewares/autenticacion')
 const app = express();
 const upload = require('../lib/multer');
 const CloudStorage = require('../services/CloudStorage');
+const Nodemailer = require('../services/Nodemailer');
 
 app.get('/usuario', verificarToken,async(req, res)=>{
     try{
@@ -55,11 +56,12 @@ app.post('/register',async(req, res)=>{
                 })
             };
             const userDB = users[0];
-            bcrypt.compare(dataUser.password, userDB.password, (err, response)=>{
+            bcrypt.compare(dataUser.password, userDB.password, async(err, response)=>{
                 if(response){
                     let token = jwt.sign({
                         usuario: userDB
                     }, config.seed, { expiresIn: config.caducidad_token });
+                    await usuario.refreshToken(token,userDB.idUsuario);
                     return res.status(200).json({
                         ok: true,
                         usuario:{
@@ -215,6 +217,115 @@ app.delete('/usuario/:id', [verificarToken, verificarAdmin_role], async(req, res
         })
     } catch (error) {
         res.status(500).json({error}) 
+    }
+});
+
+app.post('/resetPassword',[verificarToken],async(req,res)=>{
+    try {
+        const {idUsuario} = req.body;
+        if(!idUsuario) return res.status(500).json({
+            ok:false,
+            info:'Datos recibidos insuficientes'
+        });
+        const uService = new UsuarioService();
+
+        //OBTENGO EL USUARIO DE LA DB
+        const user = await uService.getOne(idUsuario);
+        if(user.length==0) return res.status(403).json({
+            ok:false,
+            info:'Operacion no permitida'
+        });
+        const userDB = user[0];
+
+        //GENERO NUEVO TOKEN PARA GUARDARLO EN DB
+        let token = jwt.sign({
+            usuario:userDB
+        },config.seed, { expiresIn: '10m' });
+
+        //GUARDO EL NUEVO TOKEN
+        try {
+            await uService.refreshToken(token,userDB.idUsuario);
+        } catch (error) {
+            return res.status(400).json({
+                ok:false,
+                info:'Problemas en el servidor'
+            })
+        }
+
+        let verificationLink = `https://localhost:3000/new-password/${token}`;
+
+        //ENVIO DE EMAIL CON LINK PARA REALIZAR EL RESET PASSWORD
+        const nodemailer = new Nodemailer();
+        const mailOptions = {
+            from:`${config.ACCOUNT_USERNAME}`,
+            to:`${userDB.email}`,
+            subject:'Recuperación de contraseña',
+            html:`
+                <p>Recibimos un pedido para restablecer la contraseña de tu usuario.</p>
+                <br/>
+                <p>Para iniciar el proceso de reinicio, hace click en el siguiente botón:</p>
+                <a style="width: 100%;
+                display: block;
+                padding: 7px;
+                text-align: center;
+                border-radius: 20px;
+                box-shadow: 0px 2px 1px -1px rgba(228, 224, 224, 0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+                background-color: #FFB347;
+                color: white!important;" href="${verificationLink}">Cambiar contraseña</a>
+                <p>Este link solo puede ser usado una vez.</p>
+                <p>Si tiene que reiniciar su contraseña otra vez, por favor visite <a href="https://developers.oliverpetshop.com.ar">https://oliverpetshop.com.ar</a> para iniciar el proceso nuevamente.</p>
+
+                <p>Si usted no realizo el pedido de reseteo, ignore este email.</p>
+
+                <b>OLIVER PETSHOP</b>
+            `
+        };
+        nodemailer.send(mailOptions).then(result=>{
+            res.status(200).json({
+                ok:true,
+                info:'Hemos enviado un email con los pasos para poder realizar el cambio de contraseña a la dirección con la cual usted se registro!'
+            })
+        }).catch(err=>{
+            res.status(500).json({ok:false,error:err})
+        })
+    } catch (error) {
+        res.status(500).json({
+            error:error.message
+        })
+    }
+})
+
+app.put('/new-password',verificarRefreshToken,async(req,res)=>{
+    const uService = new UsuarioService();
+    const token = req.get('refresh-token');
+
+    try {
+        let user = await uService.getBytoken(token);
+        user = user[0];
+        if(!user) return res.status(400).json({
+            ok:false,
+            info:'No se encontro el usuario'
+        });
+        
+        const {newPassword,confirmNewPassword} = req.body;
+        const email = user.email;
+
+        if(newPassword!=confirmNewPassword) return res.status(400).json({
+            ok:false,
+            info:'Las contraseñas no coinciden'
+        });
+
+        await uService.resetPassword(email,newPassword);
+        res.status(200).json({
+            ok:true,
+            info:'Se ha modificado la contraseña con éxito'
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            ok:false,
+            info:error.message
+        })
     }
 });
 

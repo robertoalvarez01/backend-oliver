@@ -19,6 +19,13 @@ class UsuarioService{
         return datos;
     }
 
+    async getBytoken(token){
+        const datos = await this.usuario.getByToken(token).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos
+    }
+
     async create(body,avatar){
         const datos = await this.usuario.register(body,avatar).then(res=>{
             return res;
@@ -31,6 +38,20 @@ class UsuarioService{
             return res;
         }).catch(err=>err);
         return datos;
+    }
+
+    async refreshToken(token,idUsuario){
+        const response = await this.usuario.refreshToken(token,idUsuario).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return response;
+    }
+
+    async resetPassword(email,password){
+        const response = await this.usuario.resetPassword(email,password).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return response;
     }
 
     async updateFromWeb(body,id){

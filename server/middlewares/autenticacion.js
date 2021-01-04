@@ -23,6 +23,25 @@ let verificarToken = (req, res, next) => {
 
 }
 
+let verificarRefreshToken = (req, res, next) => {
+
+    let token = req.get('refresh-token');
+
+    jwt.verify(token, config.seed, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                info:err.message
+            });
+        }
+
+        req.usuario = decoded.usuario;
+        next();
+    });
+
+
+}
+
 // ==========================
 // Verificar Admin_Role
 // ==========================
@@ -68,5 +87,6 @@ let verificarTokenURL = (req, res, next) => {
 module.exports = {
     verificarToken,
     verificarAdmin_role,
-    verificarTokenURL
+    verificarTokenURL,
+    verificarRefreshToken
 };
