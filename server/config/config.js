@@ -41,6 +41,7 @@ const config = {
     SP_USUARIO:process.env.SP_USUARIO,
     SP_USUARIO_DELETE:process.env.SP_USUARIO_DELETE,
     SP_USUARIO_UPDATE_WEB:process.env.SP_USUARIO_UPDATE_WEB,
+    SP_USUARIO_RESET_PASSWORD:process.env.SP_USUARIO_RESET_PASSWORD,
     SP_LEGALES:process.env.SP_LEGALES,
     SP_ZONAS:process.env.SP_ZONAS,
     SP_ZONAS_DELETE:process.env.SP_ZONAS_DELETE,
@@ -59,12 +60,19 @@ const config = {
     ID_GOOGLE_CLOUD: process.env.PROJECT_ID_GCLOUD,
     BUCKET_GCLOUD: process.env.BUCKET_GCLOUD, 
 
-    MP_ACCESS_TOKEN:process.env.MERCADO_PAGO_ACCESS_TOKEN_DEV,
-    MP_PUBLIC_KEY:process.env.MERCADO_PAGO_PUBLIC_KEY_DEV,
-    MP_CLIENT_ID:process.env.MERCADO_PAGO_CLIENT_ID,
-    MP_CLIENT_SECRET:process.env.MERCADO_PAGO_CLIENT_SECRET,
+    // MP_ACCESS_TOKEN:process.env.MERCADO_PAGO_ACCESS_TOKEN_DEV,
+    // MP_PUBLIC_KEY:process.env.MERCADO_PAGO_PUBLIC_KEY_DEV,
+    // MP_CLIENT_ID:process.env.MERCADO_PAGO_CLIENT_ID,
+    // MP_CLIENT_SECRET:process.env.MERCADO_PAGO_CLIENT_SECRET,
 
-    DEFAULT_FOTO:'https://storage.googleapis.com/web-oliver/sin-imagen.png'
+    DEFAULT_FOTO:'https://storage.googleapis.com/web-oliver/sin-imagen.png',
+
+    //DATA EMAIL
+    ACCOUNT_NAME:process.env.ACCOUNT_NAME,
+    ACCOUNT_USERNAME:process.env.ACCOUNT_USERNAME,
+    ACCOUNT_PASSWORD:process.env.ACCOUNT_PASSWORD,
+    ACCOUNT_HOST:process.env.ACCOUNT_HOST,
+    ACCOUNT_PORT:process.env.ACCOUNT_PORT
 };
 
 module.exports = {config}

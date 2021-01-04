@@ -20,6 +20,16 @@ class UsuarioModel{
             })
         })
     }
+
+    getByToken(token){
+        return new Promise((resolve,reject)=>{
+            connection.query(`SELECT email FROM ${config.TABLE_USER} WHERE token = '${token}'`,(err,res,fields)=>{
+                if(err || res.length==0) return reject(err);
+                resolve(res);
+            })
+        })
+    }
+
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_USUARIO}(${id},'${body.email}','${body.password}','${body.nombre}','${body.telefono}',
@@ -30,6 +40,29 @@ class UsuarioModel{
             })
         })
     };
+
+    refreshToken(token,idUsuario){
+        return new Promise((resolve,reject)=>{
+            let query = `UPDATE usuario SET token = '${token}' WHERE idUsuario = ${idUsuario}`;
+            connection.query(query,(err,res,fields)=>{
+                if(err) return reject(err);
+                resolve(true);
+            })
+        })
+    }
+
+    resetPassword(email,password){
+        return new Promise((resolve,reject)=>{
+            bcrypt.hash(password, 10,(err,hash)=>{
+                if(err) reject(err);
+                let query = `CALL ${config.SP_USUARIO_RESET_PASSWORD}('${email}','${hash}')`;
+                connection.query(query,(err,res,fields)=>{
+                    if(err) return reject(err);
+                    resolve();
+                })
+            })
+        })
+    }
 
     updateFromWeb(body,id){
         return new Promise((resolve,reject)=>{

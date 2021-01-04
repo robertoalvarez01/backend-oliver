@@ -18,11 +18,13 @@ app.post('/login', async(req, res) => {
         };
         const userDB = users[0];
         //comparo el password recibido en el body con el hash que esta en db, si no concide envio un 401.
-        bcrypt.compare(body.password, userDB.password, (err, response)=>{
+        bcrypt.compare(body.password, userDB.password, async (err, response)=>{
             if(response){
                 let token = jwt.sign({
                     usuario: userDB
                 }, config.seed, { expiresIn: config.caducidad_token });
+                //actualizo el token y lo guardo en la base de datos.
+                const refreshtoken = await usuarioS.refreshToken(token,userDB.idUsuario);
                 return res.status(200).json({
                     ok: true,
                     usuario:{
