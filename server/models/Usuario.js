@@ -23,8 +23,8 @@ class UsuarioModel{
 
     getByToken(token){
         return new Promise((resolve,reject)=>{
-            connection.query(`SELECT email FROM ${config.TABLE_USER} WHERE token = '${token}'`,(err,res,fields)=>{
-                if(err || res.length==0) return reject(err);
+            connection.query(`SELECT idUsuario,email,nombre,telefono,foto,lon,lat,address,puntos FROM ${config.TABLE_USER} WHERE token = '${token}'`,(err,res,fields)=>{
+                if(err) return reject(err);
                 resolve(res);
             })
         })
