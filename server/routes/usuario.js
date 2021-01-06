@@ -315,10 +315,19 @@ app.put('/new-password',verificarRefreshToken,async(req,res)=>{
             info:'Las contraseñas no coinciden'
         });
 
+        // actualizo la contraseña
         await uService.resetPassword(email,newPassword);
+
+        //refresh token
+        const newToken = jwt.sign({
+            usuario:user
+        },config.seed, { expiresIn: config.caducidad_token });
+        await uService.refreshToken(newToken,user.idUsuario);
+
         res.status(200).json({
             ok:true,
-            info:'Se ha modificado la contraseña con éxito'
+            info:'Se ha modificado la contraseña con éxito',
+            token:newToken
         });
 
     } catch (error) {
@@ -328,5 +337,28 @@ app.put('/new-password',verificarRefreshToken,async(req,res)=>{
         })
     }
 });
+
+app.get('/verify-sesion',verificarToken,async(req,res)=>{
+    const uService = new UsuarioService();
+    const token = req.get('token');
+    try {
+        let user = await uService.getBytoken(token);
+        if(user.length>0 && user.length==1){
+            return res.status(200).json({
+                ok:true,
+                info:'Sesión activa'
+            });
+        }
+        res.status(401).json({
+            ok:false,
+            info:'Sesión expirada'
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            info:error.message
+        })
+    }
+})
 
 module.exports = app;
