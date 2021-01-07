@@ -206,6 +206,38 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
     }
 })
 
+app.put('/actualizarDireccion/:id',verificarToken,async(req,res)=>{
+    try {
+        const {address,lat,lon} = req.body;
+        const {id:idUsuario} = req.params;
+        if(address=='' || lat == '' || lon == '' || !idUsuario) return res.status(400).json({
+            ok:false,
+            info:'Datos recibidos no suficientes'
+        });
+        const uService = new UsuarioService();
+        await uService.updateAddress({address,lat,lon},idUsuario);
+        const updatedUser = await uService.getOne(idUsuario);
+        const userDB = updatedUser[0];
+        return res.status(200).json({
+            ok:true,
+            usuario:{
+                email:userDB.email,
+                nombre:userDB.nombre,
+                telefono:userDB.telefono,
+                foto:userDB.foto,
+                provider:userDB.provider,
+                ubicacion:userDB.address,
+                idUsuario:userDB.idUsuario
+            }
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            info:error.message
+        })
+    }
+})
+
 app.delete('/usuario/:id', [verificarToken, verificarAdmin_role], async(req, res)=>{
     try {
         const {id} = req.params;
@@ -252,7 +284,7 @@ app.post('/resetPassword',[verificarToken],async(req,res)=>{
             })
         }
 
-        let verificationLink = `https://localhost:3000/new-password/${token}`;
+        let verificationLink = `https://developers.oliverpetshop.com.ar/new-password/${token}`;
 
         //ENVIO DE EMAIL CON LINK PARA REALIZAR EL RESET PASSWORD
         const nodemailer = new Nodemailer();

@@ -61,6 +61,13 @@ class UsuarioService{
         return response;
     }
 
+    async updateAddress(data,id){
+        const response = await this.usuario.updateAddress(data,id).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return response;
+    }
+
     async updateFotoFromWeb(foto,id){
         const response = await this.usuario.updateFotoFromWeb(foto,id).then(res=>{
             return res;

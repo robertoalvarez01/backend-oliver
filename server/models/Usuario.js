@@ -75,6 +75,17 @@ class UsuarioModel{
         })
     }
 
+    updateAddress(data,id){
+        return new Promise((resolve,reject)=>{
+            let query = `CALL ${config.SP_USUARIO_UPDATE_ADDRESS}(${id},'${data.address}','${data.lat}',
+            '${data.lon}')`;
+            connection.query(query,(error,res,fiels)=>{
+                if(error) return reject(error);
+                resolve(res);
+            })
+        })
+    }
+
     updateFotoFromWeb(foto,id){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_USUARIO_UPDATE_WEB}(${id},'null','null',
