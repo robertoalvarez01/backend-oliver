@@ -217,17 +217,18 @@ app.put('/actualizarDireccion/:id',verificarToken,async(req,res)=>{
         const uService = new UsuarioService();
         await uService.updateAddress({address,lat,lon},idUsuario);
         const updatedUser = await uService.getOne(idUsuario);
-        const userDB = updatedUser[0];
         return res.status(200).json({
             ok:true,
             usuario:{
-                email:userDB.email,
-                nombre:userDB.nombre,
-                telefono:userDB.telefono,
-                foto:userDB.foto,
-                provider:userDB.provider,
-                ubicacion:userDB.address,
-                idUsuario:userDB.idUsuario
+                email:updatedUser[0].email,
+                nombre:updatedUser[0].nombre,
+                telefono:updatedUser[0].telefono,
+                foto:updatedUser[0].foto,
+                address:updatedUser[0].address,
+                idUsuario:updatedUser[0].idUsuario,
+                token:token,
+                lat:updatedUser[0].lat,
+                lon:updatedUser[0].lon
             }
         })
     } catch (error) {
