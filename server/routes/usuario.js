@@ -226,7 +226,7 @@ app.put('/actualizarDireccion/:id',verificarToken,async(req,res)=>{
                 foto:updatedUser[0].foto,
                 address:updatedUser[0].address,
                 idUsuario:updatedUser[0].idUsuario,
-                token:token,
+                token:updatedUser[0].token,
                 lat:updatedUser[0].lat,
                 lon:updatedUser[0].lon
             }
