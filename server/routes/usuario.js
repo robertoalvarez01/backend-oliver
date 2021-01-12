@@ -9,7 +9,7 @@ const upload = require('../lib/multer');
 const CloudStorage = require('../services/CloudStorage');
 const Nodemailer = require('../services/Nodemailer');
 
-app.get('/usuario', verificarToken,async(req, res)=>{
+app.get('/usuario', [verificarToken,verificarAdmin_role],async(req, res)=>{
     try{
         const usuario = new UsuarioService();
         const data = await usuario.getAll();
@@ -71,7 +71,10 @@ app.post('/register',async(req, res)=>{
                             foto:userDB.foto,
                             provider:userDB.provider,
                             ubicacion:userDB.address,
-			                idUsuario:userDB.idUsuario
+                            admin:userDB.admin,
+                            idUsuario:userDB.idUsuario,
+                            lat:userDB.lat,
+                            lon:userDB.lon
                         },
                         token
                     })
@@ -146,6 +149,7 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
         let token = jwt.sign({
             usuario: updatedUser[0]
         }, config.seed, { expiresIn: config.caducidad_token });
+        await usuario.refreshToken(token,updatedUser[0].idUsuario);
         let userDB = {
             email:updatedUser[0].email,
             nombre:updatedUser[0].nombre,
@@ -182,6 +186,7 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
             let token = jwt.sign({
                 usuario: updatedUser[0]
             }, config.seed, { expiresIn: config.caducidad_token });
+            await usuario.refreshToken(token,updatedUser[0].idUsuario);
             let userDB = {
                 email:updatedUser[0].email,
                 nombre:updatedUser[0].nombre,
@@ -217,6 +222,10 @@ app.put('/actualizarDireccion/:id',verificarToken,async(req,res)=>{
         const uService = new UsuarioService();
         await uService.updateAddress({address,lat,lon},idUsuario);
         const updatedUser = await uService.getOne(idUsuario);
+        let token = jwt.sign({
+            usuario: updatedUser[0]
+        }, config.seed, { expiresIn: config.caducidad_token });
+        await uService.refreshToken(token,updatedUser[0].idUsuario);
         return res.status(200).json({
             ok:true,
             usuario:{
@@ -264,7 +273,7 @@ app.post('/resetPassword',[verificarToken],async(req,res)=>{
 
         //OBTENGO EL USUARIO DE LA DB
         const user = await uService.getOne(idUsuario);
-        if(user.length==0) return res.status(403).json({
+        if(user.length==0 || user.length>1) return res.status(403).json({
             ok:false,
             info:'Operacion no permitida'
         });

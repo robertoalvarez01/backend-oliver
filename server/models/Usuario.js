@@ -14,7 +14,7 @@ class UsuarioModel{
 
     get(id){
         return new Promise((resolve,reject)=>{
-            connection.query(`SELECT idUsuario,email,nombre,telefono,foto,lon,lat,address,puntos,token FROM ${config.TABLE_USER} WHERE idUsuario = ${id}`,(err,results,fields)=>{
+            connection.query(`SELECT idUsuario,email,nombre,telefono,foto,provider,address,admin,lat,lon FROM ${config.TABLE_USER} WHERE idUsuario = ${id}`,(err,results,fields)=>{
                 if(err) return reject(err);
                 resolve(results);
             })
@@ -23,7 +23,7 @@ class UsuarioModel{
 
     getByToken(token){
         return new Promise((resolve,reject)=>{
-            connection.query(`SELECT idUsuario,email,nombre,telefono,foto,lon,lat,address,puntos FROM ${config.TABLE_USER} WHERE token = '${token}'`,(err,res,fields)=>{
+            connection.query(`SELECT idUsuario,email,nombre,telefono,foto,provider,address,admin,lat,lon FROM ${config.TABLE_USER} WHERE token = '${token}'`,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);
             })

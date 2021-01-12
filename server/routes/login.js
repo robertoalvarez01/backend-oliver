@@ -39,7 +39,8 @@ app.post('/login', async(req, res) => {
                         lat:userDB.lat,
                         lon:userDB.lon
                     },
-                    token
+                    token,
+                    tokenDB:userDB.token
                 })
             }
             return res.status(401).json({
