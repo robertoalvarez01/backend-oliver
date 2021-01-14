@@ -1,6 +1,8 @@
 require('dotenv').config();
 let caducidad_token = 1000 * 60 * 60 * 24 * 30;
 const config = {
+    URL_SITE:process.env.URL_SITE || 'http://localhost:3000',
+    URL_API:process.env.URL_API || 'http://localhost:3001',
     port:process.env.PORT || 3000,
     node_env:process.env.NODE_ENV || 'dev',
     // ============================

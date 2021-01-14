@@ -30,3 +30,5 @@ app.use(require('./routes/index'));
 
 app.listen(config.port, console.log("Server running on port "+config.port));
 // https.createServer(options, app).listen(3000, console.log("Secure server running on port 3000"));
+
+console.log(config.URL_SITE,config.URL_API);

@@ -80,8 +80,6 @@ let verificarTokenURL = (req, res, next) => {
         req.usuario = decoded.usuario;
         next();
     });
-
-
 }
 
 module.exports = {

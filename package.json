@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node server/server.js",
+        "start": "URL_SITE=https://developers.oliverpetshop.com.ar URL_API=https://api.oliverpetshop.com.ar node server/server.js",
         "dev": "nodemon server/server.js"
     },
     "author": "",

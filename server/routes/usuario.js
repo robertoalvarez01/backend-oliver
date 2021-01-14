@@ -61,35 +61,68 @@ app.post('/register',async(req, res)=>{
                     let token = jwt.sign({
                         usuario: userDB
                     }, config.seed, { expiresIn: config.caducidad_token });
+                    let tokenEmail = jwt.sign({
+                        usuario:userDB
+                    },userDB.email,{expiresIn:'1d'});
+
                     await usuario.refreshToken(token,userDB.idUsuario);
-                    return res.status(200).json({
-                        ok: true,
-                        usuario:{
-                            email:userDB.email,
-                            nombre:userDB.nombre,
-                            telefono:userDB.telefono,
-                            foto:userDB.foto,
-                            provider:userDB.provider,
-                            ubicacion:userDB.address,
-                            admin:userDB.admin,
-                            idUsuario:userDB.idUsuario,
-                            lat:userDB.lat,
-                            lon:userDB.lon
-                        },
-                        token
+
+                    let verificationLink = `${config.URL_API}/auth/confirmed?token=${tokenEmail}&email=${userDB.email}`;
+                    //ENVIO DE EMAIL CON LINK PARA REALIZAR CONFIRMACION DE CUENTA
+                    const nodemailer = new Nodemailer();
+                    const mailOptions = {
+                        from:`${config.ACCOUNT_USERNAME}`,
+                        to:`${userDB.email}`,
+                        subject:'Confirmación de cuenta',
+                        html:`
+                            <h1>Bienvenido ${userDB.nombre} a Petshop Oliver</h1>
+                            <br/>
+                            <p>Te pedimos por favor, que confirmes tu cuenta presionando el botón que se encuentra abajo para poder finalizar el registro. ¡Muchas gracias!</p>
+                            <a style="width: 100%;
+                            display: block;
+                            padding: 7px;
+                            text-align: center;
+                            border-radius: 20px;
+                            box-shadow: 0px 2px 1px -1px rgba(228, 224, 224, 0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+                            background-color: #FFB347;
+                            color: white!important;" href="${verificationLink}">Confirmar cuenta</a>
+
+                            <b>OLIVER PETSHOP</b>
+                        `
+                    };
+                    nodemailer.send(mailOptions).then(result=>{
+                        return res.status(200).json({
+                            ok: true,
+                            usuario:{
+                                email:userDB.email,
+                                nombre:userDB.nombre,
+                                telefono:userDB.telefono,
+                                foto:userDB.foto,
+                                provider:userDB.provider,
+                                ubicacion:userDB.address,
+                                admin:userDB.admin,
+                                idUsuario:userDB.idUsuario,
+                                lat:userDB.lat,
+                                lon:userDB.lon
+                            },
+                            token
+                        })
+                    }).catch(err=>{
+                        res.status(500).json({ok:false,error:err})
+                    })
+                }else{
+                    return res.status(401).json({
+                        info:'Usuario o contraseña incorrectos'
                     })
                 }
-                return res.status(401).json({
-                    info:'Usuario o contraseña incorrectos'
-                })
             });
         }else if(register.errno == 1062){
-            return res.status(200).json({
+            return res.status(500).json({
                 ok:false,
                 info:'Ya existe un usuario con ese email'
             })
         }else{
-            return res.status(200).json({
+            return res.status(500).json({
                 ok:false,
                 info:'Problemas al crear el usuario'
             })
@@ -300,7 +333,7 @@ app.post('/resetPassword',async(req,res)=>{
             })
         }
 
-        let verificationLink = `https://developers.oliverpetshop.com.ar/new-password/${token}`;
+        let verificationLink = `${config.URL_SITE}/new-password/${token}`;
 
         //ENVIO DE EMAIL CON LINK PARA REALIZAR EL RESET PASSWORD
         const nodemailer = new Nodemailer();
@@ -321,7 +354,7 @@ app.post('/resetPassword',async(req,res)=>{
                 background-color: #FFB347;
                 color: white!important;" href="${verificationLink}">Cambiar contraseña</a>
                 <p>Este link solo puede ser usado una vez.</p>
-                <p>Si tiene que reiniciar su contraseña otra vez, por favor visite <a href="https://developers.oliverpetshop.com.ar">https://oliverpetshop.com.ar</a> para iniciar el proceso nuevamente.</p>
+                <p>Si tiene que reiniciar su contraseña otra vez, por favor visite <a href="${config.URL_SITE}">${config.URL_SITE}</a> para iniciar el proceso nuevamente.</p>
 
                 <p>Si usted no realizo el pedido de reseteo, ignore este email.</p>
 
@@ -409,6 +442,21 @@ app.get('/verify-sesion',verificarToken,async(req,res)=>{
     }
 });
 
+app.get('/auth/confirmed',async(req,res,next)=>{
+    const {token,email} = req.query;
+    try {
+        const {usuario:{idUsuario}} = jwt.verify(token,email);
+        const Uservice = new UsuarioService();
+        await Uservice.confirmAccount(idUsuario);
+    } catch(err) {
+        console.log(err);
+        res.status(403).json({
+            ok:false,
+            info:'No autorizado'
+        })
+    }
+    return res.redirect(config.URL_SITE);
+})
 
 
 module.exports = app;

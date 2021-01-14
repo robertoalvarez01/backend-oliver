@@ -93,6 +93,11 @@ class UsuarioService{
         const users = await this.usuario.login(body).then(res=>res).catch(err=>err);
         return users;
     }
+
+    async confirmAccount(idUsuario){
+        const response = await this.usuario.confirmAccount(idUsuario).then(res=>res).catch(err=>err);
+        return response;
+    }
 }
 
 module.exports = UsuarioService;

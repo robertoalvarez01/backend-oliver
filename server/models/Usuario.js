@@ -124,7 +124,7 @@ class UsuarioModel{
             bcrypt.hash(body.password, 10,(err,hash)=>{
                 if(err) reject(err);
                 let query = `CALL ${config.SP_USUARIO}(0,'${body.email}','${hash}','${body.nombre}','${body.telefono}',
-                0,'${foto}','web','${body.lon}','${body.lat}','${body.address}')`;
+                0,'${foto}','web','${body.lon}','${body.lat}','${body.address}',0)`;
                 connection.query(query,(error,results,fields)=>{
                     if(error) return reject(error);
                     resolve(results);
@@ -149,6 +149,16 @@ class UsuarioModel{
         return new Promise((resolve,reject)=>{
             let query = `SELECT * FROM ${config.TABLE_USER} 
                         WHERE email = '${body.email}' LIMIT 1`;
+            connection.query(query,(err,res,fiels)=>{
+                if(err) reject(err);
+                resolve(res);
+            })
+        })
+    }
+
+    confirmAccount(idUsuario){
+        return new Promise((resolve,reject)=>{
+            let query = `UPDATE usuario SET verificada = 1 WHERE idUsuario = ${idUsuario}`;
             connection.query(query,(err,res,fiels)=>{
                 if(err) reject(err);
                 resolve(res);
