@@ -26,6 +26,13 @@ class UsuarioService{
         return datos
     }
 
+    async getByEmail(email){
+        const datos = await this.usuario.getByEmail(email).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos
+    }
+
     async create(body,avatar){
         const datos = await this.usuario.register(body,avatar).then(res=>{
             return res;

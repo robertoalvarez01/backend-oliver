@@ -262,17 +262,23 @@ app.delete('/usuario/:id', [verificarToken, verificarAdmin_role], async(req, res
     }
 });
 
-app.post('/resetPassword',[verificarToken],async(req,res)=>{
+app.post('/resetPassword',async(req,res)=>{
     try {
-        const {idUsuario} = req.body;
-        if(!idUsuario) return res.status(500).json({
+        const {idUsuario,email} = req.body;
+        if(!idUsuario && !email) return res.status(500).json({
             ok:false,
             info:'Datos recibidos insuficientes'
         });
         const uService = new UsuarioService();
 
         //OBTENGO EL USUARIO DE LA DB
-        const user = await uService.getOne(idUsuario);
+        let user;
+        if(idUsuario){
+            user = await uService.getOne(idUsuario);
+        }else if(email){
+            user = await uService.getByEmail(email);
+        }
+
         if(user.length==0 || user.length>1) return res.status(403).json({
             ok:false,
             info:'Operacion no permitida'
@@ -401,6 +407,8 @@ app.get('/verify-sesion',verificarToken,async(req,res)=>{
             info:error.message
         })
     }
-})
+});
+
+
 
 module.exports = app;

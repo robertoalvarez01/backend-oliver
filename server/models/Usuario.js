@@ -30,6 +30,15 @@ class UsuarioModel{
         })
     }
 
+    getByEmail(email){
+        return new Promise((resolve,reject)=>{
+            connection.query(`SELECT idUsuario,email,nombre,telefono,foto,provider,address,admin,lat,lon FROM ${config.TABLE_USER} WHERE email = '${email}'`,(err,res,fields)=>{
+                if(err) return reject(err);
+                resolve(res);
+            })
+        }) 
+    }
+
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_USUARIO}(${id},'${body.email}','${body.password}','${body.nombre}','${body.telefono}',
