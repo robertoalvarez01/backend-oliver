@@ -59,10 +59,13 @@ app.post('/register',async(req, res)=>{
             bcrypt.compare(dataUser.password, userDB.password, async(err, response)=>{
                 if(response){
                     let token = jwt.sign({
-                        usuario: userDB
+                        usuario: userDB.email
                     }, config.seed, { expiresIn: config.caducidad_token });
                     let tokenEmail = jwt.sign({
-                        usuario:userDB
+                        usuario:{
+                            idUsuario:userDB.idUsuario,
+                            email:userDB.email
+                        }
                     },userDB.email,{expiresIn:'1d'});
 
                     await usuario.refreshToken(token,userDB.idUsuario);
@@ -180,7 +183,10 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
         const response = await usuario.updateFromWeb(body,id);
         const updatedUser = await usuario.getOne(id);
         let token = jwt.sign({
-            usuario: updatedUser[0]
+            usuario:{
+                idUsuario:updatedUser[0].idUsuario,
+                email:updatedUser[0].email
+            }
         }, config.seed, { expiresIn: config.caducidad_token });
         await usuario.refreshToken(token,updatedUser[0].idUsuario);
         let userDB = {
@@ -217,7 +223,10 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
             const response = await usuario.updateFotoFromWeb(url,id);
             const updatedUser = await usuario.getOne(id);
             let token = jwt.sign({
-                usuario: updatedUser[0]
+                usuario:{
+                    idUsuario:updatedUser[0].idUsuario,
+                    email:updatedUser[0].email
+                }
             }, config.seed, { expiresIn: config.caducidad_token });
             await usuario.refreshToken(token,updatedUser[0].idUsuario);
             let userDB = {
@@ -256,7 +265,10 @@ app.put('/actualizarDireccion/:id',verificarToken,async(req,res)=>{
         await uService.updateAddress({address,lat,lon},idUsuario);
         const updatedUser = await uService.getOne(idUsuario);
         let token = jwt.sign({
-            usuario: updatedUser[0]
+            usuario:{
+                idUsuario:updatedUser[0].idUsuario,
+                email:updatedUser[0].email
+            }
         }, config.seed, { expiresIn: config.caducidad_token });
         await uService.refreshToken(token,updatedUser[0].idUsuario);
         return res.status(200).json({
@@ -320,7 +332,10 @@ app.post('/resetPassword',async(req,res)=>{
 
         //GENERO NUEVO TOKEN PARA GUARDARLO EN DB
         let token = jwt.sign({
-            usuario:userDB
+            usuario:{
+                idUsuario:userDB.idUsuario,
+                email:userDB.email
+            }
         },config.seed, { expiresIn: '10m' });
 
         //GUARDO EL NUEVO TOKEN
@@ -401,7 +416,10 @@ app.put('/new-password',verificarRefreshToken,async(req,res)=>{
 
         //refresh token
         const newToken = jwt.sign({
-            usuario:user
+            usuario:{
+                idUsuario:user.idUsuario,
+                email:user.email
+            }
         },config.seed, { expiresIn: config.caducidad_token });
         await uService.refreshToken(newToken,user.idUsuario);
 

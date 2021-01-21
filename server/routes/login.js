@@ -21,7 +21,10 @@ app.post('/login', async(req, res) => {
         bcrypt.compare(body.password, userDB.password, async (err, response)=>{
             if(response){
                 let token = jwt.sign({
-                    usuario: userDB
+                    usuario:{
+                        idUsuario:userDB.idUsuario,
+                        email:userDB.email
+                    }
                 }, config.seed, { expiresIn: config.caducidad_token });
                 //actualizo el token y lo guardo en la base de datos.
                 const refreshtoken = await usuarioS.refreshToken(token,userDB.idUsuario);
