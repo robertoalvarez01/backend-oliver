@@ -5,6 +5,7 @@ const {config} = require('../config/config');
 const UsuarioService = require('../services/UsuarioService');
 const app = express();
 
+
 app.post('/login', async(req, res) => {
     try {
         const {body} = req;
