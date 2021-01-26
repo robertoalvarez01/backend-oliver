@@ -5,6 +5,7 @@ const {config} = require('../config/config');
 const UsuarioService = require('../services/UsuarioService');
 const app = express();
 
+
 app.post('/login', async(req, res) => {
     try {
         const {body} = req;
@@ -21,7 +22,11 @@ app.post('/login', async(req, res) => {
         bcrypt.compare(body.password, userDB.password, async (err, response)=>{
             if(response){
                 let token = jwt.sign({
-                    usuario: userDB
+                    usuario:{
+                        idUsuario:userDB.idUsuario,
+                        email:userDB.email,
+                        admin:userDB.admin
+                    }
                 }, config.seed, { expiresIn: config.caducidad_token });
                 //actualizo el token y lo guardo en la base de datos.
                 const refreshtoken = await usuarioS.refreshToken(token,userDB.idUsuario);
@@ -39,8 +44,7 @@ app.post('/login', async(req, res) => {
                         lat:userDB.lat,
                         lon:userDB.lon
                     },
-                    token,
-                    tokenDB:userDB.token
+                    token
                 })
             }
             return res.status(401).json({
