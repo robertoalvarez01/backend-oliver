@@ -64,12 +64,8 @@ app.post('/register',async(req, res)=>{
                     let tokenEmail = jwt.sign({
                         usuario:{
                             idUsuario:userDB.idUsuario,
-<<<<<<< HEAD
-                            email:userDB.email
-=======
                             email:userDB.email,
                             admin:userDB.admin
->>>>>>> 54c0046964a220e8c1b31204f1c0ae2d3f6569ce
                         }
                     },userDB.email,{expiresIn:'1d'});
 
@@ -190,12 +186,8 @@ app.put('/actualizarUsuarioDesdeWeb/:id',[verificarToken,/*upload.single('foto')
         let token = jwt.sign({
             usuario:{
                 idUsuario:updatedUser[0].idUsuario,
-<<<<<<< HEAD
-                email:updatedUser[0].email
-=======
                 email:updatedUser[0].email,
                 admin:updatedUser[0].admin
->>>>>>> 54c0046964a220e8c1b31204f1c0ae2d3f6569ce
             }
         }, config.seed, { expiresIn: config.caducidad_token });
         await usuario.refreshToken(token,updatedUser[0].idUsuario);
@@ -235,12 +227,8 @@ app.put('/actualizarFotoUsuarioDesdeWeb/:id',[verificarToken,upload.single('foto
             let token = jwt.sign({
                 usuario:{
                     idUsuario:updatedUser[0].idUsuario,
-<<<<<<< HEAD
-                    email:updatedUser[0].email
-=======
                     email:updatedUser[0].email,
                     admin:updatedUser[0].admin
->>>>>>> 54c0046964a220e8c1b31204f1c0ae2d3f6569ce
                 }
             }, config.seed, { expiresIn: config.caducidad_token });
             await usuario.refreshToken(token,updatedUser[0].idUsuario);
@@ -282,12 +270,8 @@ app.put('/actualizarDireccion/:id',verificarToken,async(req,res)=>{
         let token = jwt.sign({
             usuario:{
                 idUsuario:updatedUser[0].idUsuario,
-<<<<<<< HEAD
-                email:updatedUser[0].email
-=======
                 email:updatedUser[0].email,
                 admin:updatedUser[0].admin
->>>>>>> 54c0046964a220e8c1b31204f1c0ae2d3f6569ce
             }
         }, config.seed, { expiresIn: config.caducidad_token });
         await uService.refreshToken(token,updatedUser[0].idUsuario);
@@ -354,12 +338,8 @@ app.post('/resetPassword',async(req,res)=>{
         let token = jwt.sign({
             usuario:{
                 idUsuario:userDB.idUsuario,
-<<<<<<< HEAD
-                email:userDB.email
-=======
                 email:userDB.email,
                 admin:userDB.admin
->>>>>>> 54c0046964a220e8c1b31204f1c0ae2d3f6569ce
             }
         },config.seed, { expiresIn: '10m' });
 
@@ -443,12 +423,8 @@ app.put('/new-password',verificarRefreshToken,async(req,res)=>{
         const newToken = jwt.sign({
             usuario:{
                 idUsuario:user.idUsuario,
-<<<<<<< HEAD
-                email:user.email
-=======
                 email:user.email,
                 admin:user.admin
->>>>>>> 54c0046964a220e8c1b31204f1c0ae2d3f6569ce
             }
         },config.seed, { expiresIn: config.caducidad_token });
         await uService.refreshToken(newToken,user.idUsuario);
