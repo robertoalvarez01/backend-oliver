@@ -10,8 +10,8 @@ class MercadoPagoService{
         let preference = {
             items: data, 
             back_urls:{
-                success:`${config.URL_SITE}/checkout?estado=success`,
-                failure:`${config.URL_SITE}/checkout?estado=failure`
+                success:`${config.URL_SITE}/procesarVenta`,
+                failure:`${config.URL_SITE}/errorVenta`
             },
             auto_return:"approved"
         };
