@@ -4,7 +4,7 @@ const MercadoPagoService = require('../services/MercadoPago');
 const { verificarToken } = require('../middlewares/autenticacion');
 
 app.post('/mercadopago',verificarToken,async(req,res,next)=>{
-    const {productos} = req.body;
+    const {body:productos} = req;
     if(!productos || productos.length==0) return res.status(500).json({
         ok:false,
         info:'Ningun producto recibido'
