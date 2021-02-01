@@ -21,7 +21,11 @@ app.post('/google/tokensignin',async(req, res,next)=>{
                 //ya hay un usuario registrado con ese email, entonces lo logueo.
                 const userDB = usersInDb[0];
                 let token = jwt.sign({
-                    usuario: userDB
+                    usuario:{
+                        idUsuario:userDB.idUsuario,
+                        email:userDB.email,
+                        admin:userDB.admin
+                    }
                 }, config.seed, { expiresIn: config.caducidad_token });
                 await uModel.refreshToken(token,userDB.idUsuario);
                 return res.status(200).json({
@@ -45,7 +49,11 @@ app.post('/google/tokensignin',async(req, res,next)=>{
                 if(register){
                     const userDB = await uModel.login(dataUser);
                     let token = jwt.sign({
-                        usuario: userDB[0]
+                        usuario:{
+                            idUsuario:userDB[0].idUsuario,
+                            email:userDB[0].email,
+                            admin:userDB[0].admin
+                        }
                     }, config.seed, { expiresIn: config.caducidad_token });
                     await uModel.refreshToken(token,userDB[0].idUsuario);
                     return res.status(200).json({
