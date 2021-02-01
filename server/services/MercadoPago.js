@@ -8,7 +8,12 @@ mercadopago.configure({
 class MercadoPagoService{
     async init(data=null){
         let preference = {
-            items: data
+            items: data, 
+            back_urls:{
+                success:`${config.URL_SITE}/checkout?estado=success`,
+                failure:`${config.URL_SITE}/checkout?estado=failure`
+            },
+            auto_return:"approved"
         };
         const res = await mercadopago.preferences.create(preference);
         return res;
