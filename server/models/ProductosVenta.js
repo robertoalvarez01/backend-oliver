@@ -30,8 +30,7 @@ class ProductosVentasModel{
 
     create(body){
         return new Promise(async(resolve,reject)=>{
-            //hash para password
-            let query = `CALL ${config.SP_PRODUCTOSVENTA}(0,${body.idVenta},${body.cantidad},${body.idSubProducto})`;
+            let query = `CALL ${config.SP_PRODUCTOSVENTA}(0,${body.idProducto},${body.idVenta},${body.cantidad},${body.idSubProducto})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);

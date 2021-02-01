@@ -28,7 +28,10 @@ class EnvioModel{
             let query = `CALL ${config.SP_ENVIO}(0,${body.idZona},'${body.tipo}',0)`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
-                resolve(results);
+                return connection.query(`SELECT idEnvio from ${config.TABLE_ENVIO} order by idEnvio DESC limit 1`,(err,res)=>{
+                    if(error) return reject(error);
+                    resolve(res);
+                })
             })
         })
     };

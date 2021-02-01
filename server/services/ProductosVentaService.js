@@ -1,3 +1,4 @@
+const { reject } = require('underscore');
 const ProductosVentaModel = require('../models/ProductosVenta');
 
 class ProductosVentaService{
@@ -19,11 +20,15 @@ class ProductosVentaService{
         return datos;
     }
 
-    async create(body){
-        const datos = await this.pvModel.create(body).then(res=>{
-            return res;
-        }).catch(err=>err);
-        return datos;
+    async create(body,idVenta){
+        return new Promise((resolve,reject)=>{
+            if(body.length>0){
+                body.forEach(async prd => {
+                    prd.idVenta = idVenta;
+                    this.pvModel.create(prd).then(()=>resolve()).catch(err=>reject(err));
+                }); 
+            }
+        })
     }
 
     async update(body,id){

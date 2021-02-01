@@ -16,5 +16,6 @@ app.use(require('./legales'));
 app.use(require('./zonas'));
 app.use(require('./mercadopago'));
 app.use(require('./envio'));
+app.use(require('./ventas.js'))
 
 module.exports = app;
