@@ -21,14 +21,15 @@ class ProductosVentaService{
     }
 
     async create(body,idVenta){
-        return new Promise((resolve,reject)=>{
-            if(body.length>0){
-                body.forEach(async prd => {
-                    prd.idVenta = idVenta;
-                    this.pvModel.create(prd).then(()=>resolve()).catch(err=>reject(err));
-                }); 
-            }
-        })
+        if(body.length>0){
+            body.forEach(async prd => {
+                prd.idVenta = idVenta;
+                await this.pvModel.create(prd).then(console.log('subido')).catch(err=>{
+                    throw new Error(err);
+                });
+            })
+            return;
+        }
     }
 
     async update(body,id){
