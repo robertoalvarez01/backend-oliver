@@ -47,6 +47,11 @@ class VentasService{
         return datos;
     }
 
+    async verificarVentaDuplicada(id){
+        const response = await this.vModel.getByOperacionId(id).then(res=>res).catch(err=>err);
+        return response;
+    }
+
 }
 
 module.exports = VentasService;

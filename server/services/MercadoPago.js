@@ -11,7 +11,7 @@ class MercadoPagoService{
             items: data, 
             back_urls:{
                 success:`${config.URL_SITE}/procesarVenta`,
-                failure:`${config.URL_SITE}/errorVenta`
+                failure:`${config.URL_SITE}/checkout`
             },
             auto_return:"approved"
         };

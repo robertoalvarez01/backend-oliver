@@ -6,7 +6,7 @@ class EnvioModel{
 
     getAll(){
         return new Promise((resolve,reject)=>{
-            connection.query(`SELECT ${config.TABLE_ENVIO}.* , ${config.TABLE_ZONAS}.zona FROM ${config.TABLE_ENVIO} LEFT JOIN ${config.TABLE_ZONAS} ON ${config.TABLE_ZONAS}.idZona = ${config.TABLE_ENVIO}.idZona`,(err,res,fields)=>{
+            connection.query(`SELECT ${config.TABLE_ENVIO}.* , ${config.TABLE_ZONAS}.zona FROM ${config.TABLE_ENVIO} LEFT JOIN ${config.TABLE_ZONAS} ON ${config.TABLE_ZONAS}.idZona = ${config.TABLE_ENVIO}.idZona ORDER BY ${config.TABLE_ENVIO}.idEnvio DESC`,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);
             })

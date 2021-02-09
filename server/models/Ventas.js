@@ -46,7 +46,7 @@ class VentasModel{
     create(body){
         return new Promise(async(resolve,reject)=>{
             //hash para password
-            let query = `CALL ${config.SP_VENTAS}(0,${body.idUsuario},'${body.fecha}','${body.subtotal}','${body.porcentaje_descuento}','${body.descuento}','${body.total}',${body.idEnvio})`;
+            let query = `CALL ${config.SP_VENTAS}(0,${body.idUsuario},'${body.fecha}','${body.subtotal}','${body.porcentaje_descuento}','${body.descuento}','${body.total}',${body.idEnvio},${body.operacion_id})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 return connection.query(`SELECT idVenta from ${config.TABLE_VENTAS} order by idVenta DESC limit 1`,(err,res)=>{
@@ -59,7 +59,7 @@ class VentasModel{
 
     update(body,id){
         return new Promise((resolve,reject)=>{
-            let query = `CALL ${config.SP_VENTAS}(${id},${body.idUsuario},'${body.fecha}','${body.subtotal}','${body.porcentaje_descuento}','${config,descuento}','${body.total}',${body.idEnvio})`;
+            let query = `CALL ${config.SP_VENTAS}(${id},${body.idUsuario},'${body.fecha}','${body.subtotal}','${body.porcentaje_descuento}','${config,descuento}','${body.total}',${body.idEnvio},0)`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);
@@ -72,6 +72,15 @@ class VentasModel{
             connection.query(`CALL ${config.SP_VENTAS_DELETE}(${id})`,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);
+            })
+        })
+    }
+
+    getByOperacionId(id){
+        return new Promise((resolve,reject)=>{
+            connection.query(`SELECT 1 FROM ventas WHERE operacion_id = ${id}`,(err,res,fields)=>{
+                if(err) return reject(err);
+                resolve(res)
             })
         })
     }
