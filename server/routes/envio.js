@@ -4,6 +4,7 @@ const app = express();
 const EnvioService = require('../services/EnvioService');
 const VentasService = require('../services/VentasService');
 const ProductosVentaService = require('../services/ProductosVentaService');
+const Nodemailer = require('../services/Nodemailer');
 
 app.get('/envios',[verificarToken,verificarAdmin_role],async(req,res)=>{
     const eService = new EnvioService();
@@ -68,12 +69,28 @@ app.get('/envios/:id',[verificarToken,verificarAdmin_role],async(req,res)=>{
     }
 })
 
-app.get('/envios/modificarEstado/:id',[verificarToken,verificarAdmin_role],async(req,res)=>{
+app.put('/envios/modificarEstadoEnCamino/:id',[verificarToken,verificarAdmin_role],async(req,res)=>{
     const eService = new EnvioService();
+    const nodemailer = new Nodemailer();
     try {
         const {id} = req.params;
-        await eService.cambiarEstado(id);
-        res.status(200).json({ok:true,info:'Estado del envio modificado'})
+        const {email} = req.query;
+        await eService.cambiarEstadoEnCamino(id);
+        const mailOptions = {
+            from:`${config.ACCOUNT_USERNAME}`,
+            to:`${email}`,
+            subject:'Envío en camino',
+            html:`
+                <h1>Tu envío ya esta en camino!</h1>
+
+                <b>OLIVER PETSHOP</b>
+            `
+        };
+        nodemailer.send(mailOptions).then(result=>{
+            return res.status(200).json({ok:true,info:'Estado del envio modificado'})
+        }).catch(err=>{
+            res.status(500).json({ok:false,error:err})
+        })
     } catch (error) {
         res.status(500).json({
             ok:false,
@@ -81,5 +98,36 @@ app.get('/envios/modificarEstado/:id',[verificarToken,verificarAdmin_role],async
         })
     }
 })
+
+app.put('/envios/modificarEstadoEntregado/:id',[verificarToken,verificarAdmin_role],async(req,res)=>{
+    const eService = new EnvioService();
+    const nodemailer = new Nodemailer();
+    try {
+        const {id} = req.params;
+        const {email} = req.query;
+        await eService.cambiarEstadoEntregado(id);
+        const mailOptions = {
+            from:`${config.ACCOUNT_USERNAME}`,
+            to:`${email}`,
+            subject:'Envío entregado',
+            html:`
+                <h1>Hemos entregado su compra satisfactoriamente</h1>
+        
+                <b>OLIVER PETSHOP</b>
+            `
+        };
+        nodemailer.send(mailOptions).then(result=>{
+            return res.status(200).json({ok:true,info:'Estado del envio modificado'})
+        }).catch(err=>{
+            res.status(500).json({ok:false,error:err})
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            error:error.message
+        })
+    }
+})
+
 
 module.exports = app;
