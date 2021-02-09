@@ -40,13 +40,19 @@ class EnvioService{
         return datos;
     }
 
-    async cambiarEstado(id){
-        const response = await this.eModel.cambiarEstado(id).then(res=>{
+    async cambiarEstadoEntregado(id){
+        const response = await this.eModel.cambiarEstadoEntregado(id).then(res=>{
             return res;
         }).catch(err=>err);
         return response;
     }
 
+    async cambiarEstadoEnCamino(id){
+        const response = await this.eModel.cambiarEstadoEnCamino(id).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return response;
+    }
 }
 
 module.exports = EnvioService;
