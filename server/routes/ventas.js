@@ -4,11 +4,15 @@ const app = express();
 const EnvioService = require('../services/EnvioService');
 const VentasService = require('../services/VentasService');
 const ProductosVentaService = require('../services/ProductosVentaService');
+const {config} = require('../config/config');
+const NodeMailer = require('../services/Nodemailer');
+const UsuarioService = require('../services/UsuarioService');
 
 app.post('/registrarVenta',[verificarToken],async(req,res)=>{
     const eService = new EnvioService();
     const vService = new VentasService();
     const pvService = new ProductosVentaService();
+    const uService = new UsuarioService();
     try {
         const {envio:dataEnvio,venta:dataVenta} = req.body;
         if(!dataEnvio.idZona || dataEnvio.tipo==''){
@@ -30,10 +34,29 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
             const newVenta = await vService.create(dataVenta);
             const {idVenta:idUltimaVenta} = newVenta[0];
             await pvService.create(dataVenta.productos,idUltimaVenta);
-            res.status(200).json({
-                ok:true,
-                info:'Venta agregada'
-            })
+
+            //envio de email a usuario
+            const dataUsuario = await uService.getOne(dataVenta.idUsuario);
+            const {email} = dataUsuario[0];
+            const nodemailer = new NodeMailer();
+            const mailOptions = {
+                from:`${config.ACCOUNT_USERNAME}`,
+                to:`${email}`,
+                subject:'Nueva compra en PetShop Oliver',
+                html:`
+                    <h1>Hemos recibido la informacion de tu compra, en breve te informaremos cuando el envio este en camino</h1>
+    
+                    <b>OLIVER PETSHOP</b>
+                `
+            };
+            nodemailer.send(mailOptions).then(result=>{
+                return  res.status(200).json({
+                    ok:true,
+                    info:'Venta agregada'
+                })
+            }).catch(err=>{
+                res.status(500).json({ok:false,error:err})
+            });
         }
     } catch (error) {
         res.status(500).json({
