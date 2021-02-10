@@ -11,7 +11,7 @@ class EnvioModel{
                 query += `AND ${config.TABLE_ENVIO}.idZona = ${idZona} `;
             }
             if(tipo && tipo!=''){
-                query += `AND ${config.TABLE_ENVIO}.tipo = ${tipo} `;
+                query += `AND ${config.TABLE_ENVIO}.tipo = '${tipo}' `;
             }
             query += `ORDER BY ${config.TABLE_ENVIO}.idEnvio DESC`;
             connection.query(query,(err,res,fields)=>{

@@ -5,6 +5,7 @@ const EnvioService = require('../services/EnvioService');
 const VentasService = require('../services/VentasService');
 const ProductosVentaService = require('../services/ProductosVentaService');
 const Nodemailer = require('../services/Nodemailer');
+const {config} = require('../config/config');
 
 app.get('/envios',[verificarToken,verificarAdmin_role],async(req,res)=>{
     const eService = new EnvioService();
