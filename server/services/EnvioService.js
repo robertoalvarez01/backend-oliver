@@ -5,8 +5,8 @@ class EnvioService{
         this.eModel = new EnvioModel();
     }
 
-    async getAll(){
-        const datos = await this.eModel.getAll().then(res=>{
+    async getAll(idEnvio=null,tipo=null){
+        const datos = await this.eModel.getAll(idEnvio,tipo).then(res=>{
             return res;
         }).catch(err=>err); 
         return datos;
