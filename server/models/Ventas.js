@@ -32,7 +32,7 @@ class VentasModel{
 
     getByEnvio(idEnvio){
         return new Promise((resolve,reject)=>{
-            connection.query(`SELECT ${config.TABLE_VENTAS}.idVenta, ${config.TABLE_USER}.email, ${config.TABLE_USER}.lat, ${config.TABLE_USER}.lon, ${config.TABLE_USER}.address, ${config.TABLE_VENTAS}.fecha, ${config.TABLE_VENTAS}.subtotal,
+            connection.query(`SELECT ${config.TABLE_VENTAS}.idVenta, ${config.TABLE_USER}.email, ${config.TABLE_USER}.lat, ${config.TABLE_USER}.lon, ${config.TABLE_USER}.address, ${config.TABLE_USER}.nombre, ${config.TABLE_USER}.foto, ${config.TABLE_VENTAS}.fecha, ${config.TABLE_VENTAS}.subtotal,
             ${config.TABLE_VENTAS}.porcentaje_descuento, ${config.TABLE_VENTAS}.descuento, ${config.TABLE_VENTAS}.total, ${config.TABLE_ENVIO}.tipo as tipo_de_envio, ${config.TABLE_ENVIO}.entregado
                 FROM ventas
                     LEFT JOIN ${config.TABLE_USER} ON ${config.TABLE_USER}.idUsuario = ${config.TABLE_VENTAS}.idUsuario
