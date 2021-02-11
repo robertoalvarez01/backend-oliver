@@ -6,10 +6,9 @@ const UsuarioModel = require('../models/Usuario');
 const {config} = require('../config/config');
 app.post('/google/tokensignin',async(req, res,next)=>{
     try{
+        const {token,googleId} = req.body;
         const gService = new GoogleService();
-        const {token} = req.body;
-        const data = await gService.verify(token);
-        if(Object.keys(data).length>0){
+        gService.verify(token).then(async data=>{
             const uModel = new UsuarioModel();
             const dataUser = {
                 email:data.email,
@@ -73,14 +72,11 @@ app.post('/google/tokensignin',async(req, res,next)=>{
                     });
                 }
             }
-        }else{
-            return res.status(503).json({
-                ok:false,
-                info:'Token no valido'
-            });
-        };
+        }).catch(err=>{
+            res.status(500).json({ok:false,error:err.message});
+        });
     }catch(err){
-        next(err);
+        res.status(500).json({ok:false,error:err.message});
     }
 });
 
