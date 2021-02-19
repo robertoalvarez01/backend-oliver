@@ -32,8 +32,8 @@ class EnvioModel{
 
     create(body){
         return new Promise(async(resolve,reject)=>{
-            //hash para password
-            let query = `CALL ${config.SP_ENVIO}(0,${body.idZona},'${body.tipo}',0,0)`;
+            let zona = (body.idZona == '')?null:body.idZona;
+            let query = `CALL ${config.SP_ENVIO}(0,${zona},'${body.tipo}',0,0)`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 return connection.query(`SELECT idEnvio from ${config.TABLE_ENVIO} order by idEnvio DESC limit 1`,(err,res)=>{
