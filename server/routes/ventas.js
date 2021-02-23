@@ -15,8 +15,8 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
     const uService = new UsuarioService();
     try {
         const {envio:dataEnvio,venta:dataVenta} = req.body;
-        const {mercadoPago:mercado_pago_params} = req.params;
-        if(!dataEnvio.idZona || dataEnvio.tipo==''){
+        const {mercadoPago:mercado_pago_params} = req.query;
+        if(dataEnvio.tipo==''){
 		    return res.status(500).json({ok:false,error:'Datos de envio insuficientes.'});
         }else if(dataVenta.productos.length==0){
             return res.status(500).json({ok:false,error:'No hay productos para registrar de la venta'})
@@ -33,12 +33,13 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
 
             //asigno idEnvio al objeto de dataVenta
             dataVenta.idEnvio = idUltimoEnvio;
-            if(mercado_pago_params){
+            if(mercado_pago_params=="true"){
                 dataVenta.pagado = 1;
             }else{
                 dataVenta.pagado = 0;
             }
             const newVenta = await vService.create(dataVenta);
+console.log(newVenta);
             const {idVenta:idUltimaVenta} = newVenta[0];
             await pvService.create(dataVenta.productos,idUltimaVenta);
 
