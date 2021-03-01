@@ -52,6 +52,13 @@ class VentasService{
         return response;
     }
 
+    async cambiarEstadoPago(id){
+        const datos = await this.vModel.cambiarEstadoPago(id).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
+
 }
 
 module.exports = VentasService;

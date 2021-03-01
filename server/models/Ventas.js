@@ -90,6 +90,15 @@ class VentasModel{
             })
         })
     }
+
+    cambiarEstadoPago(id){
+        return new Promise((resolve,reject)=>{
+            connection.query(`CALL ${config.SP_VENTA_PAGADO}(${id})`,(err,res,fields)=>{
+                if(err) reject(err);
+                resolve(res);
+            })
+        })
+    }
 }
 
 module.exports = VentasModel;

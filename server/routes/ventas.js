@@ -39,7 +39,7 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
                 dataVenta.pagado = 0;
             }
             const newVenta = await vService.create(dataVenta);
-console.log(newVenta);
+            
             const {idVenta:idUltimaVenta} = newVenta[0];
             await pvService.create(dataVenta.productos,idUltimaVenta);
 
@@ -70,6 +70,23 @@ console.log(newVenta);
         res.status(500).json({
             ok:false,
             error:error.message
+        })
+    }
+})
+
+app.put('ventas/modificarEstadoPago/:id',[verificarToken,verificarAdmin_role],async(req,res)=>{
+    const {id} = req.params;
+    const vService = new VentasService();
+    try {
+        const response = await vService.cambiarEstadoPago(id);
+        res.status(200).json({
+            ok:true,
+            info:response
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            info:error.message
         })
     }
 })
