@@ -6,3 +6,5 @@ public/indexs.html
 public/Localizacion.js
 public/map.js
 google.json
+
+server/templates
