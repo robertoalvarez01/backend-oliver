@@ -34,8 +34,10 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
             const newEnvio = await eService.create(dataEnvio);
             const {idEnvio:idUltimoEnvio} = newEnvio[0];
             
+            //creo y guardo qr en tabla
             const qr = await qrcode.toDataURL(`${idUltimoEnvio}`);
-            console.log(qr);
+            await eService.setQrCode(idUltimoEnvio,qr);
+
             //asigno idEnvio al objeto de dataVenta
             dataVenta.idEnvio = idUltimoEnvio;
             if(mercado_pago_params=="true"){

@@ -26,6 +26,13 @@ class EnvioService{
         return datos;
     }
 
+    async setQrCode(idEnvio,qr){
+        const response = await this.eModel.setQrCode(idEnvio,qr).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return response;
+    }
+
     async update(body,id){
         const datos = await this.eModel.update(body,id).then(res=>{
             return res;

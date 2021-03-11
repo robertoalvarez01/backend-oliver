@@ -44,6 +44,15 @@ class EnvioModel{
         })
     };
 
+    setQrCode(idEnvio,qr){
+        return new Promise(async(resolve,reject)=>{
+            connection.query(`CALL ${config.SP_ENVIOS_QR} (${idEnvio},'${qr}')`,(error,results,fields)=>{
+                if(error) return reject(error);
+                resolve();
+            })
+        })
+    }
+
     update(body,id){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_ENVIO}(${id},${body.idZona},'${body.tipo}',${body.entregado},0)`;
