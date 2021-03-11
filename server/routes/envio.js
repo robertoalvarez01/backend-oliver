@@ -12,8 +12,8 @@ app.get('/envios',[verificarToken,verificarAdmin_role],async(req,res)=>{
     const vService = new VentasService();
     const pvService = new ProductosVentaService();
     try {
-        const {idZona,tipo} = req.query;//parametros para filtros
-        const envios = await eService.getAll(idZona,tipo);
+        const {idZona,tipo,idEnvio} = req.query;//parametros para filtros
+        const envios = await eService.getAll(idZona,tipo,idEnvio);
         if(!envios.length) return res.status(200).json({ok:true,data:[]});
         let promises = [];
 

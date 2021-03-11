@@ -4,7 +4,7 @@ const {config} = require('../config/config');
 
 class EnvioModel{
 
-    getAll(idZona,tipo){
+    getAll(idZona,tipo,idEnvio){
         return new Promise((resolve,reject)=>{
             let query = `SELECT ${config.TABLE_ENVIO}.* , ${config.TABLE_ZONAS}.zona FROM ${config.TABLE_ENVIO} LEFT JOIN ${config.TABLE_ZONAS} ON ${config.TABLE_ZONAS}.idZona = ${config.TABLE_ENVIO}.idZona WHERE 1=1 `;
             if(idZona && idZona!=''){
@@ -12,6 +12,9 @@ class EnvioModel{
             }
             if(tipo && tipo!=''){
                 query += `AND ${config.TABLE_ENVIO}.tipo = '${tipo}' `;
+            }
+            if(idEnvio && idEnvio!=''){
+                query += `AND ${config.TABLE_ENVIO}.idEnvio = ${idEnvio} `;
             }
             query += `ORDER BY ${config.TABLE_ENVIO}.idEnvio DESC`;
             connection.query(query,(err,res,fields)=>{
