@@ -74,7 +74,7 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
     }
 })
 
-app.put('ventas/modificarEstadoPago/:id',[verificarToken,verificarAdmin_role],async(req,res)=>{
+app.put('/ventas/modificarEstadoPago/:id',[verificarToken,verificarAdmin_role],async(req,res)=>{
     const {id} = req.params;
     const vService = new VentasService();
     try {
