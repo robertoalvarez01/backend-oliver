@@ -7,6 +7,7 @@ const ProductosVentaService = require('../services/ProductosVentaService');
 const {config} = require('../config/config');
 const NodeMailer = require('../services/Nodemailer');
 const UsuarioService = require('../services/UsuarioService');
+const qrcode = require('qrcode');
 
 app.post('/registrarVenta',[verificarToken],async(req,res)=>{
     const eService = new EnvioService();
@@ -28,9 +29,13 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
                     return res.status(500).json({ok:false,info:'Ha ocurrido un error con la operación, lo sentimos mucho.'})
                 }
             }
+
+            
             const newEnvio = await eService.create(dataEnvio);
             const {idEnvio:idUltimoEnvio} = newEnvio[0];
-
+            
+            const qr = await qrcode.toDataURL(`${idUltimoEnvio}`);
+            console.log(qr);
             //asigno idEnvio al objeto de dataVenta
             dataVenta.idEnvio = idUltimoEnvio;
             if(mercado_pago_params=="true"){
