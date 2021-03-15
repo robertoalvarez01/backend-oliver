@@ -52,18 +52,25 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
 
             //envio de email a usuario
             const dataUsuario = await uService.getOne(dataVenta.idUsuario);
-            const {email} = dataUsuario[0];
+            const {email,nombre} = dataUsuario[0];
             const nodemailer = new NodeMailer();
             let html = `
-            <h1>Hemos recibido la informacion de tu compra, en breve te informaremos cuando el envio este en camino</h1>
-    
-            <b>OLIVER PETSHOP</b>`;
+            <p>Hola, <b>${nombre}</b></p>
+            <br/>
+            <p>Hemos recibido la informacion de tu compra.</p>`;
 
             if(mercado_pago_params){
-                html = `<h1>Hemos recibido la informacion de tu compra, para poder retirar tu compra, acercate a nuestro local y presente el codigo de la compra que se muestra continuación: <b>${idUltimoEnvio}</b></h1>
-                <b>OLIVER PETSHOP</b>`
+                html += `
+                <br/>
+                <p>Para poder retirar tu compra, acercate a nuestro local y presentá el codigo de la compra que se muestra continuación.</p>
+                <br/>
+                <p>Código de compra: <b>${idUltimoEnvio}</b></p>`;
+            }else{
+                html += `<p>en breve te informaremos cuando el envio este en camino</p>`;
             }
 
+            html += `<br/>
+            <b>OLIVER PETSHOP</b>`
 
             const mailOptions = {
                 from:`Oliver PETSHOP <${config.ACCOUNT_USERNAME}>`,
