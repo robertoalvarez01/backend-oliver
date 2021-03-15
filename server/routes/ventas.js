@@ -56,21 +56,25 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
             const nodemailer = new NodeMailer();
             let html = `
             <p>Hola, <b>${nombre}</b></p>
-            <br/>
-            <p>Hemos recibido la informacion de tu compra.</p>`;
+            <p>Hemos recibido la informacion de tu compra: </p><br/>`;
 
-            if(mercado_pago_params){
+            dataVenta.productos.map(prd=>{
                 html += `
-                <br/>
-                <p>Para poder retirar tu compra, acercate a nuestro local y presentá el codigo de la compra que se muestra continuación.</p>
+                    <b>${prd.subProducto} - por (${prd.cantidad}) unidad/es</b><br/>
+                `;
+            })
+            if(mercado_pago_params && dataEnvio.tipo == 'Local'){
+                html += `
+                <br/><br/>
+                <p>Para poder retirar tu compra, acércate a nuestro local y presentá el código de la compra que se muestra a continuación.</p>
                 <br/>
                 <p>Código de compra: <b>${idUltimoEnvio}</b></p>`;
             }else{
-                html += `<p>en breve te informaremos cuando el envio este en camino</p>`;
+                html += `<p>En breve te informaremos cuando el envío esté en camino.</p>`;
             }
 
-            html += `<br/>
-            <b>OLIVER PETSHOP</b>`
+            html += `<br/><br/>
+            Muchas gracias por tu confianza, <b>OLIVER PETSHOP.</b>`
 
             const mailOptions = {
                 from:`Oliver PETSHOP <${config.ACCOUNT_USERNAME}>`,
