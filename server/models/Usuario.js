@@ -136,7 +136,7 @@ class UsuarioModel{
     registerWithGoogle(data){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_USUARIO}(0,'${data.email}',null,'${data.nombre}',null,
-            0,'${data.foto}','Google',null,null,null)`;
+            0,'${data.foto}','Google',null,null,null,0)`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
