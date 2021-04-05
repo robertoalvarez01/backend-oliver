@@ -19,6 +19,7 @@ app.post('/producto', [verificarToken, verificarAdmin_role], async(req, res) => 
             info:response
         })
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             error
         })

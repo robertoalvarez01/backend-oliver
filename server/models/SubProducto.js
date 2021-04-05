@@ -24,7 +24,7 @@ class SubProductoModel{
 
     get(id){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idSubProducto,subprd.idProducto,producto,descripcion,descripcion_basica,subProducto,codigoBarra,    stock,minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,mk.marca
+            let query = `SELECT idSubProducto,subprd.idProducto,producto,descripcion,descripcion_basica,subProducto,codigoBarra,    stock,minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,mk.marca,subprd.mostrar
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm,${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND mk.idMarca = prd.idMarca AND idSubProducto = ${id}`;
             connection.query(query,(err,results,fields)=>{

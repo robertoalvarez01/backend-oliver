@@ -4,7 +4,7 @@ const {config} = require('../config/config');
 class ProductoModel{
     getAll(desde,limite,isAdmin){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idProducto,producto,disponible,categoria,marca,precioUnidad
+            let query = `SELECT idProducto,producto,categoria,marca,precioUnidad
                         FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
                         WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca `;
             if(!isAdmin){
@@ -21,7 +21,7 @@ class ProductoModel{
     get(id){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idProducto,producto,precioUnidad,descripcion
-                                ,descripcion_basica,disponible,prd.idCategoria,categoria,prd.idMarca,marca,prd.idSubCategoria,sc.subcategoria
+                                ,descripcion_basica,prd.idCategoria,categoria,prd.idMarca,marca,prd.idSubCategoria,sc.subcategoria,prd.mostrar
                         FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk,${config.TABLE_SUB_CATEGORIA} as sc
                         WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca AND sc.idSubCategoria = prd.idSubCategoria  AND idProducto = ${id}`;
             connection.query(query,(err,results,fields)=>{
@@ -33,7 +33,7 @@ class ProductoModel{
 
     search(key,isAdmin){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idProducto,producto,precioUnidad,disponible,categoria,marca
+            let query = `SELECT idProducto,producto,precioUnidad,categoria,marca
                         FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
                         WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca AND producto LIKE '%${key}%' OR categoria LIKE '%${key}%'`;
             if(!isAdmin){
@@ -48,7 +48,7 @@ class ProductoModel{
 
     filtrar(categoria,subcategoria,marca,desde,limite){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idProducto,producto,disponible,categoria,marca,precioUnidad
+            let query = `SELECT idProducto,producto,categoria,marca,precioUnidad
                         FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
                         WHERE prd.idCategoria = cat.idCategoria AND prd.idMarca = mk.idMarca`;
             if(categoria){
@@ -72,7 +72,7 @@ class ProductoModel{
         return new Promise(async(resolve,reject)=>{
             //hash para password
             let query = `CALL ${config.SP_PRODUCTO}(0,'${body.producto}','${body.precioUnidad}','${body.descripcion}',
-            '${body.descripcionBasica}',${body.disponible},${body.idCategoria},${body.idMarca},${body.idSubCategoria},${body.mostrar})`;
+            '${body.descripcionBasica}',${body.idCategoria},${body.idMarca},${body.idSubCategoria},${body.mostrar})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
@@ -83,7 +83,7 @@ class ProductoModel{
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_PRODUCTO}(${id},'${body.producto}','${body.precioUnidad}','${body.descripcion}',
-            '${body.descripcionBasica}',${body.disponible},${body.idCategoria},${body.idMarca},${body.idSubCategoria},${body.mostrar})`;
+            '${body.descripcionBasica}',${body.idCategoria},${body.idMarca},${body.idSubCategoria},${body.mostrar})`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);
