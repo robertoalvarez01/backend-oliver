@@ -4,8 +4,8 @@ class ProductoService{
     constructor(){
         this.producto = new ProductoModel();
     }
-    async getAll(desde,limite){
-        const datos = await this.producto.getAll(desde,limite).then(res=>{
+    async getAll(desde,limite,isAdmin){
+        const datos = await this.producto.getAll(desde,limite,isAdmin).then(res=>{
             return res;
         }).catch(err=>err); 
         return datos;
@@ -18,8 +18,8 @@ class ProductoService{
         return datos;
     }
 
-    async search(key){
-        const datos = await this.producto.search(key).then(res=>{
+    async search(key,isAdmin){
+        const datos = await this.producto.search(key,isAdmin).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;

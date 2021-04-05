@@ -2,15 +2,19 @@ const connection = require('../lib/mysql');
 const {config} = require('../config/config');
 
 class SubProductoModel{
-    getAll(desde,limite){
+    getAll(desde,limite,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,producto,subProducto,codigoBarra,stock,minStock,
             peso,tamaño,subprd.precioUnidad,foto,marca,prd.idMarca
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, 
                         ${config.TABLE_TAM} as tm, ${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño
-                        AND mk.idMarca = prd.idMarca
-                        ORDER BY idSubProducto DESC LIMIT ${desde},${limite}`;
+                        AND mk.idMarca = prd.idMarca `;
+
+            if(!isAdmin){
+                query += "AND subprd.mostrar = 1 ";
+            }
+            query += `ORDER BY idSubProducto DESC LIMIT ${desde},${limite}`;
             connection.query(query,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);
@@ -30,14 +34,17 @@ class SubProductoModel{
         })
     }
 
-    getByIdProducto(idProducto,limit){
+    getByIdProducto(idProducto,limit,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,subProducto,codigoBarra,stock,
                                 minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_TAM} as tm
-                        WHERE subprd.idTamaño = tm.idTamaño AND subprd.idProducto = ${idProducto}`;
+                        WHERE subprd.idTamaño = tm.idTamaño AND subprd.idProducto = ${idProducto} `;
+            if(!isAdmin){
+                query += `AND subprd.mostrar = 1 `;
+            }
             if(limit){
-                query+=` LIMIT 1`;
+                query+=`LIMIT 1`;
             }
             connection.query(query,(err,res,fields)=>{
                 if(err) return reject(err);
@@ -46,13 +53,16 @@ class SubProductoModel{
         })
     }
 
-    search(key){
+    search(key,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,subProducto,producto,tamaño,peso,stock,foto,mk.marca
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm,
                         ${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND mk.idMarca = prd.idMarca
                         AND subProducto LIKE '%${key}%'`;
+            if (!isAdmin) {
+                query += " AND subprd.mostrar = 1 ";
+            }
             connection.query(query,(err,results,fields)=>{
                 if(err) return reject(err);
                 resolve(results);
@@ -88,7 +98,7 @@ class SubProductoModel{
         return new Promise(async(resolve,reject)=>{
             //hash para password
             let query = `CALL ${config.SP_SUBPRODUCTO}(0,${body.idProducto},'${body.subProducto}','${body.codigoBarra}',
-            ${body.stock},${body.minStock},'${body.peso}',${body.idTamaño},'${body.precioUnidad}','${foto}')`;
+            ${body.stock},${body.minStock},'${body.peso}',${body.idTamaño},'${body.precioUnidad}','${foto}',${body.mostrar})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
@@ -99,7 +109,7 @@ class SubProductoModel{
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_SUBPRODUCTO}(${id},${body.idProducto},'${body.subProducto}','${body.codigoBarra}',
-            ${body.stock},${body.minStock},'${body.peso}',${body.idTamaño},'${body.precioUnidad}','${foto}')`;
+            ${body.stock},${body.minStock},'${body.peso}',${body.idTamaño},'${body.precioUnidad}','${foto}',${body.mostrar})`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);

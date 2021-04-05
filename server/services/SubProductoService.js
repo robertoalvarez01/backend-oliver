@@ -4,8 +4,8 @@ class SubProductoService{
     constructor(){
         this.subproducto = new SubProductoModel();
     }
-    async getAll(desde,limite){
-        const datos = await this.subproducto.getAll(desde,limite).then(res=>{
+    async getAll(desde,limite,isAdmin){
+        const datos = await this.subproducto.getAll(desde,limite,isAdmin).then(res=>{
             return res;
         }).catch(err=>err); 
         return datos;
@@ -18,16 +18,16 @@ class SubProductoService{
         return datos;
     }
 
-    async getByIdProducto(idProducto,limit=false){
+    async getByIdProducto(idProducto,limit=false,isAdmin){
         return new Promise((resolve,reject)=>{
-            this.subproducto.getByIdProducto(idProducto,limit).then(res=>{
+            this.subproducto.getByIdProducto(idProducto,limit,isAdmin).then(res=>{
                 resolve(res);
             }).catch(err=>reject(err));
         })
     }
 
-    async search(key){
-        const datos = await this.subproducto.search(key).then(res=>{
+    async search(key,isAdmin){
+        const datos = await this.subproducto.search(key,isAdmin).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;

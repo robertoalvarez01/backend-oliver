@@ -87,8 +87,9 @@ app.get('/subproducto', [verificarToken,verificarAdmin_role],async(req, res) => 
         desde = Number(desde);
         let limite = req.query.limite || 5;
         limite = Number(limite);
+        let isAdmin = req.query.admin || false;
         const subproducto = new SubProductoService();
-        const response = await subproducto.getAll(desde,limite);
+        const response = await subproducto.getAll(desde,limite,isAdmin);
         res.status(200).json({
             data:response
         })
@@ -127,8 +128,9 @@ app.get('/subproductos/buscar',[verificarToken,verificarAdmin_role], async(req, 
     try {
         let {busqueda} = req.query;
         busqueda = busqueda.toLowerCase();
+        let isAdmin = req.query.admin || false;
         const subproducto = new SubProductoService();
-        const response = await subproducto.search(busqueda);
+        const response = await subproducto.search(busqueda,isAdmin);
         res.status(200).json({
             data:response
         })

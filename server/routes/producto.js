@@ -75,14 +75,15 @@ app.get('/producto', async(req, res) => {
         desde = Number(desde);
         let limite = req.query.limite || 5;
         limite = Number(limite);
+        let isAdmin = req.query.admin || false;
         const productoservice = new ProductoService();
         const subproductoService = new SubProductoService();
-        const data = await productoservice.getAll(desde,limite);
+        const data = await productoservice.getAll(desde,limite,isAdmin);
         //guardo cada promesa para obtener la foto,peso y precio de un subproducto de cada producto.
         let promesas = [];
         data.map( res => {
             //llamo al metodo que me trae los subproductos a partir de un producto determinado
-            const datasubprd = subproductoService.getByIdProducto(res.idProducto,true).then(result=>{
+            const datasubprd = subproductoService.getByIdProducto(res.idProducto,isAdmin).then(result=>{
                 if(result.length>0){
                     res.foto = result[0].foto;
                     res.peso = result[0].peso;
@@ -116,8 +117,9 @@ app.get('/producto/:id', async(req, res) => {
         const productoservice = new ProductoService();
         const subproductoService = new SubProductoService();
         const data = await productoservice.getOne(id);
+        let isAdmin = req.query.admin || false;
         if(data.length>0){
-            const subproductos = await subproductoService.getByIdProducto(data[0].idProducto);
+            const subproductos = await subproductoService.getByIdProducto(data[0].idProducto,false,isAdmin);
             res.status(200).json({
                 data,
                 subproductos
@@ -140,13 +142,14 @@ app.get('/producto/:id', async(req, res) => {
 app.get('/productos/buscar', async(req, res) => {
     try {
         let {busqueda} = req.query;
+        let isAdmin = req.query.admin || false;
         busqueda = busqueda.toLowerCase();
         const productoservice = new ProductoService();
         const subproductoService = new SubProductoService();
-        const data = await productoservice.search(busqueda);
+        const data = await productoservice.search(busqueda,isAdmin);
         let promesas = [];
         data.map(res=>{
-            const datasubprd = subproductoService.getByIdProducto(res.idProducto,true).then(result=>{
+            const datasubprd = subproductoService.getByIdProducto(res.idProducto,true,isAdmin).then(result=>{
                 if(result.length>0){
                     res.foto = result[0].foto;
                     res.peso = result[0].peso;
@@ -183,7 +186,7 @@ app.get('/productos/filtro/filtrar',async(req,res)=>{
             let promesas = [];
             const response = await productoService.filtrar(idCategoria,idSubcategoria,idMarca,desde,limite);
             response.map(res=>{
-                const datasubprd = subproductoService.getByIdProducto(res.idProducto,true).then(result=>{
+                const datasubprd = subproductoService.getByIdProducto(res.idProducto,true,false).then(result=>{
                     if(result.length>0){
                         res.foto = result[0].foto;
                         res.peso = result[0].peso;

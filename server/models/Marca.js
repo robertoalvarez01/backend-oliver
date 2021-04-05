@@ -4,7 +4,8 @@ const {config} = require('../config/config');
 class MarcaModel{
     getAll(){
         return new Promise((resolve,reject)=>{
-            connection.query(`SELECT * FROM ${config.TABLE_MARCA}`,(err,res,fields)=>{
+            let query = `SELECT * FROM ${config.TABLE_MARCA} ORDER BY destacada DESC`;
+            connection.query(query,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);
             })
@@ -23,7 +24,7 @@ class MarcaModel{
     create(body,imagen){
         return new Promise(async(resolve,reject)=>{
             //hash para password
-            let query = `CALL ${config.SP_MARCA}(0,'${body.marca}','${imagen}')`;
+            let query = `CALL ${config.SP_MARCA}(0,'${body.marca}','${imagen}',${body.destacada})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
@@ -33,7 +34,7 @@ class MarcaModel{
 
     update(body,id,imagen){
         return new Promise((resolve,reject)=>{
-            let query = `CALL ${config.SP_MARCA}(${id},'${body.marca}','${imagen}')`;
+            let query = `CALL ${config.SP_MARCA}(${id},'${body.marca}','${imagen}',${body.destacada})`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);
