@@ -16,13 +16,23 @@ class CloudStorage{
     
     async upload(file){
         let url='';
-        if(this.seccion=='categorias'){
-            url+='categorias/';
-        }else if(this.seccion=='marcas'){
-            url+='marcas/';
-        }else if(this.seccion=='usuarios'){
-            url+='usuarios/';
+        switch (this.seccion) {
+            case 'categorias':
+                url+='categorias/';
+                break;
+            case 'marcas':
+                url+='marcas/';
+                break;
+            case 'usuarios':
+                url+='usuarios/';
+                break;
+            case 'banners':
+                url += 'banners/';
+                break;
+            default:
+                break;
         }
+
         url+= `${file.originalname}`;
         return new Promise((resolve,reject)=>{
             const blob = bucket.file(url);
