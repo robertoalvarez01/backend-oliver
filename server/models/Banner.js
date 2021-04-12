@@ -27,7 +27,7 @@ class BannerModel{
     create(body,imagen){
         return new Promise(async(resolve,reject)=>{
             //hash para password
-            let query = `CALL ${config.SP_BANNERS}(0,'${imagen}','${body.descripcion}',${body.activo})`;
+            let query = `CALL ${config.SP_BANNERS}(0,'${imagen}','${body.descripcion}',${body.activo},${body.tiempo})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
@@ -37,7 +37,7 @@ class BannerModel{
 
     update(body,id,imagen){
         return new Promise((resolve,reject)=>{
-            let query = `CALL ${config.SP_BANNERS}(${id},'${imagen}','${body.descripcion}',${body.activo})`;
+            let query = `CALL ${config.SP_BANNERS}(${id},'${imagen}','${body.descripcion}',${body.activo},${body.tiempo})`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);

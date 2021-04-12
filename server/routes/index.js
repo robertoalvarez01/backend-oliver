@@ -19,5 +19,6 @@ app.use(require('./envio'));
 app.use(require('./ventas.js'))
 app.use(require('./mediosDePago.js'))
 app.use(require('./banner.js'));
+app.use(require('./usuarioOferta.js'));
 
 module.exports = app;

@@ -11,6 +11,13 @@ class SubProductoService{
         return datos;
     }
 
+    async getOfertas(desde,limite,isAdmin){
+        const datos = await this.subproducto.getOfertas(desde,limite,isAdmin).then(res=>{
+            return res;
+        }).catch(err=>err); 
+        return datos;
+    }
+
     async getOne(id){
         const datos = await this.subproducto.get(id).then(res=>{
             return res;

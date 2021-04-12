@@ -139,6 +139,22 @@ app.get('/subproductos/buscar',[verificarToken,verificarAdmin_role], async(req, 
     }
 });
 
+app.get('/subproductos/ofertas', async(req, res) => {
+    try {
+        let desde = req.query.desde || 0;
+        desde = Number(desde);
+        let limite = req.query.limite || 5;
+        limite = Number(limite);
+        let isAdmin = req.query.admin || false;
+        const subproducto = new SubProductoService();
+        const response = await subproducto.getOfertas(desde,limite,isAdmin);
+        res.status(200).json({
+            data:response
+        })
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+});
 
 //filtros
 

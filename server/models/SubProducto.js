@@ -5,7 +5,7 @@ class SubProductoModel{
     getAll(desde,limite,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,producto,subProducto,codigoBarra,stock,minStock,
-            peso,tamaño,subprd.precioUnidad,foto,marca,prd.idMarca
+            peso,tamaño,subprd.precioUnidad,foto,marca,prd.idMarca,descuento
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, 
                         ${config.TABLE_TAM} as tm, ${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño
@@ -24,7 +24,7 @@ class SubProductoModel{
 
     get(id){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idSubProducto,subprd.idProducto,producto,descripcion,descripcion_basica,subProducto,codigoBarra,    stock,minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,mk.marca,subprd.mostrar
+            let query = `SELECT idSubProducto,subprd.idProducto,producto,descripcion,descripcion_basica,subProducto,codigoBarra,    stock,minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,mk.marca,subprd.mostrar,descuento
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm,${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND mk.idMarca = prd.idMarca AND idSubProducto = ${id}`;
             connection.query(query,(err,results,fields)=>{
@@ -37,7 +37,7 @@ class SubProductoModel{
     getByIdProducto(idProducto,limit,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,subProducto,codigoBarra,stock,
-                                minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto
+                                minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,descuento
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_TAM} as tm
                         WHERE subprd.idTamaño = tm.idTamaño AND subprd.idProducto = ${idProducto} `;
             if(!isAdmin){
@@ -52,6 +52,26 @@ class SubProductoModel{
             })
         })
     }
+
+    getOfertas(desde,limite,isAdmin){
+        return new Promise((resolve,reject)=>{
+            let query = `SELECT idSubProducto,prd.idProducto,producto,subProducto,codigoBarra,stock,minStock,
+            peso,tamaño,subprd.precioUnidad,foto,marca,prd.idMarca,subprd.descuento
+                        FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, 
+                        ${config.TABLE_TAM} as tm, ${config.TABLE_MARCA} as mk
+                        WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño
+                        AND mk.idMarca = prd.idMarca AND descuento > 0 `;
+
+            if(!isAdmin){
+                query += "AND subprd.mostrar = 1 ";
+            }
+            query += `ORDER BY idSubProducto DESC LIMIT ${desde},${limite}`;
+            connection.query(query,(err,res,fields)=>{
+                if(err) return reject(err);
+                resolve(res);
+            })
+        })
+    };
 
     search(key,isAdmin){
         return new Promise((resolve,reject)=>{
@@ -98,7 +118,7 @@ class SubProductoModel{
         return new Promise(async(resolve,reject)=>{
             //hash para password
             let query = `CALL ${config.SP_SUBPRODUCTO}(0,${body.idProducto},'${body.subProducto}','${body.codigoBarra}',
-            ${body.stock},${body.minStock},'${body.peso}',${body.idTamaño},'${body.precioUnidad}','${foto}',${body.mostrar})`;
+            ${body.stock},${body.minStock},'${body.peso}',${body.idTamaño},'${body.precioUnidad}','${foto}',${body.mostrar},${body.descuento})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 resolve(results);
@@ -109,7 +129,7 @@ class SubProductoModel{
     update(body,id,foto){
         return new Promise((resolve,reject)=>{
             let query = `CALL ${config.SP_SUBPRODUCTO}(${id},${body.idProducto},'${body.subProducto}','${body.codigoBarra}',
-            ${body.stock},${body.minStock},'${body.peso}',${body.idTamaño},'${body.precioUnidad}','${foto}',${body.mostrar})`;
+            ${body.stock},${body.minStock},'${body.peso}',${body.idTamaño},'${body.precioUnidad}','${foto}',${body.mostrar},${body.descuento})`;
             connection.query(query,(error,res,fiels)=>{
                 if(error) return reject(error);
                 resolve(res);
