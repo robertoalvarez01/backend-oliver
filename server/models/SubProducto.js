@@ -5,7 +5,7 @@ class SubProductoModel{
     getAll(desde,limite,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,producto,subProducto,codigoBarra,stock,minStock,
-            peso,tamaño,subprd.precioUnidad,foto,marca,prd.idMarca,descuento
+            peso,tamaño,subprd.precioUnidad,foto,marca,prd.idMarca,descuento,precioFinal
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, 
                         ${config.TABLE_TAM} as tm, ${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño
@@ -24,7 +24,7 @@ class SubProductoModel{
 
     get(id){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idSubProducto,subprd.idProducto,producto,descripcion,descripcion_basica,subProducto,codigoBarra,    stock,minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,mk.marca,subprd.mostrar,descuento
+            let query = `SELECT idSubProducto,subprd.idProducto,producto,descripcion,descripcion_basica,subProducto,codigoBarra,    stock,minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,mk.marca,subprd.mostrar,descuento,precioFinal
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm,${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND mk.idMarca = prd.idMarca AND idSubProducto = ${id}`;
             connection.query(query,(err,results,fields)=>{
@@ -37,7 +37,7 @@ class SubProductoModel{
     getByIdProducto(idProducto,limit,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,subProducto,codigoBarra,stock,
-                                minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,descuento
+                                minStock,peso,subprd.idTamaño,tamaño,subprd.precioUnidad,foto,descuento,precioFinal
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_TAM} as tm
                         WHERE subprd.idTamaño = tm.idTamaño AND subprd.idProducto = ${idProducto} `;
             if(!isAdmin){
@@ -56,7 +56,7 @@ class SubProductoModel{
     getOfertas(desde,limite,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,prd.idProducto,producto,subProducto,codigoBarra,stock,minStock,
-            peso,tamaño,subprd.precioUnidad,foto,marca,prd.idMarca,subprd.descuento
+            peso,tamaño,subprd.precioUnidad,foto,marca,prd.idMarca,subprd.descuento,precioFinal
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, 
                         ${config.TABLE_TAM} as tm, ${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño
@@ -75,7 +75,7 @@ class SubProductoModel{
 
     search(key,isAdmin){
         return new Promise((resolve,reject)=>{
-            let query = `SELECT idSubProducto,subProducto,producto,tamaño,peso,stock,foto,mk.marca
+            let query = `SELECT idSubProducto,subProducto,producto,tamaño,peso,stock,foto,mk.marca,precioFinal
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm,
                         ${config.TABLE_MARCA} as mk
                         WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND mk.idMarca = prd.idMarca
@@ -93,7 +93,7 @@ class SubProductoModel{
     filtrar(categoria,subcategoria,marca,desde,limite){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idSubProducto,producto,subProducto,codigoBarra,stock,minStock,
-                        peso,tamaño,subprd.precioUnidad,subprd.foto,categoria,prd.idCategoria,marca,prd.idMarca,sc.subcategoria
+                        peso,tamaño,subprd.precioUnidad,subprd.foto,categoria,prd.idCategoria,marca,prd.idMarca,sc.subcategoria,precioFinal
                         FROM ${config.TABLE_SUB_PRODUCTO} as subprd, ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_TAM} as tm,
                         ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk,${config.TABLE_SUB_CATEGORIA} as sc
                             WHERE subprd.idProducto = prd.idProducto AND subprd.idTamaño = tm.idTamaño AND cat.idCategoria = prd.idCategoria AND mk.idMarca = prd.idMarca AND sc.idSubCategoria = prd.idSubCategoria`;
