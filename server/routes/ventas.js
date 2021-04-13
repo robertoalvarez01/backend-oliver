@@ -74,14 +74,24 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
             }
 
             html += `<br/><br/>
-            Muchas gracias por tu confianza, <b>OLIVER PETSHOP.</b>`
+            <p>Para cualquier consulta, comunicarse a <b>02304347008</b></p>
+            Muchas gracias por tu confianza, <b>OLIVER PETSHOP.</b>
+            <br/>
+            <img src="cid:OliverPetShop" width="50px" height="50px"/>`
 
             const mailOptions = {
-                from:`Oliver PETSHOP <${config.ACCOUNT_USERNAME}>`,
+                from:`Oliver PETSHOP <petshop-oliver@hotmail.com>`,
                 to:`${email}`,
-                cc:`${config.ACCOUNT_USERNAME}`,
+                cc:`petshop-oliver@hotmail.com`,
                 subject:'Nueva compra en PetShop Oliver',
-                html
+                html,
+                attachments:[
+                    {
+                        filename:'Perro.png',
+                        path:'https://storage.googleapis.com/web-oliver/static/Perro.png',
+                        cid:"OliverPetShop"
+                    }
+                ]
             };
             nodemailer.send(mailOptions).then(result=>{
                 return  res.status(200).json({
