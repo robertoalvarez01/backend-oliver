@@ -89,9 +89,11 @@ app.get('/producto', async(req, res) => {
                     res.foto = result[0].foto;
                     res.peso = result[0].peso;
                     res.precioUnidad = result[0].precioUnidad;
+                    res.precioFinal = result[0].precioFinal;
                 }else{
                     res.foto = config.DEFAULT_FOTO;
                     res.peso = null;
+                    res.precioFinal = 0;
                 };
             });
             promesas.push(datasubprd);
@@ -155,9 +157,11 @@ app.get('/productos/buscar', async(req, res) => {
                     res.foto = result[0].foto;
                     res.peso = result[0].peso;
                     res.precioUnidad = result[0].precioUnidad;
+                    res.precioFinal = result[0].precioFinal;
                 }else{
                     res.foto = config.DEFAULT_FOTO;
                     res.peso = null;
+                    res.precioFinal = 0;
                 };
             });
             promesas.push(datasubprd);
@@ -192,9 +196,11 @@ app.get('/productos/filtro/filtrar',async(req,res)=>{
                         res.foto = result[0].foto;
                         res.peso = result[0].peso;
                         res.precioUnidad = result[0].precioUnidad;
+                        res.precioFinal = result[0].precioFinal;
                     }else{
                         res.foto = config.DEFAULT_FOTO;
                         res.peso = null;
+                        res.precioFinal = 0;
                     };
                 });
                 promesas.push(datasubprd);
