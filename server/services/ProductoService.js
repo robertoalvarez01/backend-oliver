@@ -18,8 +18,8 @@ class ProductoService{
         return datos;
     }
 
-    async search(key,isAdmin){
-        const datos = await this.producto.search(key,isAdmin).then(res=>{
+    async search(desde,limite,key,isAdmin){
+        const datos = await this.producto.search(desde,limite,key,isAdmin).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;

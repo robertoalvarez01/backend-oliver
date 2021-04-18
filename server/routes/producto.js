@@ -147,9 +147,13 @@ app.get('/productos/buscar', async(req, res) => {
         let {busqueda} = req.query;
         let isAdmin = req.query.admin || false;
         busqueda = busqueda.toLowerCase();
+        let desde = req.query.desde || 0;
+        desde = Number(desde);
+        let limite = req.query.limite || 5;
+        limite = Number(limite);
         const productoservice = new ProductoService();
         const subproductoService = new SubProductoService();
-        const data = await productoservice.search(busqueda,isAdmin);
+        const data = await productoservice.search(desde,limite,busqueda,isAdmin);
         let promesas = [];
         data.map(res=>{
             const datasubprd = subproductoService.getByIdProducto(res.idProducto,true,isAdmin).then(result=>{
