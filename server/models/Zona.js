@@ -23,7 +23,7 @@ class ZonaModel{
 
     create(body){
         return new Promise((resolve,reject)=>{
-            connection.query(`CALL ${config.SP_ZONAS}(0,'${body.zona}','${body.dia}','${body.precio}')`,(err,res,fields)=>{
+            connection.query(`CALL ${config.SP_ZONAS}(0,'${body.zona}','${body.dia}','${body.precio}','${body.precioExpress}')`,(err,res,fields)=>{
                 if(err) return reject(err);
                 return resolve(res);
             })
@@ -32,7 +32,7 @@ class ZonaModel{
 
     update(body,id){
         return new Promise((resolve,reject)=>{
-            connection.query(`CALL ${config.SP_ZONAS}(${id},'${body.zona}','${body.dia}','${body.precio}')`,(err,res,fields)=>{
+            connection.query(`CALL ${config.SP_ZONAS}(${id},'${body.zona}','${body.dia}','${body.precio}','${body.precioExpress}')`,(err,res,fields)=>{
                 if(err) return reject(err);
                 return resolve(res);
             })
