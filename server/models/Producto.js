@@ -31,7 +31,7 @@ class ProductoModel{
         })
     }
 
-    search(key,isAdmin){
+    search(desde,limite,key,isAdmin){
         return new Promise((resolve,reject)=>{
             let query = `SELECT idProducto,producto,precioUnidad,categoria,marca
                         FROM ${config.TABLE_PRODUCTO} as prd, ${config.TABLE_CATEGORIA} as cat, ${config.TABLE_MARCA} as mk
@@ -39,6 +39,7 @@ class ProductoModel{
             if(!isAdmin){
                 query += ` AND mostrar = 1`;
             }
+            query += ` LIMIT ${desde},${limite}`;
             connection.query(query,(err,results,fields)=>{
                 if(err) return reject(err);
                 resolve(results);

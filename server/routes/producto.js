@@ -89,9 +89,11 @@ app.get('/producto', async(req, res) => {
                     res.foto = result[0].foto;
                     res.peso = result[0].peso;
                     res.precioUnidad = result[0].precioUnidad;
+                    res.precioFinal = result[0].precioFinal;
                 }else{
                     res.foto = config.DEFAULT_FOTO;
                     res.peso = null;
+                    res.precioFinal = 0;
                 };
             });
             promesas.push(datasubprd);
@@ -145,9 +147,13 @@ app.get('/productos/buscar', async(req, res) => {
         let {busqueda} = req.query;
         let isAdmin = req.query.admin || false;
         busqueda = busqueda.toLowerCase();
+        let desde = req.query.desde || 0;
+        desde = Number(desde);
+        let limite = req.query.limite || 5;
+        limite = Number(limite);
         const productoservice = new ProductoService();
         const subproductoService = new SubProductoService();
-        const data = await productoservice.search(busqueda,isAdmin);
+        const data = await productoservice.search(desde,limite,busqueda,isAdmin);
         let promesas = [];
         data.map(res=>{
             const datasubprd = subproductoService.getByIdProducto(res.idProducto,true,isAdmin).then(result=>{
@@ -155,9 +161,11 @@ app.get('/productos/buscar', async(req, res) => {
                     res.foto = result[0].foto;
                     res.peso = result[0].peso;
                     res.precioUnidad = result[0].precioUnidad;
+                    res.precioFinal = result[0].precioFinal;
                 }else{
                     res.foto = config.DEFAULT_FOTO;
                     res.peso = null;
+                    res.precioFinal = 0;
                 };
             });
             promesas.push(datasubprd);
@@ -192,9 +200,11 @@ app.get('/productos/filtro/filtrar',async(req,res)=>{
                         res.foto = result[0].foto;
                         res.peso = result[0].peso;
                         res.precioUnidad = result[0].precioUnidad;
+                        res.precioFinal = result[0].precioFinal;
                     }else{
                         res.foto = config.DEFAULT_FOTO;
                         res.peso = null;
+                        res.precioFinal = 0;
                     };
                 });
                 promesas.push(datasubprd);
