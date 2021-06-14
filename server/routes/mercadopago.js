@@ -3,17 +3,19 @@ const app = express();
 const MercadoPagoService = require('../services/MercadoPago');
 const { verificarToken } = require('../middlewares/autenticacion');
 
-app.post('/mercadopago/nueva-venta',verificarToken,async(req,res,next)=>{
-    const {body} = req;
+app.post('/mercadopago',verificarToken,async(req,res,next)=>{
+    const {body:productos} = req;
+    if(!productos || productos.length==0) return res.status(500).json({
+        ok:false,
+        info:'Ningun producto recibido'
+    });
     try {
-        const mp = new MercadoPagoService();
-        const response = await mp.nuevaTransaccion(body);
+        const mercadopago = new MercadoPagoService();
+        const response = await mercadopago.init(productos);
         res.status(200).json({
-            ok:true,
             info:response
-        });
+        })
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             ok:false,
             error:error.message

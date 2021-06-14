@@ -6,26 +6,19 @@ mercadopago.configure({
 });
 
 class MercadoPagoService{
-
-    async nuevaTransaccion(data){
-        const payment_data = {
-            transaction_amount: Number(data.total),
-            token: data.token,
-            description: data.descripcion,
-            installments: Number(data.installments),
-            payment_method_id: data.paymentMethod.id,
-            issuer_id: data.issuer,
-            payer: {
-              email: data.email,
-              identification: {
-                type: data.docType,
-                number: data.docNumber
-              }
-            }
+    async init(data=null){
+        let preference = {
+            items: data, 
+            back_urls:{
+                success:`${config.URL_SITE}/procesarVenta`,
+                failure:`${config.URL_SITE}/checkout`
+            },
+            auto_return:"approved"
         };
-        const res = await mercadopago.payment.save(payment_data);
+        const res = await mercadopago.preferences.create(preference);
         return res;
     }
 }
 
 module.exports = MercadoPagoService;
+
