@@ -9,7 +9,7 @@ const NodeMailer = require('../services/Nodemailer');
 const UsuarioService = require('../services/UsuarioService');
 const qrcode = require('qrcode');
 
-app.post('/registrarVenta',[verificarToken],async(req,res)=>{
+app.post('/ventas/registrarVenta',[verificarToken],async(req,res)=>{
     const eService = new EnvioService();
     const vService = new VentasService();
     const pvService = new ProductosVentaService();
@@ -107,6 +107,83 @@ app.post('/registrarVenta',[verificarToken],async(req,res)=>{
             ok:false,
             error:error.message
         })
+    }
+})
+
+app.post('/ventas/preguardar',verificarToken,async(req,res)=>{
+    const {envio:dataEnvio,venta:dataVenta,usuario:{idUsuario}} = req.body;
+    if(!dataEnvio.idZona){
+        return res.status(400).json({
+            ok:false,
+            error:'Zona invalida'
+        })
+    }
+    if(!dataVenta.productos.length){
+        return res.status(400).json({
+            ok:false,
+            error:'No se puede registrar una venta sin productos'
+        })
+    }
+    if(!idUsuario){
+        return res.status(400).json({
+            ok:false,
+            error:'Usuario invalido'
+        });
+    }
+    try {
+        const eService = new EnvioService();
+        const vService = new VentasService();
+        const pvService = new ProductosVentaService();
+
+        //seteo venta_aprobada en 0 porque el envio no esta confirmado.
+        dataEnvio.venta_aprobada = 0;
+
+        const newEnvio = await eService.create(dataEnvio);
+        const {idEnvio:idUltimoEnvio} = newEnvio[0];
+
+        //creo y guardo qr en tabla
+        const qr = await qrcode.toDataURL(`${idUltimoEnvio}`);
+        await eService.setQrCode(idUltimoEnvio,qr);
+
+        //asigno idEnvio al objeto de dataVenta
+        dataVenta.idEnvio = idUltimoEnvio;
+        dataVenta.pagado = 0;//seteo en 0 porque el pago de la venta se va confirmar en el hook cuando mercado pago aprueba el pago.
+        
+        const newVenta = await vService.create(dataVenta);
+        
+        const {idVenta:idUltimaVenta} = newVenta[0];
+
+        //guardo los productos de la venta
+        await pvService.create(dataVenta.productos,idUltimaVenta);
+
+        return res.status(200).json({
+            ok:true,
+            info:{
+                idVenta:idUltimaVenta,
+                idEnvio:idUltimoEnvio
+            }
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            error:error.message
+        })
+    }
+})
+
+//HOOK DONDE MERCADO PAGO NOTIFICA LA APROBACION DEL PAGO
+app.post('/ventas/hooks/updatePago',async(req,res)=>{
+    const vService = VentasService();
+    const eService = EnvioService();
+    const {data:{id:idPago},action} = req.body;
+    if(action == "payment.created"){
+        const ultimaVenta = await vService.getUltimaVenta(0);//pasarle el valor de pagado. Si es 0 trae la ultima no pagada.
+        const {idVenta,idEnvio} = ultimaVenta[0];
+
+        const updateVenta = await vService.aprobarVenta(idVenta,idPago);
+        const updateEnvio = await eService.aprobarEnvio(idEnvio);
+        res.status(200);
     }
 })
 

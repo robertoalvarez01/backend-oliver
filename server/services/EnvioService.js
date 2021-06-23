@@ -60,6 +60,13 @@ class EnvioService{
         }).catch(err=>err);
         return response;
     }
+
+    async aprobarEnvio(id){
+        const response = await this.eModel.aprobarEnvio(id).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return response;
+    }
 }
 
 module.exports = EnvioService;

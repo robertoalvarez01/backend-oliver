@@ -25,6 +25,13 @@ class VentasService{
         }).catch(err=>err);
         return datos;
     }
+    
+    async getUltimaVenta(pagado){
+        const datos = await this.vModel.getUltimaVenta(pagado).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
 
     async create(body){
         const datos = await this.vModel.create(body).then(res=>{
@@ -47,9 +54,11 @@ class VentasService{
         return datos;
     }
 
-    async verificarVentaDuplicada(id){
-        const response = await this.vModel.getByOperacionId(id).then(res=>res).catch(err=>err);
-        return response;
+    async aprobarVenta(idVenta,payment_id){
+        const datos = await this.vModel.aprobarVenta(idVenta,payment_id).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
     }
 
     async cambiarEstadoPago(id){
