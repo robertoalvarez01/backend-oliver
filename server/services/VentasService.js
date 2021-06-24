@@ -25,9 +25,9 @@ class VentasService{
         }).catch(err=>err);
         return datos;
     }
-    
-    async getUltimaVenta(pagado){
-        const datos = await this.vModel.getUltimaVenta(pagado).then(res=>{
+
+    async getByOperacionId(id){
+        const datos = await this.vModel.getByEnvio(id).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;
@@ -49,13 +49,6 @@ class VentasService{
 
     async delete(id){
         const datos = await this.vModel.delete(id).then(res=>{
-            return res;
-        }).catch(err=>err);
-        return datos;
-    }
-
-    async aprobarVenta(idVenta,payment_id){
-        const datos = await this.vModel.aprobarVenta(idVenta,payment_id).then(res=>{
             return res;
         }).catch(err=>err);
         return datos;

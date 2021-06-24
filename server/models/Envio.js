@@ -36,7 +36,7 @@ class EnvioModel{
     create(body){
         return new Promise(async(resolve,reject)=>{
             let zona = (body.idZona == '')?null:body.idZona;
-            let query = `CALL ${config.SP_ENVIO}(0,${zona},'${body.tipo}',0,0,${body.venta_aprobada})`;
+            let query = `CALL ${config.SP_ENVIO}(0,${zona},'${body.tipo}',0,0)`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 return connection.query(`SELECT idEnvio from ${config.TABLE_ENVIO} order by idEnvio DESC limit 1`,(err,res)=>{
@@ -87,15 +87,6 @@ class EnvioModel{
     cambiarEstadoEnCamino(id){
         return new Promise((resolve,reject)=>{
             connection.query(`CALL ${config.SP_ENVIOS_ENCAMINO}(${id})`,(err,res,fields)=>{
-                if(err) reject(err);
-                resolve(res);
-            })
-        })
-    }
-
-    aprobarEnvio(id){
-        return new Promise((resolve,reject)=>{
-            connection.query(`CALL ${config.SP_VALIDAR_ENVIO}(${id})`,(err,res,fields)=>{
                 if(err) reject(err);
                 resolve(res);
             })

@@ -49,19 +49,10 @@ class VentasModel{
         })
     }
 
-    getUltimaVenta(pagado){
-        return new Promise((resolve,reject)=>{
-            connection.query(`SELECT idVenta, idEnvio FROM ${config.TABLE_VENTAS} WHERE pagado = ${pagado} ORDER BY idVenta DESC LIMIT 1`,(err,results,fields)=>{
-                if(err) return reject(err);
-                resolve(results);
-            })
-        })
-    }
-
     create(body){
         return new Promise(async(resolve,reject)=>{
             //hash para password
-            let query = `CALL ${config.SP_VENTAS}(0,${body.idUsuario},'${body.subtotal}','${body.porcentaje_descuento}','${body.descuento}','${body.total}',${body.idEnvio},null,${body.idMedioPago},${body.pagado})`;
+            let query = `CALL ${config.SP_VENTAS}(0,${body.idUsuario},'${body.subtotal}','${body.porcentaje_descuento}','${body.descuento}','${body.total}',${body.idEnvio},${body.collection_id},${body.idMedioPago},'${body.payment_id}',${body.pagado})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 return connection.query(`SELECT idVenta from ${config.TABLE_VENTAS} order by idVenta DESC limit 1`,(err,res)=>{
@@ -109,14 +100,6 @@ class VentasModel{
         })
     }
 
-    aprobarVenta(idVenta,payment_id){
-        return new Promise((resolve,reject)=>{
-            connection.query(`CALL ${config.SP_VALIDAR_VENTA}(${idVenta},${payment_id})`,(err,res,fields)=>{
-                if(err) reject(err);
-                resolve(res);
-            })
-        })
-    }
 }
 
 module.exports = VentasModel;

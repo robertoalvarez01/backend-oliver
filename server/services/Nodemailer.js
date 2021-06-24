@@ -15,7 +15,36 @@ class Nodemailer{
                 pass:config.ACCOUNT_PASSWORD
             }
         });
+    }
 
+    armarBody(config){
+        let html = `
+        <p>Hola, <b>${config.nombre}</b></p>
+        <p>Hemos recibido la informacion de tu compra: </p><br/>`;
+
+        config.productos.map(prd=>{
+            html += `
+                <b>${prd.subProducto} - por (${prd.cantidad}) unidad/es</b><br/>
+            `;
+        });
+
+        if(config.tipoEnvio == 'Local'){
+            html += `
+            <br/><br/>
+            <p>Para poder retirar tu compra, acércate a nuestro local y presentá el código de la compra que se muestra a continuación.</p>
+            <br/>
+            <p>Código de compra: <b>${config.idUltimoEnvio}</b></p>`;
+        }else{
+            html += `<p>En breve te informaremos cuando el envío esté en camino.</p>`;
+        }
+
+        html += `<br/><br/>
+        <p>Para cualquier consulta, comunicarse a <b>02304347008</b></p>
+        Muchas gracias por tu confianza, <b>OLIVER PETSHOP.</b>
+        <br/>
+        <img src="cid:OliverPetShop" width="50px" height="50px"/>`
+
+        return html;
     }
     
     send(mailOptions){
