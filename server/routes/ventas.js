@@ -9,7 +9,7 @@ const UsuarioService = require('../services/UsuarioService');
 const qrcode = require('qrcode');
 
 app.post('/ventas/registrarVenta',verificarToken,async(req,res)=>{
-    const {envio:dataEnvio,venta:dataVenta,usuario:{idUsuario}} = req.body;
+    const {envio:dataEnvio,venta:dataVenta} = req.body;
     if(!dataEnvio.idZona){
         return res.status(400).json({
             ok:false,
@@ -22,7 +22,7 @@ app.post('/ventas/registrarVenta',verificarToken,async(req,res)=>{
             error:'No se puede registrar una venta sin productos'
         })
     }
-    if(!idUsuario){
+    if(!dataVenta.idUsuario){
         return res.status(400).json({
             ok:false,
             error:'Usuario invalido'
@@ -65,7 +65,6 @@ app.post('/ventas/registrarVenta',verificarToken,async(req,res)=>{
         
         //guardo la venta
         const newVenta = await vService.create(dataVenta);
-        
         const {idVenta:idUltimaVenta} = newVenta[0];
 
         //guardo los productos de la venta
