@@ -10,12 +10,7 @@ const qrcode = require('qrcode');
 
 app.post('/ventas/registrarVenta',verificarToken,async(req,res)=>{
     const {envio:dataEnvio,venta:dataVenta} = req.body;
-    if(!dataEnvio.idZona){
-        return res.status(400).json({
-            ok:false,
-            error:'Zona invalida'
-        })
-    }
+    
     if(!dataVenta.productos.length){
         return res.status(400).json({
             ok:false,
