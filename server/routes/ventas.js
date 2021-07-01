@@ -125,7 +125,9 @@ app.post('/ventas/hooks/updatePago',async(req,res)=>{
     // const eService = EnvioService();
     // const {data:{id:idPago},action} = req.body;
     console.log(req.body);
-    res.status(200);
+    return res.status(200).json({
+        ok:true
+    });
 })
 
 app.put('/ventas/modificarEstadoPago/:id',[verificarToken,verificarAdmin_role],async(req,res)=>{

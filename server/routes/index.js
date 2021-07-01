@@ -20,5 +20,6 @@ app.use(require('./ventas.js'))
 app.use(require('./mediosDePago.js'))
 app.use(require('./banner.js'));
 app.use(require('./usuarioOferta.js'));
+app.use(require('./balance.js'));
 
 module.exports = app;
