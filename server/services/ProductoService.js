@@ -32,6 +32,13 @@ class ProductoService{
         return datos;
     }
 
+    async getByIdMarca(idMarca){
+        const datos = await this.producto.getByIdMarca(idMarca).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
+
     async create(body,avatar=null){
         const datos = await this.producto.create(body,avatar).then(res=>{
             return res;

@@ -69,6 +69,16 @@ class ProductoModel{
         })
     }
 
+    getByIdMarca(idMarca){
+        return new Promise((resolve,reject)=>{
+            let query = `SELECT idProducto from producto WHERE idMarca = ${idMarca}`;
+            connection.query(query,(err,results,fields)=>{
+                if(err) return reject(err);
+                resolve(results);
+            })
+        })
+    }
+
     create(body,foto){
         return new Promise(async(resolve,reject)=>{
             //hash para password

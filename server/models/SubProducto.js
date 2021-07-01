@@ -145,6 +145,17 @@ class SubProductoModel{
             })
         })
     }
+
+    aumentarPorIdProductos(valor,listProducts){
+        return new Promise((resolve,reject)=>{
+            connection.query(`update subProducto set precioUnidad = precioUnidad + ((precioUnidad * ${valor})/100), 
+                                                    precioFinal = (precioFinal + ((precioFinal * ${valor})/100)) 
+                            WHERE idProducto in (?)`,[listProducts],(error,res,fiels)=>{
+                if(error) return reject(error);
+                resolve(res);
+            })
+        })
+    }
 }
 
 module.exports = SubProductoModel;

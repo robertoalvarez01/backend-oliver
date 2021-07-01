@@ -67,6 +67,13 @@ class SubProductoService{
         }).catch(err=>err);
         return datos;
     }
+
+    async aumentarPorProductos(aumento,listaProductos){
+        const datos = await this.subproducto.aumentarPorIdProductos(aumento,listaProductos).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
 }
 
 module.exports = SubProductoService;

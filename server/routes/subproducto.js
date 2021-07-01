@@ -2,7 +2,8 @@ const express = require('express');
 const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
 const upload = require('../lib/multer');
 const app = express();
-let SubProductoService = require('../services/SubProductoService');
+const ProductoService = require('../services/ProductoService');
+const SubProductoService = require('../services/SubProductoService');
 const CloudStorage = require('../services/CloudStorage');
 
 // ======================================
@@ -160,32 +161,44 @@ app.get('/subproductos/ofertas', async(req, res) => {
 
 //esta ruta queda caducada porque ahora se filtra desde productos
 app.get('/subproductos/filtrar',[verificarToken,verificarAdmin_role],async(req,res)=>{
-    // try {
-    //     let categoria = req.query.categoria || null;
-    //     let subcategoria = req.query.subcategoria || null;
-    //     let marca = req.query.marca || null;
-    //     let desde = req.query.desde || 1;
-    //     let limite = req.query.limite || 50;
-    //     const subproducto = new SubProductoService();
-    //     if(categoria || subcategoria || marca){
-    //         const response = await subproducto.filtrar(categoria,subcategoria,marca,desde,limite);
-    //         res.status(200).json({
-    //             data:response,
-    //             info:'Productos filtrados'
-    //         })
-    //     }else{
-    //         res.status(400).json({
-    //             info:'Ningun dato recibido'
-    //         })
-    //     }
-    // } catch (error) {
-    //     res.status(500).json({
-    //         error
-    //     })
-    // }
     res.status(403).json({
         info:'Ruta vencida'
     })
 })
+
+app.put('/aumentos/subproducto/marca', [verificarToken,verificarAdmin_role], async(req, res) => {
+    const {body:{idMarca,aumento}} = req;
+    if(!idMarca){
+        return res.status(400).json({
+            ok:false,
+            error:'Ninguna marca recibida'
+        })
+    }
+    try {
+        const pService = new ProductoService();
+        const productos = await pService.getByIdMarca(idMarca);
+        if(productos.length == 0){
+            return res.status(400).json({
+                ok:false,
+                error:'No hay productos con esa marca'
+            })
+        }
+
+        const spService = new SubProductoService();
+        let prds = [];
+        productos.map(prd=>(prds.push(prd.idProducto)));
+
+        const data = await spService.aumentarPorProductos(aumento,prds);
+
+        res.status(200).json({
+            ok:true,
+            message:`Se han modificado ${productos.length} productos`,
+            info:data
+        })
+
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+});
 
 module.exports = app;
