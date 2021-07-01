@@ -37,7 +37,7 @@ class VentasModel{
     getByEnvio(idEnvio){
         return new Promise((resolve,reject)=>{
             connection.query(`SELECT ${config.TABLE_VENTAS}.idVenta, ${config.TABLE_USER}.email, ${config.TABLE_USER}.lat, ${config.TABLE_USER}.lon, ${config.TABLE_USER}.address, ${config.TABLE_USER}.nombre, ${config.TABLE_USER}.foto, ${config.TABLE_VENTAS}.fecha, ${config.TABLE_VENTAS}.subtotal,
-            ${config.TABLE_VENTAS}.porcentaje_descuento, ${config.TABLE_VENTAS}.descuento, ${config.TABLE_VENTAS}.total, ${config.TABLE_VENTAS}.pagado, ${config.TABLE_ENVIO}.tipo as tipo_de_envio, ${config.TABLE_ENVIO}.entregado,${config.TABLE_MEDIOS_DE_PAGO}.medio
+            ${config.TABLE_VENTAS}.porcentaje_descuento, ${config.TABLE_VENTAS}.descuento, ${config.TABLE_VENTAS}.total, ${config.TABLE_VENTAS}.pagado, ${config.TABLE_VENTAS}.payment_id, ${config.TABLE_ENVIO}.tipo as tipo_de_envio, ${config.TABLE_ENVIO}.entregado,${config.TABLE_MEDIOS_DE_PAGO}.medio
                 FROM ventas
                     LEFT JOIN ${config.TABLE_USER} ON ${config.TABLE_USER}.idUsuario = ${config.TABLE_VENTAS}.idUsuario
                     LEFT JOIN ${config.TABLE_ENVIO} ON ${config.TABLE_ENVIO}.idEnvio = ${config.TABLE_ENVIO}.idEnvio 
@@ -52,7 +52,7 @@ class VentasModel{
     create(body){
         return new Promise(async(resolve,reject)=>{
             //hash para password
-            let query = `CALL ${config.SP_VENTAS}(0,${body.idUsuario},'${body.subtotal}','${body.porcentaje_descuento}','${body.descuento}','${body.total}',${body.idEnvio},${body.collection_id},${body.idMedioPago},'${body.payment_id}',${body.pagado})`;
+            let query = `CALL ${config.SP_VENTAS}(0,${body.idUsuario},'${body.subtotal}','${body.porcentaje_descuento}','${body.descuento}','${body.total}',${body.idEnvio},'${body.collection_id}',${body.idMedioPago},'${body.payment_id}',${body.pagado})`;
             connection.query(query,(error,results,fields)=>{
                 if(error) return reject(error);
                 return connection.query(`SELECT idVenta from ${config.TABLE_VENTAS} order by idVenta DESC limit 1`,(err,res)=>{
