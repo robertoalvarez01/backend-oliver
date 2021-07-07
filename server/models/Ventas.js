@@ -100,6 +100,24 @@ class VentasModel{
         })
     }
 
+    getCantidadByIdUsuario(idUsuario){
+        return new Promise((resolve,reject)=>{
+            connection.query(`SELECT COUNT(*) AS TOTAL FROM vw_ventas WHERE idUsuario = ${idUsuario}`,(err,res,fields)=>{
+                if(err) reject(err);
+                resolve(res);
+            })
+        })
+    }
+
+    getVentasByIdUsuario(idUsuario,cantidad){
+        return new Promise((resolve,reject)=>{
+            connection.query(`SELECT idVenta,total,medio_pago,DATE_FORMAT(fecha, "%d-%m-%Y") AS fecha,pagado FROM vw_ventas WHERE idUsuario = ${idUsuario} order by idVenta desc limit ${cantidad}`,(err,res,fields)=>{
+                if(err) reject(err);
+                resolve(res);
+            })
+        }) 
+    }
+
 }
 
 module.exports = VentasModel;

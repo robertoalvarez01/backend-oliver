@@ -480,7 +480,7 @@ app.get('/auth/confirmed',async(req,res,next)=>{
         })
     }
     return res.redirect(config.URL_SITE);
-})
+});
 
 
 module.exports = app;

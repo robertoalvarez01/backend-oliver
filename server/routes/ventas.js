@@ -139,6 +139,46 @@ app.put('/ventas/modificarEstadoPago/:id',[verificarToken,verificarAdmin_role],a
             info:error.message
         })
     }
+});
+
+app.get('/ventas/usuario/:idUsuario',verificarToken,async(req,res)=>{
+    const {params:{idUsuario},body:{cantidad}} = req;
+    if(!idUsuario){
+        return res.status(400).json({
+            ok:false,
+            error:'Usuario desconocido'
+        })
+    }
+    try {
+        const vService = new VentasService();
+        const pvService = new ProductosVentaService();
+        const ventasCantidad = await vService.getCantidadDeVentasPorUsuario(idUsuario);
+        const ventas = await vService.getVentasPorUsuario(idUsuario,cantidad);
+        let promises = [];
+        
+        ventas.map(async (ven)=>{
+            const prds = pvService.getAll(ven.idVenta).then(prd=>{
+                ven.productos = prd;
+            });
+            promises.push(prds);
+        });
+
+        Promise.all(promises).then(()=>{
+            res.status(200).json({
+                ok:true,
+                info:{
+                    cantidad_ventas:ventasCantidad[0].TOTAL,
+                    ventas
+                }
+            })
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            info:error.message
+        })
+    }
 })
 
 module.exports = app;

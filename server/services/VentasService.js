@@ -61,6 +61,20 @@ class VentasService{
         return datos;
     }
 
+    async getCantidadDeVentasPorUsuario(idUsuario){
+        const datos = await this.vModel.getCantidadByIdUsuario(idUsuario).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
+
+    async getVentasPorUsuario(idUsuario,cantidad=10){
+        const datos = await this.vModel.getVentasByIdUsuario(idUsuario,cantidad).then(res=>{
+            return res;
+        }).catch(err=>err);
+        return datos;
+    }
+
 }
 
 module.exports = VentasService;
