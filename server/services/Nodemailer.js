@@ -6,15 +6,18 @@ const path = require('path');
 class Nodemailer{
     constructor() {
         this.transporter = nodemailer.createTransport({
-            // host:config.ACCOUNT_HOST,
-            // port:config.ACCOUNT_PORT,
-            // secure:false,
+            host:config.ACCOUNT_HOST,
+            port:config.ACCOUNT_PORT,
+            secure:true,
             service:'gmail',
             auth:{
                 user:config.ACCOUNT_USERNAME,
                 pass:config.ACCOUNT_PASSWORD
             }
         });
+        this.transporter.verify().then(()=>{
+            console.log('nodemailer configurado');
+        })
     }
 
     armarBody(config){
