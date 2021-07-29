@@ -79,7 +79,7 @@ app.put('/envios/modificarEstadoEnCamino/:id',[verificarToken,verificarAdmin_rol
         const {email} = req.query;
         await eService.cambiarEstadoEnCamino(id);
         const mailOptions = {
-            from:`${config.ACCOUNT_USERNAME}`,
+            from:`Oliver PETSHOP <petshop-oliver@hotmail.com>`,
             to:`${email}`,
             subject:'Envío en camino',
             html:`
@@ -109,7 +109,7 @@ app.put('/envios/modificarEstadoEntregado/:id',[verificarToken,verificarAdmin_ro
         const {email} = req.query;
         await eService.cambiarEstadoEntregado(id);
         const mailOptions = {
-            from:`${config.ACCOUNT_USERNAME}`,
+            from:`Oliver PETSHOP <petshop-oliver@hotmail.com>`,
             to:`${email}`,
             subject:'Envío entregado',
             html:`
