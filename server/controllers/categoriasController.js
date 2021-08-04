@@ -91,7 +91,7 @@ exports.getById = async(req,res)=>{
     try {
         const {id} = req.params;
         const cModel = new CategoriaModel();
-        const response = await cModel.getOne(id);
+        const response = await cModel.get(id);
         res.status(200).json({
             ok:true,
             data:response

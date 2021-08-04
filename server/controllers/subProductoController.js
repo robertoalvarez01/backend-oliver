@@ -25,7 +25,7 @@ exports.update = async(req,res)=>{
         const {body,params:{id}} = req;
         const subproducto = new SubProductoModel();
         if(!req.file){
-            await subproducto.update(body,id);
+            await subproducto.update(body,id,null);
             return res.status(200).json({
                 ok:true
             });
