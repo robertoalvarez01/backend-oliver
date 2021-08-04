@@ -12,14 +12,12 @@ app.use('/categorias',require('./categoria'));
 app.use('/subcategorias',require('./subCategoria'));
 app.use('/productos',require('./producto'));
 app.use('/subproductos',require('./subproducto'));
-app.use(require('./google'));
-app.use(require('./mercadopago'));
-app.use(require('./legales'));
-app.use(require('./zonas'));
-app.use(require('./mercadopago'));
-app.use(require('./ventas.js'))
-app.use(require('./mediosDePago.js'))
-app.use(require('./usuarioOferta.js'));
-app.use(require('./balance.js'));
+app.use('/aumentos',require('./aumentos'));
+app.use('/zonas',require('./zonas'));
+app.use('/legales',require('./legales'));
+app.use('/medioDePago',require('./mediosDePago.js'));
+app.use('/ventas',require('./ventas.js'));
+app.use('/estadisticas',require('./estadisticas.js'));
+app.use('/usuario-oferta',require('./usuarioOferta.js'));
 
 module.exports = app;
