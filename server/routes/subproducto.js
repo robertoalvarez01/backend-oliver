@@ -8,11 +8,11 @@ const subProductoController = require('../controllers/subProductoController');
 // api/subproductos
 // ======================================
 
-app.post('/', [verificarToken, verificarAdmin_role,upload.single('foto')], subProductoController.create);
+app.post('/add', [verificarToken, verificarAdmin_role,upload.single('foto')], subProductoController.create);
 
-app.put('/:id', [verificarToken,verificarAdmin_role,upload.single('foto')], subProductoController.update);
+app.put('/update/:id', [verificarToken,verificarAdmin_role,upload.single('foto')], subProductoController.update);
 
-app.delete('/:id', [verificarToken,verificarAdmin_role], subProductoController.delete);
+app.delete('/delete/:id', [verificarToken,verificarAdmin_role], subProductoController.delete);
 
 app.get('/', [verificarToken,verificarAdmin_role],subProductoController.getAll);
 

@@ -10,19 +10,19 @@ const categoriasController = require('../controllers/categoriasController');
 // Crea una categoria
 // ======================================
 
-app.post('/', [verificarToken,verificarAdmin_role,upload.single('foto')], categoriasController.create);
+app.post('/add', [verificarToken,verificarAdmin_role,upload.single('foto')], categoriasController.create);
 
 // ======================================
 // Actualiza una categoria
 // ======================================
 
-app.put('/:id', [verificarToken,verificarAdmin_role,upload.single('foto')], categoriasController.update);
+app.put('/update/:id', [verificarToken,verificarAdmin_role,upload.single('foto')], categoriasController.update);
 
 // ======================================
 // Borra una categoria -- (Borrado definitivo)
 // ======================================
 
-app.delete('/:id', [verificarToken, verificarAdmin_role], categoriasController.delete);
+app.delete('/delete/:id', [verificarToken, verificarAdmin_role], categoriasController.delete);
 
 // ======================================
 // Trae todas las categorias

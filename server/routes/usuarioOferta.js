@@ -3,7 +3,7 @@ const { verificarToken, verificarAdmin_role } = require('../middlewares/autentic
 const app = express();
 const usuarioOfertaController = require('../controllers/usuarioOfertaController');
 
-app.post('/', usuarioOfertaController.registrarUsuario);
+app.post('/add', usuarioOfertaController.registrarUsuario);
 
 app.get('/', usuarioOfertaController.obtenerUsuariosRegistrados);
 

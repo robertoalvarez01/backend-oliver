@@ -8,20 +8,20 @@ const tamañosController = require('../controllers/tamañosController');
 // Crea un tamaño
 // ======================================
 
-app.post(`/`, [verificarToken,verificarAdmin_role], tamañosController.create);
+app.post(`/add`, [verificarToken,verificarAdmin_role], tamañosController.create);
 
 // ======================================
 // Actualiza un tamaño
 // ======================================
 
-app.put(`/:id`, [verificarToken,verificarAdmin_role], tamañosController.update);
+app.put(`/update/:id`, [verificarToken,verificarAdmin_role], tamañosController.update);
 
 
 // ======================================
 // Borra un tamaño -- (Borrado definitivo)
 // ======================================
 
-app.delete(`/:id`, [verificarToken, verificarAdmin_role], tamañosController.delete);
+app.delete(`/delete/:id`, [verificarToken, verificarAdmin_role], tamañosController.delete);
 
 // ======================================
 // Trae todos los tamaños

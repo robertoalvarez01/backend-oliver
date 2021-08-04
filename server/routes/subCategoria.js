@@ -8,11 +8,11 @@ const subCategoriaController = require('../controllers/subCategoriaController');
 // api/subcategorias
 // ======================================
 
-app.post('/', [verificarToken,verificarAdmin_role], subCategoriaController.create);
+app.post('/add', [verificarToken,verificarAdmin_role], subCategoriaController.create);
 
-app.put('/:id', [verificarToken,verificarAdmin_role], subCategoriaController.update);
+app.put('/update/:id', [verificarToken,verificarAdmin_role], subCategoriaController.update);
 
-app.delete('/:id', [verificarToken, verificarAdmin_role], subCategoriaController.delete);
+app.delete('/delete/:id', [verificarToken, verificarAdmin_role], subCategoriaController.delete);
 
 app.get('/', subCategoriaController.getAll);
 

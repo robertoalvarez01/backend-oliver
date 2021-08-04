@@ -8,11 +8,11 @@ const productosController = require('../controllers/productosController');
 // api/productos
 // ======================================
 
-app.post('/', [verificarToken, verificarAdmin_role], productosController.create);
+app.post('/add', [verificarToken, verificarAdmin_role], productosController.create);
 
-app.put('/:id', [verificarToken,verificarAdmin_role], productosController.update);
+app.put('/update/:id', [verificarToken,verificarAdmin_role], productosController.update);
 
-app.delete('/:id', verificarToken, productosController.delete);
+app.delete('/delete/:id', verificarToken, productosController.delete);
 
 app.get('/', productosController.getAll);
 

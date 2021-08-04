@@ -4,11 +4,11 @@ const app = express();
 const mediosDePagoController = require('../controllers/mediosDePagoController');
 
 
-app.post('/', [verificarToken,verificarAdmin_role], mediosDePagoController.create);
+app.post('/add', [verificarToken,verificarAdmin_role], mediosDePagoController.create);
 
-app.put('/:id', [verificarToken,verificarAdmin_role], mediosDePagoController.update);
+app.put('/update/:id', [verificarToken,verificarAdmin_role], mediosDePagoController.update);
 
-app.delete('/:id', [verificarToken, verificarAdmin_role], mediosDePagoController.delete);
+app.delete('/delete/:id', [verificarToken, verificarAdmin_role], mediosDePagoController.delete);
 
 app.get('/', [verificarToken],mediosDePagoController.getAll);
 

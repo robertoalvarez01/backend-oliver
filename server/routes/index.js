@@ -5,7 +5,7 @@ const app = express();
 app.use('/usuario',require('./usuario'));
 app.use('/auth',require('./auth'));
 app.use('/marcas',require('./marca'));
-app.use(`/${encodeURIComponent('tamaño')}`,require('./tamaño'));
+app.use(`/${encodeURIComponent('tamaños')}`,require('./tamaño'));
 app.use('/envios',require('./envio'));
 app.use('/banners',require('./banner.js'));
 app.use('/categorias',require('./categoria'));
