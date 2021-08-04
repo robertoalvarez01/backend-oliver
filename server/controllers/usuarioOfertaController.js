@@ -41,7 +41,7 @@ exports.enviarOferta = async(req,res)=>{
             subject:asunto,
             text:contenido
         };
-        usuarios.forEach(user=>{
+        usuarios.forEach(async user=>{
             msg.to = user.mail;
             await nodemailer.send(msg);
         });

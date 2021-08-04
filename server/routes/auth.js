@@ -12,3 +12,5 @@ app.get('/verify-sesion',verificarToken,authController.verifySession);
 app.get('/confirmed',authController.confirmAccount);
 
 app.post('/google',authController.authenticationByGoogle);
+
+module.exports  = app;

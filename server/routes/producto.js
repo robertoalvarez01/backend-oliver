@@ -16,9 +16,10 @@ app.delete('/delete/:id', verificarToken, productosController.delete);
 
 app.get('/', productosController.getAll);
 
+app.get('/buscar', productosController.buscar);
+
 app.get('/:id', productosController.getById);
 
-app.get('/buscar', productosController.buscar);
 
 app.get('/filtro/filtrar',productosController.filtrar)
 

@@ -109,7 +109,7 @@ class VentasModel{
         })
     }
 
-    getVentasByIdUsuario(idUsuario,cantidad){
+    getVentasByIdUsuario(idUsuario,cantidad=10){
         return new Promise((resolve,reject)=>{
             connection.query(`SELECT idVenta,total,medio_pago,DATE_FORMAT(fecha, "%d-%m-%Y") AS fecha,pagado FROM vw_ventas WHERE idUsuario = ${idUsuario} order by idVenta desc limit ${cantidad}`,(err,res,fields)=>{
                 if(err) reject(err);

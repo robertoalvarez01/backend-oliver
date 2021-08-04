@@ -14,12 +14,13 @@ app.put('/update/:id', [verificarToken,verificarAdmin_role,upload.single('foto')
 
 app.delete('/delete/:id', [verificarToken,verificarAdmin_role], subProductoController.delete);
 
+app.get('/ofertas', subProductoController.getOfertas);
+
 app.get('/', [verificarToken,verificarAdmin_role],subProductoController.getAll);
 
 app.get('/:id',[verificarToken,verificarAdmin_role] , subProductoController.getById);
 
 app.get('/buscar',[verificarToken,verificarAdmin_role], subProductoController.buscar);
 
-app.get('/ofertas', subProductoController.getOfertas);
 
 module.exports = app;

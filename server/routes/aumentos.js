@@ -6,3 +6,6 @@ const aumentosController = require('../controllers/aumentosController');
 // api/aumentos
 
 app.put('/subproducto/marca', [verificarToken,verificarAdmin_role], aumentosController.auentarPorMarca);
+
+
+module.exports = app;

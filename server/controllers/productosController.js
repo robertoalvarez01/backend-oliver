@@ -103,7 +103,7 @@ exports.getById = async(req,res)=>{
         const productoModel = new ProductoModel();
         const subproductoModel = new SubProductoModel();
         const producto = await productoModel.get(id);
-        const subproductos = await subproductoModel.getByIdProducto(data[0].idProducto,false,isAdmin);
+        const subproductos = await subproductoModel.getByIdProducto(producto[0].idProducto,false,isAdmin);
         res.status(200).json({
             ok:true,
             data:producto,
@@ -153,9 +153,12 @@ exports.buscar = async(req,res)=>{
             data:productos
         })
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             ok:false,
-            error:error.message
+            error:error.message,
+            info:'ashe'
+
         })
     } 
 }
@@ -196,7 +199,7 @@ exports.filtrar = async (req,res)=>{
         await Promise.all(promesas);
         res.status(200).json({
             ok:true,
-            data:response,
+            data:productos,
             info:'Productos filtrados'
         });
     } catch (error) {

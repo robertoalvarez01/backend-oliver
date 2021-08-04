@@ -187,11 +187,11 @@ exports.confirmAccount = async(req,res)=>{
 
 exports.authenticationByGoogle = async(req,res)=>{
     try{
-        const {token,googleId} = req.body;
+        const {token:tokenUsuario,googleId} = req.body;
         const gService = new GoogleService();
         const uModel = new UsuarioModel();
 
-        const data = await gService.verify(token);
+        const data = await gService.verify(tokenUsuario);
         const dataUser = {
             email:data.email,
             nombre:data.name,
@@ -199,10 +199,12 @@ exports.authenticationByGoogle = async(req,res)=>{
         };
         const usersInDb = await uModel.login(dataUser);
 
+        let token;
+
         //si ya hay un usuario registrado con ese email, entonces lo logueo.
         if(usersInDb.length>0){
             const userDB = usersInDb[0];
-            let token = jwt.sign({
+            token = jwt.sign({
                 usuario:{
                     idUsuario:userDB.idUsuario,
                     email:userDB.email,
@@ -230,7 +232,7 @@ exports.authenticationByGoogle = async(req,res)=>{
         //si no existe, tengo que registrar el usuario en la db y loguearlo.
         await uModel.registerWithGoogle(dataUser);
         const userDB = await uModel.login(dataUser);
-        let token = jwt.sign({
+        token = jwt.sign({
             usuario:{
                 idUsuario:userDB[0].idUsuario,
                 email:userDB[0].email,
