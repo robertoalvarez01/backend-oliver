@@ -18,9 +18,9 @@ app.get('/ofertas', subProductoController.getOfertas);
 
 app.get('/', [verificarToken,verificarAdmin_role],subProductoController.getAll);
 
-app.get('/:id',[verificarToken,verificarAdmin_role] , subProductoController.getById);
-
 app.get('/buscar',[verificarToken,verificarAdmin_role], subProductoController.buscar);
+
+app.get('/:id',[verificarToken,verificarAdmin_role] , subProductoController.getById);
 
 
 module.exports = app;
