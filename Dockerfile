@@ -1,6 +1,6 @@
 FROM node:11.15
 
-COPY ["package.json", "package-lock.json", "/usr/src/"]
+COPY ["package.json", "/usr/src/"]
 
 WORKDIR /usr/src
 
