@@ -19,5 +19,6 @@ app.use('/medioDePago',require('./mediosDePago.js'));
 app.use('/ventas',require('./ventas.js'));
 app.use('/estadisticas',require('./estadisticas.js'));
 app.use('/usuario-oferta',require('./usuarioOferta.js'));
+app.use('/ofertas',require('./ofertas'));
 
 module.exports = app;

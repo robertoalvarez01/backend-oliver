@@ -16,7 +16,12 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARkx6SZy9rQJmWQ4zerhzUQdjy0HMH9AI&callback=initMap">
     </script>-->
     <form id="form">
+      <input type="text" name="descripcion" id="" placeholder="Descripcion">
+      <input type="text" name="precioFinal" id="Precio" placeholder="Precio">
+      <input type="hidden" name="activo" value="1">
       <input type="file" name="foto" id="">
+      <input type="date" name="validoHasta" id="" placeholder="Valido hasta">
+      <br/>
       <input type="submit" value="Enviar">
     </form>
 
@@ -24,8 +29,23 @@
       let form = document.getElementById('form');
       form.addEventListener('submit',event=>{
         event.preventDefault();
-        let data = new FormData(form);
-        fetch('http://localhost:3000/upload',{
+        const productos = [
+          {
+            idProducto:5,
+            idSubProducto:1458
+          },
+          {
+            idProducto:5,
+            idSubProducto:1638
+          },
+          {
+            idProducto:5,
+            idSubProducto:1685
+          }
+        ];
+        let data = new FormData(event.target);
+        data.append('productos',JSON.stringify(productos));
+        fetch('http://localhost:3001/ofertas',{
           method:'POST',
           body:data
         }).then(res=>res.json()).then(console.log);

@@ -1,9 +1,7 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const path = require('path');
-const cors = require('cors');
-const {config} = require('./config/config');
-const bodyParser = require('body-parser');
+const cors = require("cors");
+const { config } = require("./config/config");
 
 // Enable CORS Origin
 /*
@@ -16,19 +14,13 @@ app.use((req, res, next) => {
 });*/
 app.use(cors());
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
-
-// parse application/json
-app.use(bodyParser.json())
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //Carpeta Public
-app.use(express.static(path.resolve(__dirname, './templates/')))
+//app.use("/",express.static('./public'));
 
-app.use(require('./routes/index'));
+app.use(require("./routes/index"));
 
-
-app.listen(config.port, console.log("Server running on port "+config.port));
+app.listen(config.port, console.log("Server running on port " + config.port));
 // https.createServer(options, app).listen(3000, console.log("Secure server running on port 3000"));
-
-console.log(config.URL_SITE,config.URL_API);
