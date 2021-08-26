@@ -55,6 +55,16 @@ class OfertaModel extends Model {
       throw new Error(error);
     }
   }
+
+  async cambiarEstado(id){
+    this.query = `CALL ${config.SP_CAMBIAR_ESTADO_OFERTAS}(${id})`;
+    try {
+      const response = await this.execute();
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
 
 module.exports = OfertaModel;

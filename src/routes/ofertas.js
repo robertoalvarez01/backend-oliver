@@ -14,6 +14,8 @@ app.post('/agregarProducto/:idOferta',verificarToken,verificarAdmin_role,ofertas
 
 app.post('/',verificarToken,verificarAdmin_role,upload.single('foto'),ofertasController.create);
 
+app.put('/cambiarEstado/:id',verificarToken,verificarAdmin_role,ofertasController.switchActive);
+
 app.put('/:id',upload.single('foto'),verificarToken,verificarAdmin_role,ofertasController.update);
 
 app.delete('/eliminarProducto/:id',verificarToken,verificarAdmin_role,ofertasController.quitarProducto);

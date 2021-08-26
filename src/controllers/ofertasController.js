@@ -164,3 +164,18 @@ exports.quitarProducto = async (req, res) => {
     });
   }
 };
+
+exports.switchActive = async (req, res) => {
+  const oModel = new OfertaModel();
+  try {
+    await oModel.cambiarEstado(req.params.id);
+    res.status(200).json({
+      ok: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      error: error.message,
+    });
+  }
+};
