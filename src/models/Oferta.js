@@ -7,7 +7,7 @@ class OfertaModel extends Model {
   }
 
   async getAll(desde, cantidad,admin) {
-    this.query = `SELECT id,descripcion,precioFinal,validoHasta,activo,foto FROM ${this.schema} `;
+    this.query = `SELECT id,titulo,descripcion,validoHasta,activo,foto FROM ${this.schema} `;
     if(!admin){
       this.query += `WHERE activo = 1 `;
     }
@@ -21,7 +21,7 @@ class OfertaModel extends Model {
   }
 
   async getById(id) {
-    this.query = `SELECT id,descripcion,precioFinal,validoHasta,activo,foto FROM ${this.schema} WHERE id = ${id} LIMIT 1`;
+    this.query = `SELECT id,titulo,descripcion,validoHasta,activo,foto FROM ${this.schema} WHERE id = ${id} LIMIT 1`;
     try {
       const data = await this.execute();
       return data;
@@ -31,7 +31,7 @@ class OfertaModel extends Model {
   }
 
   async create(data) {
-    this.query = `CALL ${config.SP_OFERTAS}(0,'${data.descripcion}','${data.precioFinal}','${data.validoHasta}',${data.activo},'${data.foto}')`;
+    this.query = `CALL ${config.SP_OFERTAS}(0,'${data.titulo}','${data.descripcion}','${data.validoHasta}',${data.activo},'${data.foto}')`;
     try {
       const data = await this.execute();
       return data;
@@ -41,7 +41,7 @@ class OfertaModel extends Model {
   }
 
   async update(data, id) {
-    this.query = `CALL ${config.SP_OFERTAS}(${id},'${data.descripcion}','${data.precioFinal}','${data.validoHasta}',${data.activo},'${data.foto}')`;
+    this.query = `CALL ${config.SP_OFERTAS}(${id},'${data.titulo}','${data.descripcion}','${data.validoHasta}',${data.activo},'${data.foto}')`;
     try {
       const data = await this.execute();
       return data;
