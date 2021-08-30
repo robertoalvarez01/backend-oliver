@@ -2,13 +2,15 @@ const OfertaModel = require("../models/Oferta");
 const CloudStorage = require("../services/CloudStorage");
 const ProductoOfertaModel = require("../models/ProductoOferta");
 
-exports.gelAll = async (req, res) => {
+exports.getAll = async (req, res) => {
   const oModel = new OfertaModel();
   try {
     const {
       query: { desde, cantidad },
+      usuario,
     } = req;
-    const ofertas = await oModel.getAll(desde, cantidad);
+    const admin = usuario.admin ? true : false;
+    const ofertas = await oModel.getAll(desde, cantidad, admin);
     res.status(200).json({
       ok: true,
       data: ofertas,

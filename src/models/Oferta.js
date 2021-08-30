@@ -6,8 +6,12 @@ class OfertaModel extends Model {
     super(config.TABLE_OFERTAS);
   }
 
-  async getAll(desde, cantidad) {
-    this.query = `SELECT id,descripcion,precioFinal,validoHasta,activo,foto FROM ${this.schema} ORDER BY id DESC LIMIT ${desde},${cantidad}`;
+  async getAll(desde, cantidad,admin) {
+    this.query = `SELECT id,descripcion,precioFinal,validoHasta,activo,foto FROM ${this.schema} `;
+    if(!admin){
+      this.query += `WHERE activo = 1 `;
+    }
+    this.query += `ORDER BY id DESC LIMIT ${desde},${cantidad}`;
     try {
       const data = await this.execute();
       return data;

@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
 const ofertasController = require('../controllers/ofertasController');
-const { verificarToken, verificarAdmin_role } = require('../middlewares/autenticacion');
+const { verificarToken, verificarAdmin_role, verificarEnvioToken } = require('../middlewares/autenticacion');
 const upload = require('../lib/multer');
 
 //desde api/ofertas
 
-app.get('/',ofertasController.gelAll);
+app.get('/',verificarEnvioToken,ofertasController.getAll);
 
 app.get('/:id',ofertasController.getOne);
 
