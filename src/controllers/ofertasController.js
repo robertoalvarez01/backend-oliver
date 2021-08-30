@@ -9,7 +9,7 @@ exports.getAll = async (req, res) => {
       query: { desde, cantidad },
       usuario,
     } = req;
-    const admin = usuario.admin ? true : false;
+    const admin = (usuario && usuario.admin) ? true : false;
     const ofertas = await oModel.getAll(desde, cantidad, admin);
     res.status(200).json({
       ok: true,
