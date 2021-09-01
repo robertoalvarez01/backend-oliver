@@ -202,7 +202,7 @@ class SubProductoModel{
     }
 
     restarStockDelLocal(producto=null,cantidad,codigo=null){
-        let query = `UPDATE oliver.productos.producto SET stock_local_1 = (stock_local_1 - ${cantidad})`;
+        let query = `UPDATE oliver.productos SET stock_local_1 = (stock_local_1 - ${cantidad})`;
         if(codigo){
             query += ` WHERE oliver.productos.codigo_producto = '${codigo}'`;
         }else{

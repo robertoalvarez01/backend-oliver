@@ -11,7 +11,7 @@ class VentasModel {
                     LEFT JOIN ${config.TABLE_USER} ON ${config.TABLE_USER}.idUsuario = ${config.TABLE_VENTAS}.idUsuario
                     LEFT JOIN ${config.TABLE_ENVIO} ON ${config.TABLE_ENVIO}.idEnvio = ${config.TABLE_ENVIO}.idEnvio 
                     LEFT JOIN ${config.TABLE_MEDIOS_DE_PAGO} ON ${config.TABLE_MEDIOS_DE_PAGO}.idMedioPago = ${config.TABLE_VENTAS}.idMedioPago
-                        ORDER BY ${config.TABLE_VENTAS}.idVenta DESC;`,
+                        ORDER BY ${config.TABLE_VENTAS}.idVenta DESC`,
         (err, res, fields) => {
           if (err) return reject(err);
           resolve(res);

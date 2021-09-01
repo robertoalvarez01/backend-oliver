@@ -16,7 +16,7 @@ class EnvioModel{
             if(idEnvio && idEnvio!=''){
                 query += `AND ${config.TABLE_ENVIO}.idEnvio = ${idEnvio} `;
             }
-            query += `ORDER BY ${config.TABLE_ENVIO}.idEnvio DESC`;
+            query += `ORDER BY ${config.TABLE_ENVIO}.idEnvio DESC limit 0,20`;
             connection.query(query,(err,res,fields)=>{
                 if(err) return reject(err);
                 resolve(res);

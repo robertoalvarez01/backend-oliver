@@ -15,7 +15,7 @@ exports.getAll = async(req,res)=>{
 
         //recorro array de envios para concatenar la venta correspondiente y a esas ventas, concatenarle sus productos.
         envios.map(env=>{
-            const venta = mVenta.get(env.idEnvio).then(async dataVenta=>{//obtengo ventas
+            const venta = mVenta.getByEnvio(env.idEnvio).then(async dataVenta=>{//obtengo ventas
                 if(dataVenta.length>0){
                     await mProductosVenta.getAll(dataVenta[0].idVenta).then(res=>{//obtengo los productos de la venta
                         env.venta=dataVenta[0]

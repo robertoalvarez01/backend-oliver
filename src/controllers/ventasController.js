@@ -70,6 +70,7 @@ exports.registrarVenta = async(req,res)=>{
                 await subProducto.restarStockDePagina(prd.idSubProducto,prd.cantidad);
     
                 //restar stock del local
+                console.log(prd.codigoBarra);
                 await subProducto.restarStockDelLocal(null,prd.cantidad,prd.codigoBarra);
     
                 //guardar el producto que se vendio en base
@@ -101,7 +102,7 @@ exports.registrarVenta = async(req,res)=>{
         const mailOptions = {
             from:`Oliver PETSHOP <petshop-oliver@hotmail.com>`,
             to:`${email}`,
-            cc:`petshop-oliver@hotmail.com`,
+            cc:`petshop-oliver@hotmail.com,lucilacolussi@hotmail.com`,
             subject:'Nueva compra en PetShop Oliver',
             html:mensaje,
             attachments:[
