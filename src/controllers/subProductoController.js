@@ -138,3 +138,35 @@ exports.getOfertas = async(req,res)=>{
         })
     }
 }
+
+// exports.relacionPagina = async (req,res)=>{
+//     try {
+//         const subproducto= new SubProductoModel();
+//         const response = await subproducto.getProductoLocal();
+//         res.status(200).json({
+//             ok:true,
+//             data:response
+//         })
+//     } catch (error) {
+//         res.status(500).json({
+//             ok:false,
+//             error:error.message
+//         })
+//     }
+// }
+
+// exports.noRelacionados = async (req,res)=>{
+//     try {
+//         const subproducto= new SubProductoModel();
+//         const response = await subproducto.getNoRelacionados();
+//         res.status(200).json({
+//             ok:true,
+//             data:response
+//         })
+//     } catch (error) {
+//         res.status(500).json({
+//             ok:false,
+//             error:error.message
+//         })
+//     }
+// }

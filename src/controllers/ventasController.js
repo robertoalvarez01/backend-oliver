@@ -4,6 +4,7 @@ const EnvioModel = require('../models/Envio');
 const VentasModel = require('../models/Ventas');
 const ProductosVentasModel = require('../models/ProductosVenta');
 const UsuarioModel = require('../models/Usuario');
+const SubProductoModel = require('../models/SubProducto');
 
 exports.registrarVenta = async(req,res)=>{
     const {envio:dataEnvio,venta:dataVenta} = req.body;
@@ -58,12 +59,29 @@ exports.registrarVenta = async(req,res)=>{
         //guardo la venta
         const newVenta = await ventaModel.create(dataVenta);
         const {idVenta:idUltimaVenta} = newVenta[0];
-
-        //guardo los productos de la venta
-        dataVenta.productos.forEach(async prd=>{
-            prd.idVenta = idUltimaVenta;
-            await pvModel.create(prd);
-        })
+        
+        //si esta en produccion resta el stock, sino no.
+        if(process.env.NODE_ENV == 'production'){
+            const subProducto = new SubProductoModel();
+    
+            //guardo los productos de la venta
+            dataVenta.productos.forEach(async prd=>{
+                //restar stock de la pagina
+                await subProducto.restarStockDePagina(prd.idSubProducto,prd.cantidad);
+    
+                //restar stock del local
+                await subProducto.restarStockDelLocal(null,prd.cantidad,prd.codigoBarra);
+    
+                //guardar el producto que se vendio en base
+                prd.idVenta = idUltimaVenta;
+                await pvModel.create(prd);
+            })
+        }else{
+            dataVenta.productos.forEach(async prd=>{
+                prd.idVenta = idUltimaVenta;
+                await pvModel.create(prd);
+            })
+        }
 
         //envio de email a usuario
         const nodemailer = new NodeMailer();

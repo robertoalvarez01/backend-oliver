@@ -22,5 +22,7 @@ app.get('/buscar',[verificarToken,verificarAdmin_role], subProductoController.bu
 
 app.get('/:id',[verificarToken,verificarAdmin_role] , subProductoController.getById);
 
+//app.get('/actualizarStock',subProductoController.relacionPagina);
+//app.get('/no-relacionados',subProductoController.noRelacionados);
 
 module.exports = app;

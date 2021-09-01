@@ -9,7 +9,7 @@ RUN npm install
 COPY [".", "/usr/src/"]
 
 ENV MONGO_URL=mongodb://petshop-oliver-mongo/cafe
-ENV NODE_ENV=prod
+ENV NODE_ENV=development
 
 EXPOSE 3000
 

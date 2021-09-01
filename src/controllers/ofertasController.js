@@ -62,12 +62,13 @@ exports.create = async (req, res) => {
     await oModel.create(body);
 
     //obtener el id de la ultima oferta registrada
-    const lastId = await oModel.getAll(0, 1);
+    const lastId = await oModel.getAll(0, 1,true);
 
     //cargo los productos de la oferta
     let promisesAddProductoOferta = [];
     const productos = JSON.parse(body.productos);
     productos.map((producto) => {
+      console.log(producto);
       producto.idOferta = lastId[0].id;
       //console.log(producto);
       promisesAddProductoOferta.push(prdOModel.create(producto));
